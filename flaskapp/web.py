@@ -1341,7 +1341,7 @@ def recetas(idconsulta):
 				else:
 					lencons.append(aux[0])
 					existe = existe + 1
-				consulta = "SELECT medicamento1, medicamento2, descripcion1, descripcion2 from recetagotero where idconsulta = %s;"
+				consulta = "SELECT medicamento1, descripcion1, medicamento2, descripcion2 from recetagotero where idconsulta = %s;"
 				cursor.execute(consulta, idconsulta)
 				aux = cursor.fetchall()
 				if len(aux) < 1:
@@ -1439,6 +1439,12 @@ def recetas(idconsulta):
 			gmed2 = 0
 		if len(gdesc2) < 1:
 			gdesc2 = 0
+		lugar = request.form["lugar"]
+		descripcion = request.form["descripcion"]
+		if len(lugar) < 1:
+			lugar = 0
+		if len(descripcion) < 1:
+			descripcion = 0
 		try:
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:
@@ -1459,6 +1465,8 @@ def recetas(idconsulta):
 						cursor.execute(consulta, (gmed1, gdesc1, gmed2, gdesc2, idconsulta))
 					consulta = "update consulta set proximacita = %s where idconsulta = %s"
 					cursor.execute(consulta, (gfechacad, idconsulta))
+					consulta = "update recetareferencia set lugar = %s, descripcion = %s where idconsulta = %s"
+					cursor.execute(consulta, (lugar, descripcion, idconsulta))
 				conexion.commit()
 			finally:
 				conexion.close()
@@ -2470,6 +2478,9 @@ def ver(idconsulta):
 				consulta = "select idtipolen, tipo from tipolen;"
 				cursor.execute(consulta)
 				tipolen = cursor.fetchall()
+				consulta = "select idlentedetallado, lentedetallado from lentedetallado order by lentedetallado asc;"
+				cursor.execute(consulta)
+				lentedetalladolen = cursor.fetchall()
 				consulta = "select idmateriallen, material from materiallen;"
 				cursor.execute(consulta)
 				materiallen = cursor.fetchall()
@@ -2602,7 +2613,7 @@ def ver(idconsulta):
 		dataconsulta=dataconsulta, anios=anios, cincos=cincos, meses=meses, antecedentes = antecedentes, av=av, ra=ra, vc=vc, roa=roa, ror=ror, 
 		rs=rs, rf=rf, mo=mo, obs=obs, usolen=usolen, numantmed=numantmed, numantqui=numantqui, antmed=antmed, antqui=antqui, enfermedades=enfermedades,
 		nervos=nervos, mms=mms, numeros=numeros, relva=relva, tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen,
-		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotas=gotas, referencia=referencia)
+		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotas=gotas, referencia=referencia, lentedetalladolen=lentedetalladolen)
 
 @app.route("/crearusuario", methods=['GET', 'POST'])
 def crearusuario():

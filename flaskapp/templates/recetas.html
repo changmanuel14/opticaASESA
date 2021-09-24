@@ -13,7 +13,7 @@
         <div class="tab-content">
           <div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload('Receta General')">Imprimir Receta</button>
+            <button type="button" class="button" onclick="PdfDownload('Receta General', 1)">Imprimir Receta</button>
             <br>
             <br>
             <br>
@@ -96,7 +96,7 @@
           </div>
           <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload2('Receta Lentes de Contacto')">Imprimir Receta</button>
+            <button type="button" class="button" onclick="PdfDownload('Receta Lentes de Contacto', 2)">Imprimir Receta</button>
             <button onclick="submit" class="button">Aceptar</button>
             <br>
             <br>
@@ -187,7 +187,7 @@
           </div>
           <div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload3('Receta Gotero')">Imprimir Receta</button>
+            <button type="button" class="button" onclick="PdfDownload('Receta Gotero', 3)">Imprimir Receta</button>
             <button onclick="submit" class="button">Aceptar</button>
             <br>
             <br>
@@ -216,7 +216,7 @@
                     </tr>
                     <tr style="border: white;">
                         <th class="letragrande">Fecha Proxima Cita: </th>
-                        <td class="letragrande">{{dataconsulta[0][6]}}</td>
+                        <td class="letragrande1"><input type="text" class="inputtextrecetas" onblur="cambiarfechaob1(0)" onfocus="cambiarfechaof1(0)" id="gfechacad" name="gfechacad" value="{{dataconsulta[0][6]}}"></td>
                     </tr>
                 </table>
                 <br>
@@ -258,14 +258,14 @@
           </div>
           <div id="menu3" class="tab-pane fade" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload3('Receta Gotero')">Imprimir Receta</button>
+            <button type="button" class="button" onclick="PdfDownload('Receta Referencia', 4)">Imprimir Receta</button>
             <button onclick="submit" class="button">Aceptar</button>
             <br>
             <br>
             <br>
             <center>
                 <form action="" method="POST">
-            <div id="tblinfo3" style="width: 80%;">
+            <div id="tblinfo4" style="width: 80%;">
                 <div style="width: 40%; float: left; position: relative;">
                     <center><img src="..\static\logo-galileo.png" style="width: 50%;"> </center>
                 </div>
@@ -287,7 +287,7 @@
                     </tr>
                     <tr style="border: white;">
                         <th class="letragrande">Fecha Proxima Cita: </th>
-                        <td class="letragrande">{{dataconsulta[0][6]}}</td>
+                        <td class="letragrande1"><input type="text" class="inputtextrecetas" onblur="cambiarfechaob1(1)" onfocus="cambiarfechaof1(1)" id="rfechacad" name="rfechacad" value="{{dataconsulta[0][6]}}"></td>
                     </tr>
                 </table>
                 <br>
@@ -295,11 +295,11 @@
                 <table>
                     <tr>
                         <th class="letragrande">Lugar a referir:</th>
-                        <td><input type="text" class="inputtextrecetas" id="gmed1" name="gmed1" value="{{recetaref[0][0]}}"></td>
+                        <td><input type="text" class="inputtextrecetas" id="lugar" name="lugar" value="{{recetaref[0][0]}}"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea id="gdesc1" name="gdesc1" rows="2" cols="65" style="font-size: 25px;">{{recetaref[0][1]}}</textarea>
+                            <textarea id="descripcion" name="descripcion" rows="2" cols="65" style="font-size: 25px;">{{recetaref[0][1]}}</textarea>
                         </td>
                     </tr>
                 </table>
@@ -317,6 +317,34 @@
         </center>
       </div>
       <script type="text/javascript">
+      function cambiarfechaob1(num){
+          if(num == 0){
+            var fechatext = document.getElementById('gfechacad')
+            var fechatext1 = document.getElementById('rfechacad')
+          }else{
+            var fechatext = document.getElementById('rfechacad')
+            var fechatext1 = document.getElementById('gfechacad')
+          }
+        var data = fechatext.value
+        data = String(data)
+        var arreglo = data.split('-')
+        fechatext.type = 'text'
+        fechatext.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
+        fechatext1.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
+      }
+      function cambiarfechaof1(num){
+        if(num == 0){
+            var fechatext = document.getElementById('gfechacad')
+          }else{
+            var fechatext = document.getElementById('rfechacad')
+          }
+        var data = fechatext.value
+        data = String(data)
+        var arreglo = data.split('/')
+        fechatext.type = 'date'
+        var aux = arreglo[2] + "-" + arreglo[1] + "-" + arreglo[0]
+        fechatext.value = aux
+      }
       function cambiarfechaob(){
         var fechatext = document.getElementById('lcfechacad')
         var data = fechatext.value
@@ -390,56 +418,13 @@
             }else aux = String(aux)
             prisma2.innerHTML = aux
         }
-        function PdfDownload(filename){
+        function PdfDownload(filename, num){
             kendo.pdf.defineFont({
                 "FontAwesome":
                 "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf"
             })
-            kendo.drawing.drawDOM($("#tblinfo1"))
-            .then(function(group){
-                return kendo.drawing.exportPDF(
-                    group,{
-                        paperSize: "auto",
-                        landscape: false,
-                        margin: "2cm",
-                        multiPage: true,
-                    });
-            })
-            .then(function(data){
-                kendo.saveAs({
-                    dataURI: data,
-                    fileName:filename
-                });
-            });
-        }
-        function PdfDownload2(filename){
-            kendo.pdf.defineFont({
-                "FontAwesome":
-                "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf"
-            })
-            kendo.drawing.drawDOM($("#tblinfo2"))
-            .then(function(group){
-                return kendo.drawing.exportPDF(
-                    group,{
-                        paperSize: "auto",
-                        landscape: false,
-                        margin: "2cm",
-                        multiPage: true,
-                    });
-            })
-            .then(function(data){
-                kendo.saveAs({
-                    dataURI: data,
-                    fileName:filename
-                });
-            });
-        }
-        function PdfDownload3(filename){
-            kendo.pdf.defineFont({
-                "FontAwesome":
-                "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf"
-            })
-            kendo.drawing.drawDOM($("#tblinfo3"))
+            var nomdiv = "#tblinfo" + String(num)
+            kendo.drawing.drawDOM($(nomdiv))
             .then(function(group){
                 return kendo.drawing.exportPDF(
                     group,{
