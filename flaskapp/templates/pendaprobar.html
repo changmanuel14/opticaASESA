@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Consultas pendientes de Aprobación</h1>
+    <table>
+        <tr>
+            <th>Estudiante</th>
+            <th>Paciente</th>
+        </tr>
+        {% for i in consultas %}
+        <tr>
+            <td><a href="/pendaprobarc/{{i[0]}}" style="color: black;"> {{i[1]}} {{i[2]}}</a></td>
+            <td><a href="/pendaprobarc/{{i[0]}}" style="color: black;"> {{i[3]}} {{i[4]}}</a></td>
+        </tr>
+        {% endfor%}
+    </table>
+{% endblock %}

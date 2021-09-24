@@ -1,0 +1,344 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Compra</h1>
+    <div class="container">
+        <ul class="nav nav-tabs">
+          <li><a data-toggle="tab" href="#home" class="panelb">Aro</a></li>
+          <li><a data-toggle="tab" href="#menu1" class="panelb">Lente</a></li>
+          <li><a data-toggle="tab" href="#menu2" class="panelb">Resumen</a></li>
+        </ul>
+        <form action="" method="POST">
+
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
+            <br>
+            <h1>Seleccion de aro</h1>
+            <center>
+                <select name="idaro" id="idaro" class="inputtext" onchange="cambioaro()">
+                    <option value="">Seleccione el aro</option>
+                    {% for i in aros %}
+                    <option value="{{i[0]}}">{{i[1]}} {{i[2]}} {{i[3]}}</option>
+                    {% endfor %}
+                </select>
+            </center>
+            <h5 id="precioarov">Precio de Venta: Q0.00</h5>
+            <h5 id="precioarog">Precio General: Q0.00</h5>
+            <h5 id="precioarod">Precio Galileo(Docente/Estudiante): Q0.00</h5>
+          </div>
+          <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h1>Seleccion de lente</h1>
+            <table>
+                <tr>
+                    <th>Tipo de Lente</th>
+                    <th>
+                        <select name="lh" id="lh" class="inputtext" onchange="cambiolentes()">
+                            <option value="">Seleccione el tipo de lente</option>
+                            {% for i in lenteheader %}
+                            <option value="{{i[0]}}">{{i[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Lente
+                    </th>
+                    <th>
+                        <select name="ld" id="ld" class="inputtext" onchange="cambiolentes1()">
+                            <option value="">Seleccione el lente</option>
+                        </select>
+                    </th>
+                </tr>
+            </table>
+            <h5 id="preciolenv">Precio de Venta: Q0.00</h5>
+            <h5 id="precioleng">Precio General: Q0.00</h5>
+            <h5 id="preciolend">Precio Galileo(Docente/Estudiante): Q0.00</h5>
+
+          </div>
+          <div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h1>Resumen</h1>
+            <div style="width: 30%; position: relative; float: left;">
+                <table>
+                    <tr>
+                        <th colspan="2">Aro</th>
+                    </tr>
+                    <tr>
+                        <th>Precio de Venta</th>
+                        <td>
+                            <input type="radio" id="aropreven" name="aro" value="1" disabled>
+                            <label for="aropreven" id="aroprevenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio General</th>
+                        <td>
+                            <input type="radio" id="aropregen" name="aro" value="1" onclick="calctotal()">
+                            <label for="aropregen" id="aropregenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio Galileo</th>
+                        <td>
+                            <input type="radio" id="aropredoc" name="aro" value="1" onclick="calctotal()">
+                            <label for="aropredoc" id="aropredocl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Ninguno</th>
+                        <td>
+                            <input type="radio" id="aroprenin" name="aro" value="0" onclick="calctotal()">
+                            <label for="aroprenin" id="aropreninl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Lente</th>
+                    </tr>
+                    <tr>
+                        <th>Precio Venta</th>
+                        <td>
+                            <input type="radio" id="lenpreven" name="lente" value="1" disabled>
+                            <label for="lenpreven" id="lenprevenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio General</th>
+                        <td>
+                            <input type="radio" id="lenpregen" name="lente" value="1" onclick="calctotal()">
+                            <label for="lenpregen" id="lenpregenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio Galileo</th>
+                        <td>
+                            <input type="radio" id="lenpredoc" name="lente" value="1" onclick="calctotal()">
+                            <label for="lenpredoc" id="lenpredocl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Ninguno</th>
+                        <td>
+                            <input type="radio" id="lenprenin" name="lente" value="0" onclick="calctotal()">
+                            <label for="lenprenin" id="lenpreninl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Consulta</th>
+                    </tr>
+                    <tr>
+                        <th>Precio</th>
+                        <td>
+                            <label><input type="checkbox" id="precons" name="precons" value="50" onclick="calctotal()"> Q 50.00</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="width: 60%; position: relative; float: left;">
+                <table>
+                    <tr>
+                        <th colspan="2">Datos de Facturación</th>
+                    </tr>
+                    <tr>
+                        <th>NIT</th>
+                        <td><input type="text" class="inputtext1" id="nit" name="nit" onblur="datosfactura()"></td>
+                    </tr>
+                    <tr>
+                        <th>Nombre</th>
+                        <td><input type="text" class="inputtext1" id="nomcliente" name="nomcliente"></td>
+                    </tr>
+                    <tr>
+                        <th>Apellido</th>
+                        <td><input type="text" class="inputtext1" id="apecliente" name="apecliente"></td>
+                    </tr>
+                    <tr>
+                        <th>Codigo (Carnet/CodPers)</th>
+                        <td><input type="text" class="inputtext1" id="coddesc" name="coddesc"></td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Precios</th>
+                    </tr>
+                    <tr>
+                        <th>Total General</th>
+                        <td>Q <input type="text" class="inputtext1" id="restotgen" name="restotgen" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Descuento</th>
+                        <td>Q <input type="text" class="inputtext1" id="resdesc" name="resdesc" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>Total a Cancelar</th>
+                        <td>Q <input type="text" class="inputtext1" id="restotcan" name="restotcan" readonly></td>
+                    </tr>
+                </table>
+                <center><button onclick="submit" class="button">Aceptar</button></center>
+            </div>
+        </div>
+        </form>
+      </div>
+      <script type="text/javascript">
+        function datosfactura(){
+            var textnit = document.getElementById("nit");
+            var textcoddesc = document.getElementById("coddesc");
+            var textnombre = document.getElementById("nomcliente");
+            var textapellido = document.getElementById("apecliente");
+            var nit = textnit.value
+            var arreglo = {{ datafacturas|tojson }};
+            var conteo = Object.keys(arreglo).length;
+            for (var i = 0; i<conteo;i++){
+                if(nit==arreglo[i][2]){
+                    textnombre.value = arreglo[i][0]
+                    textapellido.value = arreglo[i][1]
+                    textcoddesc.value = arreglo[i][3]
+                }
+            }
+
+        }
+        function calctotal(){
+            var totalgen = 0
+            var totalcan = 0
+            var descuento = 0
+            var arogenc = document.getElementById("aropreven")
+            var aroestc = document.getElementById("aropregen")
+            var arodocc = document.getElementById("aropredoc")
+            var aroninc = document.getElementById("aroprenin")
+            var restotgen = document.getElementById("restotgen")
+            var resdesc = document.getElementById("resdesc")
+            var restotcan = document.getElementById("restotcan")
+            var lengenc = document.getElementById("lenpreven")
+            var lenestc = document.getElementById("lenpregen")
+            var lendocc = document.getElementById("lenpredoc")
+            var lenninc = document.getElementById("lenprenin")
+            var consu = document.getElementById("precons")
+            if (arogenc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(arogenc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
+            }else if (aroestc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(aroestc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
+            }else if (arodocc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(arodocc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
+            }
+
+            if (lengenc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(lengenc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(lengenc.value)
+            }else if (lenestc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(lenestc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(lengenc.value)
+            }else if (lendocc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(lendocc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(lengenc.value)
+            }
+
+            if (consu.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(consu.value)
+                totalgen = parseFloat(totalgen) + parseFloat(consu.value)
+            }
+            totalcan = Math.round(totalcan * 100) / 100
+
+            while((totalcan + 0.01) % 10 != 0){
+                totalcan = parseFloat(totalcan) + 0.01
+                totalcan = Math.round(totalcan * 100) / 100
+            }
+            if(totalcan == 59.99){
+                totalcan = 50
+            }
+            if(totalcan == 9.99){
+                totalcan = 0
+            }
+            if(totalcan > totalgen) {
+                totalgen = totalcan
+            }
+            descuento = totalgen - totalcan
+            totalcan = totalcan.toFixed(2)
+            restotcan.value = String(totalcan)
+            descuento = descuento.toFixed(2)
+            resdesc.value = String(descuento)
+            totalgen = totalgen.toFixed(2)
+            console.log(totalgen)
+            restotgen.value = String(totalgen)
+
+        }
+
+        function cambiolentes() {
+            var select = document.getElementById("lh");
+            var select1 = document.getElementById("ld");
+            var idlh = select.value;
+            var length = select.options.length;
+            for (i = length-1; i >= 1; i--) {
+                select1.options[i] = null;
+            }
+            var arreglo = {{ lentedesc|tojson }};
+            var conteo = Object.keys(arreglo).length;
+            for(var i = 0; i<conteo; i++){
+                if(parseInt(arreglo[i][1]) == parseInt(idlh)){
+                    var opt = document.createElement('option');
+                    opt.value = arreglo[i][0];
+                    opt.innerHTML = arreglo[i][2];
+                    select1.appendChild(opt);
+                }
+            }
+        }
+        function cambiolentes1(){
+            var select = document.getElementById("ld");
+            var idlh = select.value;
+            var preg = document.getElementById("preciolenv");
+            var pree = document.getElementById("precioleng");
+            var pred = document.getElementById("preciolend");
+            var rpreg = document.getElementById("lenprevenl");
+            var rpree = document.getElementById("lenpregenl");
+            var rpred = document.getElementById("lenpredocl");
+            var rpreg1 = document.getElementById("lenpreven");
+            var rpree1 = document.getElementById("lenpregen");
+            var rpred1 = document.getElementById("lenpredoc");
+            var arreglo = {{ lentedesc|tojson }};
+            var conteo = Object.keys(arreglo).length;
+            for(var i = 0; i<conteo; i++){
+                if(parseInt(arreglo[i][0]) == parseInt(idlh)){
+                    preg.innerHTML = "Precio Venta: Q " + String(parseFloat(arreglo[i][3] * 2).toFixed(2))
+                    pree.innerHTML = "Precio General: Q " + String(parseFloat(arreglo[i][3] * 1.5).toFixed(2))
+                    pred.innerHTML = "Precio Galileo(Docente/Estudiante): Q " + String(parseFloat(arreglo[i][3] * 1.35).toFixed(2))
+                    rpreg.innerHTML = "Q " + String(parseFloat(arreglo[i][3] * 2).toFixed(2))
+                    rpree.innerHTML = "Q " + String(parseFloat(arreglo[i][3] * 1.5).toFixed(2))
+                    rpred.innerHTML = "Q " + String(parseFloat(arreglo[i][3] * 1.35).toFixed(2))
+                    rpreg1.value = String(parseFloat(arreglo[i][3] * 2).toFixed(2))
+                    rpree1.value = String(parseFloat(arreglo[i][3] * 1.5).toFixed(2))
+                    rpred1.value = String(parseFloat(arreglo[i][3] * 1.35).toFixed(2))
+                }
+            }
+        }
+        function cambioaro(){
+            var select = document.getElementById("idaro");
+            var idlh = select.value;
+            var preg = document.getElementById("precioarov");
+            var pree = document.getElementById("precioarog");
+            var pred = document.getElementById("precioarod");
+            var rpreg = document.getElementById("aroprevenl");
+            var rpree = document.getElementById("aropregenl");
+            var rpred = document.getElementById("aropredocl");
+            var rpreg1 = document.getElementById("aropreven");
+            var rpree1 = document.getElementById("aropregen");
+            var rpred1 = document.getElementById("aropredoc");
+            var arreglo = {{ aros|tojson }};
+            var conteo = Object.keys(arreglo).length;
+            for(var i = 0; i<conteo; i++){
+                if(parseInt(arreglo[i][0]) == parseInt(idlh)){
+                    preg.innerHTML = "Precio Venta: Q " + String(parseFloat(arreglo[i][4] * 2).toFixed(2))
+                    pree.innerHTML = "Precio General: Q " + String(parseFloat(arreglo[i][4] * 1.5).toFixed(2))
+                    pred.innerHTML = "Precio Galileo(Docente/Estudiante): Q " + String(parseFloat(arreglo[i][4] * 1.35).toFixed(2))
+                    rpreg.innerHTML = "Q " + String(parseFloat(arreglo[i][4] * 2).toFixed(2))
+                    rpree.innerHTML = "Q " + String(parseFloat(arreglo[i][4] * 1.5).toFixed(2))
+                    rpred.innerHTML = "Q " + String(parseFloat(arreglo[i][4] * 1.35).toFixed(2))
+                    rpreg1.value = String(parseFloat(arreglo[i][4] * 2).toFixed(2))
+                    rpree1.value = String(parseFloat(arreglo[i][4] * 1.5).toFixed(2))
+                    rpred1.value = String(parseFloat(arreglo[i][4] * 1.35).toFixed(2))
+                }
+            }
+        }
+    </script>
+{% endblock %}

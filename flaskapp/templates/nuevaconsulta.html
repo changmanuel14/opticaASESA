@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Bienvenido</h1>
+    <div class="container">
+        <ul class="nav nav-tabs">
+          <li><a data-toggle="tab" id="t0" href="#home" class="panelb" onclick="colorespanel('0')">Estudiante</a></li>
+          <li><a data-toggle="tab" id="t1" href="#menu1" class="panelb" onclick="colorespanel('1')">Paciente</a></li>
+        </ul>
+        <form action="" method="POST">
+
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
+            <br>
+            <h3>Datos de Estudiante</h3>
+            
+                <center>
+                    <input type="number" id="carnet" name="carnet" class="inputtext" tabindex="1" required placeholder="  Carné" minlength="8" maxlength="8" onchange="dataestudiante()">&nbsp;&nbsp;&nbsp;
+                    <input type="text" id="apellido" name="apellido" class="inputtext" tabindex="2" required placeholder="  Apellido(s)">&nbsp;&nbsp;&nbsp;
+                    <input type="text" id="nombre" name="nombre" class="inputtext" tabindex="3" required placeholder="  Nombre(s)"><br>
+                </center>
+                
+          </div>
+          <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h3>Datos de Paciente</h3>
+            <center>
+                <input type="number" id="cui" name="cui" class="inputtext" tabindex="4" placeholder="  CUI" maxlength="13" minlength="0" required onchange="datapaciente()">&nbsp;&nbsp;&nbsp;
+                <select name="sexo" id="sexo" class="inputtext" tabindex="5" required>
+                    <option value="">Seleccione sexo</option>
+                    {% for i in sexo %}
+                    <option value="{{i[0]}}">{{i[1]}}</option>
+                    {% endfor %}
+                </select><br>
+                <input type="text" id="nombre1" name="nombre1" class="inputtext" tabindex="6" required placeholder="  Primer Nombre" >&nbsp;&nbsp;&nbsp;
+                <input type="text" id="nombre2" name="nombre2" class="inputtext" tabindex="7" placeholder="  Segundo Nombre" ><br>
+                <input type="text" id="apellido1" name="apellido1" class="inputtext" tabindex="8" required placeholder="  Primer Apellido" >&nbsp;&nbsp;&nbsp;
+                <input type="text" id="apellido2" name="apellido2" class="inputtext" tabindex="9" placeholder="  Segundo Apellido" ><br>
+                <input type="number" id="telefono" name="telefono" class="inputtext" tabindex="10" placeholder="  Teléfono 1" maxlength="8" minlength="0" >&nbsp;&nbsp;&nbsp;
+                <input type="number" id="telefono1" name="telefono1" class="inputtext" tabindex="11" placeholder="  Teléfono 2" maxlength="8" minlength="0" ><br>
+                <input type="text" id="profesion" name="profesion" class="inputtext" tabindex="12" required placeholder="  Profesión" >&nbsp;&nbsp;&nbsp;
+                <input type="text" id="direccion" name="direccion" class="inputtext" tabindex="13" placeholder="  Dirección" ><br>
+                <input type="date" id="fechanac" name="fechanac" class="inputtext" title="Fecha de nacimiento" placeholder="Fecha de nacimiento (dd/mm/aaaa)" tabindex="14" required>
+            </center>
+            <center><button onclick="submit" class="button">Aceptar</button></center>
+          </div>
+        </div>
+        </form>
+      </div>
+        <script type="text/javascript">
+            function dataestudiante() {
+                var carnet = document.getElementById('carnet').value
+                var nombre = document.getElementById('nombre')
+                var apellido = document.getElementById('apellido')
+                var arreglo = {{ dataest|tojson }};
+                var conteo = Object.keys(arreglo).length;
+                var encontro = 0
+                for(var i = 0; i<conteo;i++){
+                    if(String(carnet) == arreglo[i][2]){
+                        console.log('entro')
+                        document.getElementById('nombre').value = arreglo[i][0]
+                        document.getElementById('apellido').value  = arreglo[i][1]
+                        encontro++
+                    }
+                }
+                if(encontro == 0) {
+                    nombre.value = ""
+                    apellido.value = ""
+                }
+
+            }
+            function datapaciente() {
+                var cui = document.getElementById('cui').value
+                var nombre1 = document.getElementById('nombre1')
+                var nombre2 = document.getElementById('nombre2')
+                var apellido1 = document.getElementById('apellido1')
+                var apellido2 = document.getElementById('apellido2')
+                var fechanac = document.getElementById('fechanac')
+                var profesion = document.getElementById('profesion')
+                var direccion = document.getElementById('direccion')
+                var telefono = document.getElementById('telefono')
+                var telefono1 = document.getElementById('telefono1')
+                var sexo = document.getElementById('sexo')
+                var arreglo = {{ datapac|tojson }};
+                var conteo = Object.keys(arreglo).length;
+                for(var i = 0; i<conteo;i++){
+                    if(String(cui) != '0'){
+                        if(String(cui) == arreglo[i][8]){
+                            nombre1.value = arreglo[i][0]
+                            nombre2.value = arreglo[i][1]
+                            apellido1.value = arreglo[i][2]
+                            apellido2.value = arreglo[i][3]
+                            fechanac.value = arreglo[i][4]
+                            profesion.value = arreglo[i][6]
+                            direccion.value = arreglo[i][7]
+                            telefono.value = arreglo[i][9]
+                            telefono1.value = arreglo[i][10]
+                            sexo.getElementsByTagName('option')[parseInt(arreglo[i][5])].selected = 'selected'
+                        }
+                    }else {
+                        nombre1.value = ""
+                        nombre2.value = ""
+                        apellido1.value = ""
+                        apellido2.value = ""
+                        fechanac.value = "0000-00-00"
+                        profesion.value = ""
+                        direccion.value = ""
+                        telefono.value = ""
+                        telefono1.value = ""
+                        sexo.getElementsByTagName('option')[0].selected = 'selected'
+                    }
+                }
+            }
+            function colorespanel(codpanel){
+                codpanel = parseInt(codpanel)
+                for(var i = 0; i<=1;i++){
+                    if(i == codpanel){
+                        var aux = 't' + String(i);
+                        var t = document.getElementById(aux)
+                        t.style.backgroundColor = '#5BC0DE'
+                        t.style.color = 'white'
+                    }else{
+                        var aux = 't' + String(i);
+                        var t = document.getElementById(aux)
+                        t.style.backgroundColor = 'white'
+                        t.style.color = 'black'
+                    }
+                }
+            }
+        </script>
+{% endblock %}

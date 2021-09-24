@@ -1,0 +1,901 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Datos Ingresados</h1>
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li><a data-toggle="tab" id="t0" href="#home" class="panelb" onclick="colorespanel('0')">Estudiante</a></li>
+            <li><a data-toggle="tab" id="t1" href="#menu1" class="panelb" onclick="colorespanel('1')">Paciente</a></li>
+            <li><a data-toggle="tab" id="t2" href="#menu2" class="panelb" onclick="colorespanel('2')">Exploración</a></li>
+            <li><a data-toggle="tab" id="t3" href="#menu3" class="panelb" onclick="colorespanel('3')">D.X./T.X. </a></li>
+        </ul>
+        <form action="" method="POST">
+
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
+            <br>
+            <h3>Datos de Estudiante</h3>
+            
+                <center>
+                    <input type="number" id="carnet" name="carnet" class="inputtext" tabindex="1" required placeholder="  Carné" minlength="8" maxlength="8" disabled value="{{estudiante[2]}}">&nbsp;&nbsp;&nbsp;
+                    <input type="text" id="apellido" name="apellido" class="inputtext" tabindex="2" required placeholder="  Apellido(s)" disabled value="{{estudiante[1]}}">&nbsp;&nbsp;&nbsp;
+                    <input type="text" id="nombre" name="nombre" class="inputtext" tabindex="3" required placeholder="  Nombre(s)" disabled value="{{estudiante[0]}}"><br>
+                </center>
+                
+          </div>
+          <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h3>Datos de Paciente</h3>
+            <center>
+                <input type="number" id="cui" name="cui" class="inputtext" tabindex="4" placeholder="  CUI" maxlength="13" minlength="0" disabled value="{{paciente[8]}}">&nbsp;&nbsp;&nbsp;
+                <input type="text" class="inputtext" disabled value="{{paciente[5]}}"><br>
+                <input type="text" id="nombre1" name="nombre1" class="inputtext" tabindex="6" required placeholder="  Primer Nombre" disabled value="{{paciente[0]}}">&nbsp;&nbsp;&nbsp;
+                <input type="text" id="nombre2" name="nombre2" class="inputtext" tabindex="7" placeholder="  Segundo Nombre" disabled value="{{paciente[1]}}"><br>
+                <input type="text" id="apellido1" name="apellido1" class="inputtext" tabindex="8" required placeholder="  Primer Apellido" disabled value="{{paciente[2]}}">&nbsp;&nbsp;&nbsp;
+                <input type="text" id="apellido2" name="apellido2" class="inputtext" tabindex="9" placeholder="  Segundo Apellido" disabled value="{{paciente[3]}}"><br>
+                <input type="number" id="telefono" name="telefono" class="inputtext" tabindex="10" placeholder="  Teléfono 1" maxlength="8" minlength="0" disabled value="{{paciente[9]}}">&nbsp;&nbsp;&nbsp;
+                <input type="number" id="telefono1" name="telefono1" class="inputtext" tabindex="11" placeholder="  Teléfono 2" maxlength="8" minlength="0" disabled value="{{paciente[10]}}"><br>
+                <input type="text" id="profesion" name="profesion" class="inputtext" tabindex="12" required placeholder="  Profesión" disabled value="{{paciente[6]}}">&nbsp;&nbsp;&nbsp;
+                <input type="text" id="direccion" name="direccion" class="inputtext" tabindex="13" placeholder="  Dirección" disabled value="{{paciente[7]}}"><br>
+                <input type="date" id="fechanac" name="fechanac" class="inputtext" tabindex="14" title="Fecha de Nacimiento" required disabled value="{{paciente[4]}}">
+                <br>
+                <br>
+            </center>
+            <br>
+            <h3>Motivo de Consulta</h3>
+            <table>
+                <tr>
+                    <th style="width: 35%;">Motivo de la Consulta</th>
+                    <th colspan="3"><textarea id="motivoconsulta" name="motivoconsulta" rows="2" cols="80" placeholder="   Motivo de la Consulta" disabled>{{dataconsulta[0][27]}}</textarea></th>
+                </tr>
+            </table>
+            <br>
+            <h3>Antecedentes</h3>
+            <table>
+                <tr>
+                    <th><label for="ultimaevmes">Última evaluación</label></th>
+                    <td><select class="inputtext" id="ultimaevmes" name="ultimaevmes" tabindex="15" disabled>
+                        <option value="">Seleccione mes</option>
+                        <option value="0">No aplica</option>
+                        {% for i in meses %}
+                        {% if dataconsulta[0][10] == i[0] %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <select class="inputtext" id="ultimaevanio" name="ultimaevanio" tabindex="16" disabled>
+                        <option value="">Seleccione año</option>
+                        <option value="0">No aplica</option>
+                        {% for i in anios %}
+                        {% if dataconsulta[0][11] == i %}
+                        <option value="{{i}}" selected>{{i}}</option>
+                        {% else %}
+                        <option value="{{i}}">{{i}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr>
+                    <th><label for="tiempolentes">Tiempo utilizando lentes</label></th>
+                    <td><input type="text" id="tiempolentes" name="tiempolentes" value="{{dataconsulta[0][12]}}" class="inputtext"disabled></td>
+                </tr>
+            </table><br>
+            <table>
+                <tr>
+                    <th style="width: 35%;">Antecedentes Oftalmológicos</th>
+                    <th colspan="3"><textarea id="antoftal" name="antoftal" rows="2" cols="80" placeholder="   Antecedentes Oftalmológicos" disabled>{{antecedentes[0]}}</textarea></th>
+                </tr>
+            </table>
+            <table id="antecedentesmedicos">
+                {% for i in range(numantmed) %}
+                {% if i == 0 %}
+                <tr>
+                    <th style="width: 35%;">Antecedentes Médicos <input type="number" id="numantmed" name="numantmed" value="{{numantmed}}" style="width: 15%;" readonly> </th>
+                {% else %}
+                <tr>
+                    <th></th>
+                {% endif %}
+                    <td><select class="inputtext1" id="enfermedad{{i + 1}}" name="enfermedad{{i + 1}}" disabled>
+                        <option value="">Seleccione Enfermedad</option>
+                        {% for j in enfermedades %}
+                        {% if antmed[i][0] == j[0] %}
+                        <option value="{{j[0]}}" selected>{{j[0]}}</option>
+                        {% else %}
+                        <option value="{{j[0]}}">{{j[0]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                        
+                    </select></td>
+                    <td><input type="text" class="inputtext1" id="medotro{{i + 1}}" name="medotro1" placeholder="Otro" value="{{antmed[i][3]}}" disabled></td>
+                    <td><input type="text" class="inputtext1" id="tiempoevolucionm{{i + 1}}" name="tiempoevolucionm{{i + 1}}" placeholder="Tiempo de Evolución" value="{{antmed[i][1]}}" disabled></td>
+                    <td><input type="text" class="inputtext1" id="controlm{{i + 1}}" name="controlm{{i + 1}}" placeholder="Control (Medicamento)" value="{{antmed[i][2]}}" disabled></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <table id="antecedentesquirurgicos">
+                {% for i in range(numantqui) %}
+                {% if i == 0 %}
+                <tr>
+                    <th style="width: 35%;">Antecedentes Quirúrgicos <input type="number" id="numantqui" name="numantqui"  value="{{numantqui}}" style="width: 15%;" readonly> </th>
+                    
+                {% else %}
+                <tr>
+                    <th></th>
+                {% endif %}
+                    <td><input type="text" class="inputtext1" id="cirugia{{i + 1}}" name="cirugia{{i + 1}}" placeholder="Cirugía" value="{{antqui[i][0]}}" disabled></td>
+                    <td><input type="text" class="inputtext1" id="tiempoevolucionq{{i + 1}}" name="tiempoevolucionq{{i + 1}}" placeholder="Tiempo de Evolución" value="{{antqui[i][1]}}" disabled></td>
+                    <td><input type="text" class="inputtext1" id="controlq{{i + 1}}" name="controlq{{i + 1}}" placeholder="Control (Medicamento)" value="{{antqui[i][2]}}" disabled></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <table>
+                <tr>
+                    <th style="width: 35%;">Antecedentes Alérgicos</th>
+                    <th colspan="3"><textarea id="antaler" name="antaler" rows="2" cols="80" placeholder="   Antecedentes Alérgicos" disabled>{{antecedentes[3]}}</textarea></th>
+                </tr>
+                <tr>
+                    <th style="width: 35%;">Antecedentes Familiares</th>
+                    <th colspan="3"><textarea id="antfam" name="antfam" rows="2" cols="80" placeholder="   Antecedentes Familiares" disabled>{{antecedentes[1]}}</textarea></th>
+                </tr>
+                <tr>
+                    <th style="width: 35%;">Antecedentes Glaucoma</th>
+                    <th colspan="3"><textarea id="antgla" name="antgla" rows="2" cols="80" placeholder="   Antecedentes Glaucoma" disabled>{{antecedentes[2]}}</textarea></th>
+                </tr>
+            </table>
+          </div>
+          <div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h3>Agudeza Visual</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>A.V.S.C.</th>
+                        <th>Agudeza Visual Lejana</th>
+                        <th>Agujero Estenopeico</th>
+                        <th>Agudeza Visual Cercana</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <th>Ojo Derecho</th>
+                        <td>{{av[0][0]}}</td>
+                        <td>{{av[0][1]}}</td>
+                        <td>{{av[0][2]}}</td>
+                    </tr>
+                    <tr>
+                        <th>Ojo Izquierdo</th>
+                        <td>{{av[1][0]}}</td>
+                        <td>{{av[1][1]}}</td>
+                        <td>{{av[1][2]}}</td>
+                    </tr>
+            </table>
+            <br>
+            <h3>Refracción actual</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>C.A.</th>
+                        <th>Esfera</th>
+                        <th>Cilindro</th>
+                        <th>Eje</th>
+                        <th>Prisma</th>
+                        <th>A.V.C.C</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <th>Ojo Derecho</th>
+                        <td>{{ra[0][0]}}</td>
+                        <td>{{ra[0][1]}}</td>
+                        <td>{{ra[0][2]}}</td>
+                        <td>{{ra[0][3]}}</td>
+                        <td>{{ra[0][4]}}</td>
+                    </tr>
+                    <tr>
+                        <th>Ojo Izquierdo</th>
+                        <td>{{ra[1][0]}}</td>
+                        <td>{{ra[1][1]}}</td>
+                        <td>{{ra[1][2]}}</td>
+                        <td>{{ra[1][3]}}</td>
+                        <td>{{ra[1][4]}}</td>
+                    </tr>
+                    <tr>
+                        <th>DNP</th>
+                        <td>{{dataconsulta[0][7]}}</td>
+                        <th>A.D.D.</th>
+                        <td>{{dataconsulta[0][13]}}</td>
+                        <td>{{dataconsulta[0][14]}}</td>
+                        <td>{{dataconsulta[0][15]}}</td>
+                    </tr>
+                </thead>
+            </table><br><br>    
+            <h3>Visión Cercana</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Esfera</th>
+                        <th>Cilindro</th>
+                        <th>Eje</th>
+                        <th>Prisma</th>
+                        <th>A.V.C.C</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <th>Ojo Derecho</th>
+                        <td>{{vc[0][0]}}</td>
+                        <td>{{vc[0][1]}}</td>
+                        <td>{{vc[0][2]}}</td>
+                        <td>{{vc[0][3]}}</td>
+                        <td>{{vc[0][4]}}</td>
+                    </tr>
+                    <tr>
+                        <th>Ojo Izquierdo</th>
+                        <td>{{vc[1][0]}}</td>
+                        <td>{{vc[1][1]}}</td>
+                        <td>{{vc[1][2]}}</td>
+                        <td>{{vc[1][3]}}</td>
+                        <td>{{vc[1][4]}}</td>
+                        
+                    </tr>
+            </table>
+            <br>
+            <h3>Refracción Objetiva</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>C.A.</th>
+                        <th>Esfera</th>
+                        <th>Cilindro</th>
+                        <th>Eje</th>
+                        <th>Prisma</th>
+                        <th>DVertice</th>
+                        <th>A.V.C.C</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <th>Ojo Derecho</th>
+                        <td>{{roa[0][0]}}</td>
+                        <td>{{roa[0][1]}}</td>
+                        <td>{{roa[0][2]}}</td>
+                        <td>{{roa[0][3]}}</td>
+                        <td>{{roa[0][4]}}</td>
+                        <td>{{roa[0][5]}}</td>
+                    </tr>
+                    <tr>
+                        <th>Ojo Izquierdo</th>
+                        <td>{{roa[1][0]}}</td>
+                        <td>{{roa[1][1]}}</td>
+                        <td>{{roa[1][2]}}</td>
+                        <td>{{roa[1][3]}}</td>
+                        <td>{{roa[1][4]}}</td>
+                        <td>{{roa[1][5]}}</td>
+                    </tr>
+            </table><br>
+            <br>
+            <h3>Refracción Subjetiva</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>C.A.</th>
+                        <th>Esfera</th>
+                        <th>Cilindro</th>
+                        <th>Eje</th>
+                        <th>Prisma</th>
+                        <th>A.V.C.C</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <th>Ojo Derecho</th>
+                        <td>{{rs[0][0]}}</td>
+                        <td>{{rs[0][1]}}</td>
+                        <td>{{rs[0][2]}}</td>
+                        <td>{{rs[0][3]}}</td>
+                        <td>{{rs[0][4]}}</td>
+                    </tr>
+                    <tr>
+                        <th>Ojo Izquierdo</th>
+                        <td>{{rs[1][0]}}</td>
+                        <td>{{rs[1][1]}}</td>
+                        <td>{{rs[1][2]}}</td>
+                        <td>{{rs[1][3]}}</td>
+                        <td>{{rs[1][4]}}</td>
+                    </tr>
+            </table>
+            <br>
+            {% if rs[0][5] == 0 %}
+            <label><input type="checkbox" id="pruamb" name="pruamb" value="1" disabled><strong>  Prueba Ambulatoria</strong></label><br>
+            {% else %}
+            <label><input type="checkbox" id="pruamb" name="pruamb" value="1" checked disabled><strong>  Prueba Ambulatoria</strong></label><br>
+            {% endif %}
+            {% if rs[0][6] == 0 %}
+            <label><input type="checkbox" id="testbi" name="testbi" value="1" disabled><strong>  Test Bicromatico</strong></label><br>
+            {% else %}
+            <label><input type="checkbox" id="testbi" name="testbi" value="1" checked disabled><strong>  Test Bicromatico</strong></label><br>
+            {% endif %}
+            {% if rs[0][7] == 0 %}
+            <label><input type="checkbox" id="equibino" name="equibino" value="1" disabled><strong>  Equilibrio Binocular</strong></label><br>
+            {% else %}
+            <label><input type="checkbox" id="equibino" name="equibino" value="1" checked disabled><strong>  Equilibrio Binocular</strong></label><br>
+            {% endif %}
+            {% if rs[0][8] == 0 %}
+            <label><input type="checkbox" id="pruest" name="pruest" value="1" disabled><strong>  Prueba de Estereopsis</strong></label><br>
+            {% else %}
+            <label><input type="checkbox" id="pruest" name="pruest" value="1" checked disabled><strong>  Prueba de Estereopsis</strong></label><br>
+            {% endif %}
+            {% if rs[0][9] == 0 %}
+            <label><input type="checkbox" id="ciljackson" name="ciljackson" value="1" disabled><strong>  Cilindro Cruzado de Jackson</strong></label><br>
+            {% else %}
+            <label><input type="checkbox" id="ciljackson" name="ciljackson" value="1" checked disabled><strong>  Cilindro Cruzado de Jackson</strong></label><br>
+            {% endif %}
+            <br>
+            <h3>Refracción Final</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>C.A.</th>
+                        <th>Esfera</th>
+                        <th>Cilindro</th>
+                        <th>Eje</th>
+                        <th>Prisma</th>
+                        <th>A.V.C.C</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <th>Ojo Derecho</th>
+                        <td>{{rf[0][0]}}</td>
+                        <td>{{rf[0][3]}}</td>
+                        <td>{{rf[0][6]}}</td>
+                        <td>{{rf[0][9]}}</td>
+                        <td>{{rf[0][12]}}</td>
+                    </tr>
+                    <tr>
+                        <th>Ojo Izquierdo</th>
+                        <td>{{rf[1][0]}}</td>
+                        <td>{{rf[1][3]}}</td>
+                        <td>{{rf[1][6]}}</td>
+                        <td>{{rf[1][9]}}</td>
+                        <td>{{rf[1][12]}}</td>
+                    </tr>
+                    <tr>
+                        <th>DNP</th>
+                        <td>{{dataconsulta[0][6]}}</td>
+                        <th>A.D.D.</th>
+                        <td>{{dataconsulta[0][16]}}</td>
+                        <td>{{dataconsulta[0][17]}}</td>
+                        <td>{{dataconsulta[0][18]}}</td>
+                    </tr>
+                </thead>
+            </table><br><br> 
+
+            <div id="distanciacercana">
+                <h3>Fórmula para Distancia Cercana</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Esfera</th>
+                        <th>Cilindro</th>
+                        <th>Eje</th>
+                        <th>Prisma</th>
+                        <th>A.V.C.C</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <th>Ojo Derecho</th>
+                    <td>{{rf[0][1]}}</td>
+                    <td>{{rf[0][4]}}</td>
+                    <td>{{rf[0][7]}}</td>
+                    <td>{{rf[0][10]}}</td>
+                    <td>{{rf[0][13]}}</td>
+                </tr>
+                <tr>
+                    <th>Ojo Izquierdo</th>
+                    <td>{{rf[1][1]}}</td>
+                    <td>{{rf[1][4]}}</td>
+                    <td>{{rf[1][7]}}</td>
+                    <td>{{rf[1][10]}}</td>
+                    <td>{{rf[1][13]}}</td>
+                </tr>
+                <tr>
+                    <th>DNP</th>
+                    <td>{{dataconsulta[0][8]}}</td>
+                </tr>
+            </table>
+            <br><br> 
+            </div>  
+            <div id="distanciamedia">
+                <h3>Fórmula para Distancia Media</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Esfera</th>
+                        <th>Cilindro</th>
+                        <th>Eje</th>
+                        <th>Prisma</th>
+                        <th>A.V.C.C</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <th>Ojo Derecho</th>
+                    <td>{{rf[0][2]}}</td>
+                    <td>{{rf[0][5]}}</td>
+                    <td>{{rf[0][8]}}</td>
+                    <td>{{rf[0][11]}}</td>
+                    <td>{{rf[0][14]}}</td>
+                </tr>
+                <tr>
+                    <th>Ojo Izquierdo</th>
+                    <td>{{rf[1][2]}}</td>
+                    <td>{{rf[1][5]}}</td>
+                    <td>{{rf[1][8]}}</td>
+                    <td>{{rf[1][11]}}</td>
+                    <td>{{rf[1][14]}}</td>
+                </tr>
+                <tr>
+                    <th>DNP</th>
+                    <td>{{dataconsulta[0][9]}}</td>
+                </tr>
+            </table>
+            <br>
+            <h3>Final</h3>
+            <table>
+                <tr class="fondoblanco">
+                    <th><label for="proxcita">Próxima Cita:</label></th>
+                    <td colspan="5"><input type="date" class="inputtext" id="proxicita" name="proxicita" value="{{dataconsulta[0][5]}}" disabled></td>
+                </tr>
+                <tr class="fondoblanco">
+                    <th><label for="usolent">Uso Lentes:</label></th>
+                    <td colspan="5"><select name="usolent" id="usolent" class="inputtext" disabled>
+                        <option value="">Seleccione uso</option>
+                        {% for i in usolen %}
+                        {% if dataconsulta[0][4] == i[0] %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr class="fondoblanco">
+                    <th><label for="lenrecom">Lente Recomendado:</label></th>
+                    <td><select name="tipolent" id="tipolent" class="inputtext1" disabled>
+                        <option value="">Seleccione tipo</option>
+                        {% for i in tipolen %}
+                        {% if i[0] == lenterecomendado[0][0] %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td><select name="lentedetalladolent" id="lentedetalladolent" class="inputtext1" disabled>
+                        <option value="">Seleccione Lente Detallado</option>
+                        {% for i in lentedetalladolen %}
+                        {% if i[0] == lenterecomendado[0][4] %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    
+                    <td><select name="materiallent" id="materiallent" class="inputtext1" disabled>
+                        <option value="">Seleccione material</option>
+                        {% for i in materiallen %}
+                        {% if i[0] == lenterecomendado[0][1] %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td><select name="filtrolent" id="filtrolent" class="inputtext1" disabled>
+                        <option value="">Seleccione filtro</option>
+                        {% for i in filtrolen %}
+                        {% if i[0] == lenterecomendado[0][2] %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td><select name="colorlent" id="colorlent" class="inputtext1" disabled>
+                        <option value="">Seleccione color</option>
+                        {% for i in colorlen %}
+                        {% if i[0] == lenterecomendado[0][3] %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                </tr>
+            </table>
+            </div>
+            <br>
+            <center><h3>Motilidad Ocular</h3></center>
+            <table>
+                <thead>
+                    <tr>
+                        <th>M.E.O.</th>
+                        <th>Movilidad Muscular Fija</th>
+                        <th>Forias</th>
+                        <th>Tropias</th>
+                        <th>Ducciones</th>
+                        <th>Versiones</th>
+                        <th>Convergencia</th>
+                    </tr>
+                </thead>
+                    <tr>
+                        <th>Ojo Derecho</th>
+                        <td>{{mo[0][0]}}</td>
+                        <td>{{mo[0][1]}}</td>
+                        <td>{{mo[0][2]}}</td>
+                        <td>{{mo[0][3]}}</td>
+                        <td rowspan="2">{{mo[0][4]}}</td>
+                        <td rowspan="2">{{mo[0][5]}}</td>
+                    </tr>
+                    <tr>
+                        <th>Ojo Izquierdo</th>
+                        <td>{{mo[1][0]}}</td>
+                        <td>{{mo[1][1]}}</td>
+                        <td>{{mo[1][2]}}</td>
+                        <td>{{mo[1][3]}}</td>
+                    </tr>
+            </table>
+            <br>
+            {% if mo[0][6] == 0 %}
+            <label><input type="checkbox" id="ortofotico" name="ortoforico" value="1" disabled><strong>  Ortofórico</strong></label><br>
+            {% else %}
+            <label><input type="checkbox" id="ortofotico" name="ortoforico" value="1" checked disabled><strong>  Ortofórico</strong></label><br>
+            {% endif %}
+            <br>
+            <h3>Salud Ocular</h3>
+            {% if obs[0][0] == 0 %}
+            <label><input type="checkbox" id="ojsal" name="ojsal" value="1" disabled><strong>  Ambos ojos saludables - Valores normales</strong></label><br>
+            {% else %}
+            <label><input type="checkbox" id="ojsal" name="ojsal" value="1" checked disabled><strong>  Ambos ojos saludables - Valores normales</strong></label><br>
+            {% endif %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Observaciones</th>
+                        <th>Ojo Derecho</th>
+                        <th>Ojo Izquierdo</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <th>Órbita</th>
+                    <td>{{obs[0][1]}}</td>
+                    <td>{{obs[1][1]}}</td>
+                </tr>
+                <tr>
+                    <th>Cejas</th>
+                    <td>{{obs[0][2]}}</td>
+                    <td>{{obs[1][2]}}</td>
+                </tr>
+                <tr>
+                    <th rowspan="2">Lágrima</th>
+                    <td>{{obs[0][3]}}</td>
+                    <td>{{obs[1][3]}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="inputtext2" id="schod" name="schod" disabled>
+                            <option value="">Prueba de Schirmer</option>
+                            {% for i in mms %}
+                            {% if i == obs[0][18] %}
+                            <option value="{{i}}" selected>{{i}} mm</option>
+                            {% else %}
+                            <option value="{{i}}">{{i}} mm</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <select class="inputtext2" id="butod" name="butod" disabled>
+                            <option value="">Prueba de But</option>
+                            {% for i in numeros %}
+                            {% if i == obs[0][19] %}
+                            <option value="{{i}}" selected>{{i}} seg</option>
+                            {% else %}
+                            <option value="{{i}}">{{i}} seg</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select class="inputtext2" id="schoi" name="schoi" disabled>
+                            <option value="">Prueba de Schirmer</option>
+                            {% for i in mms %}
+                            {% if i == obs[1][18] %}
+                            <option value="{{i}}" selected>{{i}} mm</option>
+                            {% else %}
+                            <option value="{{i}}">{{i}} mm</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <select class="inputtext2" id="butoi" name="butoi" disabled>
+                            <option value="">Prueba de But</option>
+                            {% for i in numeros %}
+                            {% if i == obs[1][19] %}
+                            <option value="{{i}}" selected>{{i}} seg</option>
+                            {% else %}
+                            <option value="{{i}}">{{i}} seg</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Vias Lagrimales</th>
+                    <td>{{obs[0][4]}}</td>
+                    <td>{{obs[1][4]}}</td>
+                </tr>
+                <tr>
+                    <th>Parpados y pestañas</th>
+                    <td>{{obs[0][5]}}</td>
+                    <td>{{obs[1][5]}}</td>
+                </tr>
+                <tr>
+                    <th>Conjuntiva</th>
+                    <td>{{obs[0][6]}}</td>
+                    <td>{{obs[1][6]}}</td>
+                </tr>
+                <tr>
+                    <th>Esclera</th>
+                    <td>{{obs[0][7]}}</td>
+                    <td>{{obs[1][7]}}</td>
+                </tr>
+                <tr>
+                    <th>Córnea</th>
+                    <td>{{obs[0][8]}}</td>
+                    <td>{{obs[1][8]}}</td>
+                </tr>
+                <tr>
+                    <th>Cámara Anterior</th>
+                    <td>{{obs[0][9]}}</td>
+                    <td>{{obs[1][9]}}</td>
+                </tr>
+                <tr>
+                    <th>Iris</th>
+                    <td>{{obs[0][10]}}</td>
+                    <td>{{obs[1][10]}}</td>
+                </tr>
+                <tr>
+                    <th>Pupila</th>
+                    <td>{{obs[0][11]}}</td>
+                    <td>{{obs[1][11]}}</td>
+                </tr>
+                <tr>
+                    <th>Cristalino</th>
+                    <td>{{obs[0][12]}}</td>
+                    <td>{{obs[1][12]}}</td>
+                </tr>
+                <tr>
+                    <th>Vítreo</th>
+                    <td>{{obs[0][13]}}</td>
+                    <td>{{obs[1][13]}}</td>
+                </tr>
+                <tr>
+                    <th>Nervio Óptico/Papila</th>
+                    <td><select class="inputtext1" id="nervood" name="nervood" disabled>
+                        <option value="">Nervio Óptico</option>
+                        {% for i in nervos %}
+                        {% if (i | int) == (obs[0][14] | int) %}
+                        <option value="{{i/10}}" selected>{{i/10}}</option>
+                        {% else %}
+                        <option value="{{i/10}}">{{i/10}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td><select class="inputtext1" id="nervooi" name="nervooi" disabled>
+                        <option value="">Nervio Óptico</option>
+                        {% for i in nervos %}
+                        {% if (i | int) == (obs[1][14] | int) %}
+                        <option value="{{i}}" selected>{{i/10}}</option>
+                        {% else %}
+                        <option value="{{i}}">{{i/10}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr>
+                    <th>Relación Vena/Arteria</th>
+                    <td><select class="inputtext1" id="retppod" name="retppod" disabled>
+                        <option value="">Relación V/A</option>
+                        {% for i in relva %}
+                        {% if (i[0] | int) == (obs[0][15] | int) %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                    <td><select class="inputtext1" id="retppoi" name="retppoi" disabled>
+                        <option value="">Relación V/A</option>
+                        {% for i in relva %}
+                        {% if (i[0] | int) == (obs[1][15] | int) %}
+                        <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                        {% else %}
+                        <option value="{{i[0]}}">{{i[1]}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr>
+                    <th>Retina Macular</th>
+                    <td>{{obs[0][17]}}</td>
+                    <td>{{obs[1][17]}}</td>
+                </tr>
+                <tr>
+                    <th>Retina Periférica</th>
+                    <td>{{obs[0][16]}}</td>
+                    <td>{{obs[1][16]}}</td>
+                </tr>
+            </table>
+            
+          </div>
+          <div id="menu3" class="tab-pane fade" style="padding-left: 5%;">
+            <table>
+                <tr class="fondoblanco">
+                    <th rowspan="3"><label for="diagnostico">Diagnóstico:</label></th>
+                    <td colspan="2">
+                        <select name="ambliopia" id="ambliopia" class="inputtext1" disabled>
+                            <option value="">Ambliopía</option>
+                            <option value="0" selected>Ninguno</option>
+                            {% for i in dataojo %}
+                            {% if i[0] == dataconsulta[0][2] %}
+                            <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                            {% else %}
+                            <option value="{{i[0]}}">{{i[1]}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td colspan="3">
+                        <select name="ametropia" id="ametropia" class="inputtext1" disabled>
+                            <option value="">Ametropía</option>
+                            <option value="0" selected>Ninguno</option>
+                            {% for i in dataametropia %}
+                            {% if i[0] == dataconsulta[0][3] %}
+                            <option value="{{i[0]}}" selected>{{i[1]}}</option>
+                            {% else %}
+                            <option value="{{i[0]}}">{{i[1]}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr class="fondoblanco">
+                    <td colspan="2">
+                        {% if dataconsulta[0][19] == 0 %}
+                        <label><input type="checkbox" id="emetropia" name="emetropia" value="1" disabled><strong>  Emetropía</strong></label>
+                        {% else %}
+                        <label><input type="checkbox" id="emetropia" name="emetropia" value="1" checked disabled><strong>  Emetropía</strong></label>
+                        {% endif %}
+                    </td>
+                    <td colspan="3">
+                        {% if dataconsulta[0][20] == 0 %}
+                        <label><input type="checkbox" id="antimetropia" name="antimetropia" value="1" disabled><strong>  Antimetropía</strong></label>
+                        {% else %}
+                        <label><input type="checkbox" id="antimetropia" name="antimetropia" value="1" checked disabled><strong>  Antimetropía</strong></label>
+                        {% endif %}
+                        
+                    </td>
+                </tr>
+                <tr class="fondoblanco">
+                    <td colspan="2">
+                        {% if dataconsulta[0][21] == 0 %}
+                        <label><input type="checkbox" id="anisometropia" name="anisometropia" value="1" disabled><strong>  Anisometropia</strong></label>
+                        {% else %}
+                        <label><input type="checkbox" id="anisometropia" name="anisometropia" value="1" checked disabled><strong>  Anisometropia</strong></label>
+                        {% endif %}
+                    </td>
+                    <td colspan="3">
+                        {% if dataconsulta[0][22] == '0' %}
+                        <label><input type="checkbox" id="patologiaocular" name="patologiaocular" value="1" disabled><strong>  Patología Ocular</strong></label><br>
+                        <input type="text" class="inputtext1" id="patologiaoculartext" name="patologiaoculartext" disabled>
+                        {% else %}
+                        <label><input type="checkbox" id="patologiaocular" name="patologiaocular" value="1" checked disabled><strong>  Patología Ocular</strong></label><br>
+                        <input type="text" class="inputtext1" id="patologiaoculartext" name="patologiaoculartext" value="{{dataconsulta[0][22]}}" disabled>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr class="fondoblanco">
+                    <th rowspan="2"><label for="tratamiento">Tratamiento:</label></th>
+                    <td colspan="2">
+                        {% if dataconsulta[0][23] == 0 %}
+                        <label><input type="checkbox" id="lentesoftalmicos" name="lentesoftalmicos" value="1" disabled><strong>  Lentes Oftálmicos</strong></label>
+                        {% else %}
+                        <label><input type="checkbox" id="lentesoftalmicos" name="lentesoftalmicos" value="1" checked disabled><strong>  Lentes Oftálmicos</strong></label>
+                        {% endif %}
+                       
+                    </td>
+                    <td colspan="3">
+                        {% if dataconsulta[0][24] == 0 %}
+                        <label><input type="checkbox" id="lentescontacto" name="lentescontacto" value="1" disabled><strong>  Lentes de Contacto</strong></label>
+                        {% else %}
+                        <label><input type="checkbox" id="lentescontacto" name="lentescontacto" value="1" checked disabled><strong>  Lentes de Contacto</strong></label>
+                        {% endif %}
+                        
+                    </td>
+                </tr>
+                <tr class="fondoblanco">
+                    <td colspan="2">
+                        {% if dataconsulta[0][25] == 0 %}
+                        <label><input type="checkbox" id="refoftalmologica" name="refoftalmologica" value="1" disabled><strong>  Referencia Oftalmológica</strong></label>
+                        {% else %}
+                        <label><input type="checkbox" id="refoftalmologica" name="refoftalmologica" value="1" checked disabled><strong>  Referencia Oftalmológica</strong></label>
+                        {% endif %}
+                        
+                    </td>
+                    <td colspan="3">
+                        {% if dataconsulta[0][26] == 0 %}
+                        <label><input type="checkbox" id="farmaco" name="farmaco" value="1" disabled><strong>  Fármaco</strong></label>
+                        {% else %}
+                        <label><input type="checkbox" id="farmaco" name="farmaco" value="1" checked disabled><strong>  Fármaco</strong></label>
+                        {% endif %}
+                        
+                    </td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <h6>Datos Gotero</h6>
+            <table id="tablegotas" style="display: block;">
+                <tr>
+                    <td><input type="text" class="inputtextrecetas1" id="gmed1" name="gmed1" value="{{gotas[0]}}" disabled></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea id="gdesc1" name="gdesc1" rows="2" cols="65" style="font-size: 25px;" disabled>{{gotas[1]}}</textarea>
+                    </td>
+                </tr>
+            </table>
+            <br>
+                <table id="tablegotas1" style="display: block;">
+                <tr>
+                    <td><input type="text" class="inputtextrecetas1" id="gmed2" name="gmed2" value="{{gotas[2]}}" disabled></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <textarea id="gdesc2" name="gdesc2" rows="2" cols="65" style="font-size: 25px;" disabled>{{gotas[3]}}</textarea>
+                    </td>
+                </tr>
+            </table>
+            <div id="referencia" style="display: block;">
+                <h6>Referencia Oftálmica</h6>
+                <table>
+                    <tr>
+                        <td>Lugar a referir: <input type="text" class="inputtextrecetas1" id="lugarref" name="lugarref" value="{{referencia[0]}}" disabled></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <textarea id="descref" name="descref" rows="2" cols="65" style="font-size: 25px;" disabled>{{referencia[1]}}</textarea>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+      <script type="text/javascript">
+        function colorespanel(codpanel){
+                codpanel = parseInt(codpanel)
+                for(var i = 0; i<=3;i++){
+                    if(i == codpanel){
+                        var aux = 't' + String(i);
+                        var t = document.getElementById(aux)
+                        t.style.backgroundColor = '#5BC0DE'
+                        t.style.color = 'white'
+                    }else{
+                        var aux = 't' + String(i);
+                        var t = document.getElementById(aux)
+                        t.style.backgroundColor = 'white'
+                        t.style.color = 'black'
+                    }
+                }
+            }
+      </script>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% block content %}
+<script type="text/javascript">
+    function PdfDownload(filename){
+        kendo.pdf.defineFont({
+            "FontAwesome":
+            "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf"
+        })
+        kendo.drawing.drawDOM($("#tblinfo1"))
+        .then(function(group){
+            return kendo.drawing.exportPDF(
+                group,{
+                    paperSize: "auto",
+                    landscape: false,
+                    margin: "2cm",
+                    multiPage: true,
+                });
+        })
+        .then(function(data){
+            kendo.saveAs({
+                dataURI: data,
+                fileName:filename
+            });
+        });
+    }
+</script>
+<button type="button" class="button" onclick="PdfDownload('Factura')">Imprimir Factura</button>
+<br>
+<br>
+<br>
+<div id="tblinfo1" class="tblinfo1">
+    <center>
+    <h1>Datos de Facturación</h1>
+    <h6><strong>Cliente: </strong> {{nomcliente}} {{apecliente}}</h6>
+    <h6><strong>Nit: </strong> {{nit}}</h6>
+    <h6><strong>Código: </strong> {{coddesc}}</h6>
+    <h6><strong>Fecha: </strong> {{d1}}</h6>
+
+    <table style="width: 50%;">
+        <tr>
+            <th colspan="2">Aro</th>
+        </tr>
+        <tr>
+            <td style="width: 70%;">{{dataaro[1]}} {{dataaro[2]}} {{dataaro[3]}}</td>
+            <td>Q {{precioaro}}</td>
+        </tr>
+        <tr>
+            <th colspan="2">Lente</th>
+        </tr>
+        <tr>
+            <td style="width: 70%;">{{datalente[1]}}</td>
+            <td>Q {{preciolente}}</td>
+        </tr>
+        <tr>
+            <th colspan="2">Consulta</th>
+        </tr>
+        <tr>
+            {% if cons == '1' %}
+            <td>Si Aplica</td>
+            <td>Q 50.00</td>
+            {% else %}
+            <td>No Aplica</td>
+            <td>Q 0.00</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th colspan="2">Totales</th>
+        </tr>
+        <tr>
+            <td style="width: 70%;">Total General</td>
+            <td>Q {{restotgen}}</td>
+        </tr>
+        <tr>
+            <td style="width: 70%;">Descuento</td>
+            <td>Q {{resdesc}}</td>
+        </tr>
+        <tr>
+            <td style="width: 70%;"><strong>Total a Cancelar</strong></td>
+            <td><strong>Q {{restotcan}}</strong></td>
+        </tr>
+    </table>
+</center>
+</div>
+<form action="" method="POST">
+<center><button onclick="submit" class="button">Aceptar</button></center>
+</form>
+{% endblock %}

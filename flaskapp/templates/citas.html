@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Citas Programadas</h1>
+    <form action="" method="POST">
+        <div class="izquierda1">
+            <h3>Seleccione fecha</h3>
+        <input type="date" id="fecha" name="fecha" class="inputtext1">
+        <center><button onclick="submit" class="button">Aceptar</button></center>
+        </div>
+    </form>
+        <div class="derecha1">
+            <button type="button" class="button"><a href="/nuevacita" style="color: white;"> Nueva Cita</a></button>
+            <table>
+                <tr>
+                    <th class="letragrande">Nombre</th>
+                    <th class="letragrande">Hora</th>
+                    <th class="letragrande">Fecha</th>
+                    <th class="letragrande">Telefono</th>
+                    <th colspan="2" class="letragrande">Opciones</th>
+
+                </tr>
+                {% for j in data %} 
+                <tr>
+                    <td class="letragrande">{{j[0]}} {{j[1]}}</td>
+                    <td class="letragrande">{{j[3]}}</td>
+                    <td class="letragrande">{{j[2]}}</td>
+                    <td class="letragrande">{{j[4]}}</td>
+                    <td class="letragrande"><a href="ceditar/{{j[5]}}">Editar</a></td>
+                    <td class="letragrande"><a href="celiminar/{{j[5]}}">Eliminar</a></td>
+                </tr>         
+                {% endfor %}
+            </table>
+        </div>
+    
+{% endblock %}
