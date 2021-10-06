@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, make_response
 import pymysql
 from datetime import date, timedelta
 import datetime
+import pdfkit
 
 from werkzeug.utils import send_file
 
@@ -846,8 +847,8 @@ def datosclinicos(idconsulta):
 		rfe1oi = request.form["rfe1oi"]
 		rfe2oi = request.form["rfe2oi"]
 		rfe3oi = request.form["rfe3oi"]
-		if len(rfe3oi) < 1:
-			rfe3oi = 0
+		if len(rfe1oi) < 1:
+			rfe1oi = 0
 		if len(rfe2oi) < 1:
 			rfe2oi = 0
 		if len(rfe3oi) < 1:
@@ -1077,6 +1078,27 @@ def datosclinicos(idconsulta):
 		materiallent = request.form["materiallent"]
 		filtrolent = request.form["filtrolent"]
 		colorlent = request.form["colorlent"]
+		try:
+			ambliopiaoi = request.form["ambliopiaoi"]
+		except:
+			ambliopiaoi = 0
+		try:
+			ambliopiaod = request.form["ambliopiaod"]
+		except:
+			ambliopiaod = 0
+		ametropiaoi = request.form["ametropiaoi"]
+		if len(ametropiaoi) < 1:
+			ametropiaoi = 0
+		if len(usolent) < 1:
+			usolent = 6
+		if len(tipolent) < 1:
+			tipolent = 7
+		if len(materiallent) < 1:
+			materiallent = 5
+		if len(filtrolent) < 1:
+			filtrolent = 10
+		if len(colorlent) < 1:
+			colorlent = 10
 		ambliopia = request.form["ambliopia"]
 		ametropia = request.form["ametropia"]
 		if len(ambliopia) < 1:
@@ -1138,6 +1160,9 @@ def datosclinicos(idconsulta):
 			lugarref = 0
 		if len(descref) < 1:
 			descref = 0
+		notas = request.form["notas"]
+		if len(notas) < 1:
+			notas = 0
 		try:
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:
@@ -1201,8 +1226,8 @@ def datosclinicos(idconsulta):
 					cursor.execute(consulta, (idconsulta, tipolent, materiallent, filtrolent, colorlent, lentedetalladolent))
 
 					#consulta
-					consulta = "update consulta set idusolen=%s, proximacita=%s, dnp=%s,dnp1=%s, add1=%s, add2=%s, add3=%s, add11=%s, add22=%s, add33=%s, ingdata=1, dnp2=%s, dnp3=%s, ojoambliopia=%s, emetropia=%s, antimetropia=%s, tipoametropia=%s, anisometropia=%s, patologiaocular=%s, lentesoftalmicos=%s, lentescontacto=%s, refoftalmologica=%s, farmaco=%s, motivoconsulta=%s, ultimaevmes=%s, ultimaevanio=%s, tiempolen=%s where idconsulta = %s;"
-					cursor.execute(consulta, (usolent, proxicita, dnp, dnp1, add1, add2, add3, add11, add22, add33, dnp2, dnp3, ambliopia, emetropia, antimetropia, ametropia, anisometropia, patologiaoculartext, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, motivoconsulta, ultimaevmes, ultimaevanio, tiempolentes, idconsulta))
+					consulta = "update consulta set idusolen=%s, proximacita=%s, dnp=%s,dnp1=%s, add1=%s, add2=%s, add3=%s, add11=%s, add22=%s, add33=%s, ingdata=1, dnp2=%s, dnp3=%s, ojoambliopia=%s, emetropia=%s, antimetropia=%s, tipoametropia=%s, anisometropia=%s, patologiaocular=%s, lentesoftalmicos=%s, lentescontacto=%s, refoftalmologica=%s, farmaco=%s, motivoconsulta=%s, ultimaevmes=%s, ultimaevanio=%s, tiempolen=%s, nota=%s, ambliopiaoi=%s, ambliopiaod=%s, ametropiaoi=%s where idconsulta = %s;"
+					cursor.execute(consulta, (usolent, proxicita, dnp, dnp1, add1, add2, add3, add11, add22, add33, dnp2, dnp3, ambliopia, emetropia, antimetropia, ametropia, anisometropia, patologiaoculartext, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, motivoconsulta, ultimaevmes, ultimaevanio, tiempolentes, notas,ambliopiaoi, ambliopiaod, ametropiaoi, idconsulta))
 
 					#gotas
 					consulta = "insert into recetagotero(idconsulta, medicamento1, descripcion1, medicamento2, descripcion2) values(%s,%s,%s,%s,%s)"
@@ -1295,7 +1320,7 @@ def aprobados():
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1"
+				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y')  from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1"
 				cursor.execute(consulta)
 				consultas = cursor.fetchall()
 		finally:
@@ -1474,7 +1499,7 @@ def recetas(idconsulta):
 			print("Ocurrió un error al conectar: ", e)
 		return redirect(url_for('recetas', idconsulta=idconsulta))
 	return render_template('recetas.html', title='Recetas', logeado=logeado, dataconsulta=dataconsulta, rf = rf, 
-	lenterecomendado=lenterecomendado, lencons=lencons, datagotero=datagotero, recetaref=recetaref)
+	lenterecomendado=lenterecomendado, lencons=lencons, datagotero=datagotero, recetaref=recetaref, idconsulta=idconsulta)
 
 @app.route("/compra/<idconsulta>", methods=['GET', 'POST'])
 def compra(idconsulta):
@@ -1665,7 +1690,7 @@ def pendaprobarc(idconsulta):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, motivoconsulta from consulta where idconsulta = "+ str(idconsulta) + ";"
+				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, motivoconsulta, nota, ambliopiaoi, ambliopiaod, ametropiaoi from consulta where idconsulta = "+ str(idconsulta) + ";"
 				cursor.execute(consulta)
 				dataconsulta = cursor.fetchall()
 				idpaciente = dataconsulta[0][0]
@@ -2045,11 +2070,15 @@ def pendaprobarc(idconsulta):
 		rfe1oi = request.form["rfe1oi"]
 		rfe2oi = request.form["rfe2oi"]
 		rfe3oi = request.form["rfe3oi"]
+		if len(rfe1oi) < 1:
+			rfe1oi = 0
 		if len(rfe2oi) < 1:
 			rfe2oi = 0
 		if len(rfe3oi) < 1:
 			rfe3oi = 0
 		rfc1oi = request.form["rfc1oi"]
+		if len(rfc1oi) < 1:
+			rfc1oi = 0
 		rfc1oi = float(rfc1oi)
 		if rfc1oi > 0:
 			rfc1oi = rfc1oi * -1
@@ -2267,7 +2296,18 @@ def pendaprobarc(idconsulta):
 		lentedetalladolent = request.form["lentedetalladolent"]
 		ambliopia = request.form["ambliopia"]
 		ametropia = request.form["ametropia"]
-		
+		notas = request.form["notas"]
+		try:
+			ambliopiaoi = request.form["ambliopiaoi"]
+		except:
+			ambliopiaoi = 0
+		try:
+			ambliopiaod = request.form["ambliopiaod"]
+		except:
+			ambliopiaod = 0
+		ametropiaoi = request.form["ametropiaoi"]
+		if len(ametropiaoi) < 1:
+			ametropiaoi = 0
 		try:
 			emetropia = request.form["emetropia"]
 		except:
@@ -2380,8 +2420,8 @@ def pendaprobarc(idconsulta):
 					cursor.execute(consulta, (ojsal, orboi, cejoi, lagoi, vilagoi, pypoi, conjoi, escloi, cornoi, camaoi, irioi, pupioi, crisoi, vitoi, nervooi, retppoi, retpeoi, retmacoi, schoi, butoi, idconsulta, 1))
 					
 					#consulta
-					consulta = "update consulta set idusolen=%s, proximacita=%s, dnp=%s,dnp1=%s, add1=%s, add2=%s, add3=%s, add11=%s, add22=%s, add33=%s, aprobado=1, iduser=%s, dnp2=%s, dnp3=%s, ojoambliopia=%s, emetropia=%s, antimetropia=%s, tipoametropia=%s, anisometropia=%s, patologiaocular=%s, lentesoftalmicos=%s, lentescontacto=%s, refoftalmologica=%s, farmaco=%s where idconsulta = %s;"
-					cursor.execute(consulta, (usolent, proxicita, dnp, dnp1, add1, add2, add3, add11, add22, add33, session['iduser1'], dnp2, dnp3, ambliopia, emetropia, antimetropia, ametropia, anisometropia, patologiaoculartext, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, idconsulta))
+					consulta = "update consulta set idusolen=%s, proximacita=%s, dnp=%s,dnp1=%s, add1=%s, add2=%s, add3=%s, add11=%s, add22=%s, add33=%s, aprobado=1, iduser=%s, dnp2=%s, dnp3=%s, ojoambliopia=%s, emetropia=%s, antimetropia=%s, tipoametropia=%s, anisometropia=%s, patologiaocular=%s, lentesoftalmicos=%s, lentescontacto=%s, refoftalmologica=%s, farmaco=%s, nota=%s, ambliopiaoi=%s, ambliopiaod=%s, ametropiaoi=%s where idconsulta = %s;"
+					cursor.execute(consulta, (usolent, proxicita, dnp, dnp1, add1, add2, add3, add11, add22, add33, session['iduser1'], dnp2, dnp3, ambliopia, emetropia, antimetropia, ametropia, anisometropia, patologiaoculartext, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, notas, ambliopiaoi, ambliopiaod, ametropiaoi, idconsulta))
 					#Lente Recomendado
 					consulta = "update lenterecomendado set tipo = %s, material = %s, filtro = %s, color = %s,lentedetallado = %s where idconsulta = %s;"
 					cursor.execute(consulta, (tipolent, materiallent, filtrolent, colorlent, lentedetalladolent, idconsulta))
@@ -2455,7 +2495,7 @@ def ver(idconsulta):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco from consulta where idconsulta = "+ str(idconsulta) + ";"
+				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, nota, ambliopiaoi, ambliopiaod, ametropiaoi, motivoconsulta from consulta where idconsulta = "+ str(idconsulta) + ";"
 				cursor.execute(consulta)
 				dataconsulta = cursor.fetchall()
 				idpaciente = dataconsulta[0][0]
@@ -2640,6 +2680,158 @@ def crearusuario():
 			print("Ocurrió un error al conectar: ", e)
 		return redirect(url_for('home'))
 	return render_template('crearusuario.html', title='Nuevo Usuario', logeado=logeado)
+
+@app.route("/recetalentespdf/<idconsulta>", methods=['GET', 'POST'])
+def recetalentespdf(idconsulta):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	rf = []
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT esfera1, cilindro1, eje1, prisma1, avcc1 from reffin where idconsulta = %s and idojo = 2;"
+				cursor.execute(consulta, idconsulta)
+				aux = cursor.fetchone()
+				rf.append(aux)
+				consulta = "SELECT esfera1, cilindro1, eje1, prisma1, avcc1 from reffin where idconsulta = %s and idojo = 1;"
+				cursor.execute(consulta, idconsulta)
+				aux = cursor.fetchone()
+				rf.append(aux)
+				consulta = "SELECT p.nombre1, p.nombre2, p.apellido1, p.apellido2, DATE_FORMAT(c.fecha,'%d/%m/%Y'), u.uso, DATE_FORMAT(c.proximacita,'%d/%m/%Y'), c.dnp, c.add11, c.add22, c.add33, o.nombre, o.apellido from paciente p inner join consulta c on p.idpaciente = c.idpaciente inner join usolen u on u.idusolen = c.idusolen inner join user o ON o.iduser = c.iduser where idconsulta = " + str(idconsulta) + ";"
+				print(consulta)
+				cursor.execute(consulta)
+				dataconsulta = cursor.fetchall()
+				consulta = "SELECT t.tipo, m.material, f.filtro, c.color, d.lentedetallado from lenterecomendado l inner join tipolen t on t.idtipolen=l.tipo inner join materiallen m on m.idmateriallen=l.material inner join filtrolen f on f.idfiltrolen=l.filtro inner join colorlen c on c.idcolorlen=l.color inner join lentedetallado d on d.idlentedetallado = l.lentedetallado where l.idconsulta = %s;"
+				cursor.execute(consulta, idconsulta)
+				lenterecomendado = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	rendered = render_template('recetalentespdf.html', title="Receta lente", dataconsulta=dataconsulta, rf = rf, lenterecomendado=lenterecomendado)
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; filename=reportediario.pdf'
+	print(response)
+	return response
+
+@app.route("/recetacontactopdf/<idconsulta>", methods=['GET', 'POST'])
+def recetacontactopdf(idconsulta):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	lencons = []
+	existe = 0
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT DATE_FORMAT(fechacaducidad,'%d/%m/%Y'), poder, cb, dia, cil, eje, agregar, color, tipo from recetacontacto where idconsulta = " + str(idconsulta) + " and idojo = 2;"
+				cursor.execute(consulta)
+				aux = cursor.fetchall()
+				if len(aux) < 1:
+					lencons.append([0,0,0,0,0,0,0,0,0])
+				else:
+					lencons.append(aux[0])
+					existe = existe + 1
+				consulta = "SELECT DATE_FORMAT(fechacaducidad,'%d/%m/%Y'), poder, cb, dia, cil, eje, agregar, color, tipo from recetacontacto where idconsulta = " + str(idconsulta) + " and idojo = 1;"
+				cursor.execute(consulta)
+				aux = cursor.fetchall()
+				if len(aux) < 1:
+					lencons.append([0,0,0,0,0,0,0,0,0])
+				else:
+					lencons.append(aux[0])
+					existe = existe + 1
+				consulta = "SELECT p.nombre1, p.nombre2, p.apellido1, p.apellido2, DATE_FORMAT(c.fecha,'%d/%m/%Y'), u.uso, DATE_FORMAT(c.proximacita,'%d/%m/%Y'), c.dnp, c.add11, c.add22, c.add33, o.nombre, o.apellido from paciente p inner join consulta c on p.idpaciente = c.idpaciente inner join usolen u on u.idusolen = c.idusolen inner join user o ON o.iduser = c.iduser where idconsulta = " + str(idconsulta) + ";"
+				cursor.execute(consulta)
+				dataconsulta = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	rendered = render_template('recetacontactopdf.html', title="Receta contacto", dataconsulta=dataconsulta, lencons=lencons)
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; filename=reportediario.pdf'
+	print(response)
+	return response
+
+@app.route("/recetagotaspdf/<idconsulta>", methods=['GET', 'POST'])
+def recetagotaspdf(idconsulta):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	lencons = []
+	existe = 0
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT medicamento1, descripcion1, medicamento2, descripcion2 from recetagotero where idconsulta = %s;"
+				cursor.execute(consulta, idconsulta)
+				aux = cursor.fetchall()
+				if len(aux) < 1:
+					datagotero = [0,0,0,0]
+				else:
+					datagotero = aux[0]
+				consulta = "SELECT p.nombre1, p.nombre2, p.apellido1, p.apellido2, DATE_FORMAT(c.fecha,'%d/%m/%Y'), u.uso, DATE_FORMAT(c.proximacita,'%d/%m/%Y'), c.dnp, c.add11, c.add22, c.add33, o.nombre, o.apellido from paciente p inner join consulta c on p.idpaciente = c.idpaciente inner join usolen u on u.idusolen = c.idusolen inner join user o ON o.iduser = c.iduser where idconsulta = " + str(idconsulta) + ";"
+				cursor.execute(consulta)
+				dataconsulta = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	rendered = render_template('recetagotaspdf.html', title="Receta gotas", dataconsulta=dataconsulta, datagotero=datagotero)
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; filename=reportediario.pdf'
+	print(response)
+	return response
+
+@app.route("/recetarefpdf/<idconsulta>", methods=['GET', 'POST'])
+def recetarefpdf(idconsulta):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT lugar, descripcion from recetareferencia  where idconsulta = %s;"
+				cursor.execute(consulta, idconsulta)
+				recetaref = cursor.fetchall()
+				consulta = "SELECT p.nombre1, p.nombre2, p.apellido1, p.apellido2, DATE_FORMAT(c.fecha,'%d/%m/%Y'), u.uso, DATE_FORMAT(c.proximacita,'%d/%m/%Y'), c.dnp, c.add11, c.add22, c.add33, o.nombre, o.apellido from paciente p inner join consulta c on p.idpaciente = c.idpaciente inner join usolen u on u.idusolen = c.idusolen inner join user o ON o.iduser = c.iduser where idconsulta = " + str(idconsulta) + ";"
+				print(consulta)
+				cursor.execute(consulta)
+				dataconsulta = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	rendered = render_template('recetarefpdf.html', title="Receta Referencia", dataconsulta=dataconsulta, recetaref=recetaref)
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; filename=reportediario.pdf'
+	print(response)
+	return response
 
 if __name__ == '__main__':
     app.debug = True

@@ -13,7 +13,7 @@
         <div class="tab-content">
           <div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload('Receta General', 1)">Imprimir Receta</button>
+            <button type="button" class="button"><a href="/recetalentespdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
             <br>
             <br>
             <br>
@@ -96,7 +96,7 @@
           </div>
           <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload('Receta Lentes de Contacto', 2)">Imprimir Receta</button>
+            <button type="button" class="button"><a href="/recetacontactopdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
             <button onclick="submit" class="button">Aceptar</button>
             <br>
             <br>
@@ -187,7 +187,7 @@
           </div>
           <div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload('Receta Gotero', 3)">Imprimir Receta</button>
+            <button type="button" class="button"><a href="/recetagotaspdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
             <button onclick="submit" class="button">Aceptar</button>
             <br>
             <br>
@@ -224,11 +224,11 @@
                 <table>
                     <tr>
                         <th class="letragrande">Medicamento:</th>
-                        <td><input type="text" class="inputtextrecetas" id="gmed1" name="gmed1" value="{{datagotero[0]}}"></td>
+                        <td><input type="text" class="inputtextrecetas" style="text-align: right;" id="gmed1" name="gmed1" value="{{datagotero[0]}}"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea id="gdesc1" name="gdesc1" rows="2" cols="65" style="font-size: 25px;">{{datagotero[1]}}</textarea>
+                            <textarea id="gdesc1" name="gdesc1" rows="2" cols="65" style="font-size: 25px; text-align: right;">{{datagotero[1]}}</textarea>
                         </td>
                     </tr>
                 </table>
@@ -236,11 +236,11 @@
                     <table>
                     <tr>
                         <th class="letragrande">Medicamento:</th>
-                        <td><input type="text" class="inputtextrecetas" id="gmed2" name="gmed2" value="{{datagotero[2]}}"></td>
+                        <td><input type="text" class="inputtextrecetas"  style="text-align: right;" id="gmed2" name="gmed2" value="{{datagotero[2]}}"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <textarea id="gdesc2" name="gdesc2" rows="2" cols="65" style="font-size: 25px;">{{datagotero[3]}}</textarea>
+                            <textarea id="gdesc2" name="gdesc2" rows="2" cols="65" style="font-size: 25px; text-align: right;">{{datagotero[3]}}</textarea>
                         </td>
                     </tr>
                 </table>
@@ -258,7 +258,7 @@
           </div>
           <div id="menu3" class="tab-pane fade" style="padding-left: 5%;">
             <br>
-            <button type="button" class="button" onclick="PdfDownload('Receta Referencia', 4)">Imprimir Receta</button>
+            <button type="button" class="button"><a href="/recetarefpdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
             <button onclick="submit" class="button">Aceptar</button>
             <br>
             <br>
@@ -267,7 +267,7 @@
                 <form action="" method="POST">
             <div id="tblinfo4" style="width: 80%;">
                 <div style="width: 40%; float: left; position: relative;">
-                    <center><img src="..\static\logo-galileo.png" style="width: 50%;"> </center>
+                    <center><img src="..\static\logo-galileo.png" style="width: 60%;"> </center>
                 </div>
                 <div class="derecha">
                     <table>
@@ -284,10 +284,6 @@
                     <tr style="border: white;">
                         <th class="letragrande">Nombre: </th>
                         <td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}} {{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
-                    </tr>
-                    <tr style="border: white;">
-                        <th class="letragrande">Fecha Proxima Cita: </th>
-                        <td class="letragrande1"><input type="text" class="inputtextrecetas" onblur="cambiarfechaob1(1)" onfocus="cambiarfechaof1(1)" id="rfechacad" name="rfechacad" value="{{dataconsulta[0][6]}}"></td>
                     </tr>
                 </table>
                 <br>

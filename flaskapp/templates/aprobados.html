@@ -1,20 +1,85 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Consultas Aprobadas</h1>
-    <table>
+    <input type="text" id="estudiante" placeholder="   Filtro Estudiante" class="inputtext3" onkeyup="festudiante()">
+    <input type="text" id="paciente" placeholder="   Filtro Paciente" class="inputtext3" onkeyup="fpaciente()">
+    <input type="text" id="fecha" placeholder="   Filtro Fecha" class="inputtext3" onkeyup="ffecha()">
+    <table id="myTable">
         <tr>
             <th>Estudiante</th>
             <th>Paciente</th>
+            <th>Fecha</th>
             <th colspan="3">Opciones</th>
         </tr>
         {% for i in consultas %}
         <tr>
             <td>{{i[1]}} {{i[2]}}</td>
             <td>{{i[3]}} {{i[4]}}</td>
+            <td>{{i[5]}}</td>
             <td><a href="/ver/{{i[0]}}">Ver datos</a></td>
             <td><a href="/compra/{{i[0]}}">Compra</a></td>
             <td><a href="/recetas/{{i[0]}}">Recetas</a></td>
         </tr>
         {% endfor%}
     </table>
+    <script type="text/javascript">
+    function festudiante(){
+            var input, filter, table, tr, td,i,txtValue;
+            input = document.getElementById("estudiante");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            for(i = 0; i<tr.length;i++){
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerHTML;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    function fpaciente(){
+            var input, filter, table, tr, td,i,txtValue;
+            input = document.getElementById("paciente");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            for(i = 0; i<tr.length;i++){
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    txtValue = td.textContent || td.innerHTML;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+        function ffecha(){
+            var input, filter, table, tr, td,i,txtValue;
+            input = document.getElementById("fecha");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            for(i = 0; i<tr.length;i++){
+                td = tr[i].getElementsByTagName("td")[2];
+                if (td) {
+                    txtValue = td.textContent || td.innerHTML;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    
+    </script>
 {% endblock %}
