@@ -308,6 +308,33 @@ def nuevaconsulta():
 	proxcita = new_date, usolen = usolen, meses = meses, numeros=numeros, mms=mms, tipolen=tipolen, materiallen = materiallen, filtrolen=filtrolen, 
 	colorlen=colorlen, relva = relva, nervos=nervos, dataojo=dataojo, dataametropia=dataametropia, enfermedades=enfermedades, datapac=datapac, dataest=dataest)
 
+@app.route('/vercompras', methods=['GET', 'POST'])
+def vercompras():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = '''
+				select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, 
+				h.descuento, h.total,  DATE_FORMAT(h.fecha,'%d/%m/%Y'), u.nombre, u.apellido, h.idfacturaheader
+				from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader
+				inner join consulta c on c.idconsulta = h.idconsulta
+				inner join user u on u.iduser = c.iduser order by h.fecha desc
+				'''
+				cursor.execute(consulta)
+				pagos = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('vercompras.html', title='Ventas', logeado=logeado, pagos=pagos)
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
 	try:
@@ -1320,7 +1347,7 @@ def aprobados():
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y')  from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1"
+				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y'), p.nombre2, p.apellido2 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1"
 				cursor.execute(consulta)
 				consultas = cursor.fetchall()
 		finally:
@@ -1632,6 +1659,9 @@ def factura(nomcliente,apecliente,nit,restotcan,resdesc,restotgen,coddesc,idcons
 					consulta = "insert into facturadesc(idaro, idlente, consulta, idfacturaheader, precioaro, preciolente) values (%s, %s,%s,%s,%s,%s);"
 					cursor.execute(consulta, (idaro, idlente, cons, idfh, precioaro, preciolente))
 					conexion.commit()
+					cantcomision = round(float(restotgen * 0.01), 2)
+					consulta = 'insert into comisiones(iduser, totalventa, comision) values (%s, %s, %s);'
+					cursor.execute(consulta, (session['iduser1'], restotgen, cantcomision))
 			finally:
 				conexion.close()
 		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:

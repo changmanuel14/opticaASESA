@@ -57,6 +57,17 @@
                               <a class="dropdown-item" href="/aprobados">Aprobados</a>
                             </div>
                           </li>
+                          {% if logeado != 0 %}
+                          <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Compras
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item" href="/vercompras">Compras</a>
+                              <a class="dropdown-item" href="/comisionliquidar">Comisión pendiente liquidar</a>
+                              <a class="dropdown-item" href="/comision">Comisión liquidados</a>
+                          </li>
+                          {% endif %}
                           <li><a class="nav-item nav-link" href="/citas">Citas</a></li>
                     </div>
     <!-- Navbar Right Side -->
