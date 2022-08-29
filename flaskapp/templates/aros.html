@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Aros</h1>
+	<a href="/ingresoaros"><button class="btn btn-success">Ingreso de Aro</button></a>
+    <table class="sortable">
+        <tr>
+            <th>Marca</th>
+            <th>Color</th>
+            <th>Código</th>
+            <th>Cantidad</th>
+            <th>Precio Costo</th>
+            <th>Precio Venta</th>
+			<th>Consignación</th>
+        </tr>
+        {% for i in aros %}
+        <tr>
+            <td>{{i[2]}}</td>
+            <td>{{i[1]}}</td>
+            <td>{{i[0]}}</td>
+            <td>{{i[3]}}</td>
+            <td>Q{{i[4]}}</td>
+            <td>Q{{i[5]}}</td>
+			{% if i[6] == 0 %}
+			<td>No</td>
+			{% else %}
+			<td>Si</td>
+			{% endif %}
+        </tr>
+        {% endfor%}
+    </table>
+{% endblock %}

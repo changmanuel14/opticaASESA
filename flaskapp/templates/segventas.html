@@ -12,16 +12,15 @@
     <h6><strong>Código: </strong> {{dataventa[0][23]}}</h6>
     <h6><strong>Fecha: </strong> {{dataventa[0][6]}}</h6>
 
-    <table style="width: 50%;">
+    <table style="width: 100%;">
         <tr>
             <th colspan="2">Aro</th>
         </tr>
         <tr>
             <td style="width: 70%;">{{dataaro[1]}} {{dataaro[2]}} {{dataaro[3]}}</td>
-            <td >Q {{dataventa[0][10]}}</td>
         </tr>
         </table>
-        <table style="width: 50%;">
+        <table style="width: 100%;">
         <tr>
             <th colspan="2">Lente</th>
         </tr>
@@ -29,11 +28,8 @@
             <td style="width: 50%;"> Ojo Izquierdo:<br> {{datalente[0][0]}}</td>
             <td style="width: 50%;"> Ojo Derecho:<br> {{datalente[1][0]}}</td>
         </tr>
-        <tr>
-            <td colspan="2"><center>Q. {{dataventa[0][11]}}</center></td>
-        </tr>
         </table>
-        <table style="width: 50%;">
+        <table style="width: 100%;">
         {% if dataventa[0][24] == '1' or dataventa[0][24] == 1 %}
         <tr>
             <th colspan="2">Consulta</th>
@@ -112,22 +108,37 @@
             <td>Q.{{dataventa[0][22]}}</td>
         </tr>
         {% endif %}
-        <tr>
-            <th colspan="2">Totales</th>
-        </tr>
-        <tr>
-            <td style="width: 70%;">Total General</td>
-            <td>Q {{dataventa[0][3]}}</td>
-        </tr>
-        <tr>
-            <td style="width: 70%;">Descuento</td>
-            <td>Q {{dataventa[0][4]}}</td>
-        </tr>
-        <tr>
-            <td style="width: 70%;"><strong>Total a Cancelar</strong></td>
-            <td><strong>Q {{dataventa[0][5]}}</strong></td>
-        </tr>
     </table>
+    <br>
+    <h2>Seguimiento</h2>
+    <table style="width: 100%;">
+        <tr>
+            <th>Fecha</th>
+            <th>Comentario</th>
+            <th>Usuario</th>
+        </tr>
+        {% for i in comentarios %}
+        <tr>
+            <td>{{i[1]}}</td>
+            <td>{{i[0]}}</td>
+            <td>{{i[2]}} {{i[3]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    {% if terminado[0] == 0 %}
+    <div>
+        <h2>Nuevo comentario</h2>
+        <form action="" method="POST">
+            <textarea id="comentario" name="comentario" rows="4" cols="120"></textarea>
+            <br>
+            <br>
+            <button onclick="submit" class="button" name="accion" value="ace">Aceptar</button>  <button onclick="submit" class="button" name="accion" value="fin">Finalizar</button>
+        </form>
+    </div>
+    {% endif %}
+    
 </center>
 </div>
 {% endblock %}

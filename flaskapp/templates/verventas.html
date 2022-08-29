@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Compras</h1>
+    <h1>Ventas</h1>
     <table>
         <tr>
             <th>Cliente</th>
@@ -10,18 +10,23 @@
             <th>Descuento</th>
             <th>Precio Total</th>
             <th>User</th>
-            <th>Detalles</th>
+            <th colspan="2">Opciones</th>
         </tr>
         {% for i in pagos %}
+        {% if i[10] == 0 %}
+        <tr style="background-color: lightgoldenrodyellow;">
+        {% else %}
         <tr>
+        {% endif %}
             <td>{{i[0]}} {{i[1]}}</td>
             <td>{{i[2]}}</td>
             <td>{{i[6]}}</td>
-            <td>Q.{{i[3]}}</td>
-            <td>Q.{{i[4]}}</td>
-            <td>Q.{{i[5]}}</td>
+            <td>Q{{i[3]}}</td>
+            <td>Q{{i[4]}}</td>
+            <td>Q{{i[5]}}</td>
             <td>{{i[7]}} {{i[8]}}</td>
-            <td><a href="/compradetalles/{{i[9]}}">Detalles</a> </td>
+            <td><a href="/factura/{{i[9]}}">Detalles</a></td>
+            <td><a href="/segventas/{{i[9]}}">Seguimiento</a></td>
         </tr>
         {% endfor%}
     </table>

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Comisiones Liquidadas</h1>
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <table class="sortable">
+        <tr>
+            <th>Cliente</th>
+            <th>Nit</th>
+            <th>Fecha</th>
+            <th>Precio</th>
+            <th>Comision</th>
+            <th>User</th>
+            <th>Fecha de <br>Liquidación</th>
+        </tr>
+        {% for i in comisiones %}
+        <tr>
+            <td>{{i[0]}} {{i[1]}}</td>
+            <td>{{i[2]}}</td>
+            <td>{{i[3]}}</td>
+            <td>Q.{{i[4]}}</td>
+            <td>Q.{{i[5]}}</td>
+            <td>{{i[6]}}</td>
+            <td>{{i[7]}}</td>
+        </tr>
+        {% endfor%}
+    </table>
+{% endblock %}

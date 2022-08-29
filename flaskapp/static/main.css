@@ -148,6 +148,14 @@ table {
   margin: 5px;
 }
 
+.inputtext4 {
+  height:37px;
+  font-size:12pt;
+  width: 60%;
+  border-radius: 12px;
+  margin: 5px;
+}
+
 .inputtextrecetas {
   height:37px;
   font-size: 25px;

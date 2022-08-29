@@ -25,6 +25,22 @@ def citas():
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	fecha = datetime.datetime.now()
+	d4 = fecha.strftime("%Y-%m-%d")
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT c.nombre, c.apellido, DATE_FORMAT(c.fecha,'%d/%m/%Y'), h.hora, c.telefono, c.idcitas from citas c inner join hora h on c.idhora = h.idhora where fecha >= '" + str(d4) + "' order by c.fecha asc, c.idhora asc;"
+				cursor.execute(consulta)
+				data = cursor.fetchall()
+				consulta = "SELECT idhora, hora from hora;"
+				cursor.execute(consulta)
+				horas = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
 	if request.method == 'POST':
 		fecha = request.form["fecha"]
 		try:
@@ -42,7 +58,7 @@ def citas():
 		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 			print("Ocurrió un error al conectar: ", e)
 		return render_template('citas.html', title="Citas", logeado = logeado, data=data, horas=horas)
-	return render_template('citas.html', title="Citas", logeado = logeado)
+	return render_template('citas.html', title="Citas", logeado = logeado, data=data, horas=horas)
 
 @app.route('/nuevacita', methods=['GET', 'POST'])
 def nuevacita():
@@ -308,8 +324,8 @@ def nuevaconsulta():
 	proxcita = new_date, usolen = usolen, meses = meses, numeros=numeros, mms=mms, tipolen=tipolen, materiallen = materiallen, filtrolen=filtrolen, 
 	colorlen=colorlen, relva = relva, nervos=nervos, dataojo=dataojo, dataametropia=dataametropia, enfermedades=enfermedades, datapac=datapac, dataest=dataest)
 
-@app.route('/vercompras', methods=['GET', 'POST'])
-def vercompras():
+@app.route('/verventas', methods=['GET', 'POST'])
+def verventas():
 	try:
 		logeado = session['logeado1']
 	except:
@@ -322,10 +338,10 @@ def vercompras():
 			with conexion.cursor() as cursor:
 				consulta = '''
 				select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, 
-				h.descuento, h.total,  DATE_FORMAT(h.fecha,'%d/%m/%Y'), u.nombre, u.apellido, h.idfacturaheader
+				h.descuento, h.total,  DATE_FORMAT(h.fecha,'%d/%m/%Y'), u.nombre, u.apellido, h.idfacturaheader, h.terminado
 				from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader
 				inner join consulta c on c.idconsulta = h.idconsulta
-				inner join user u on u.iduser = c.iduser order by h.fecha desc
+				inner join user u on u.iduser = h.iduser order by h.fecha desc
 				'''
 				cursor.execute(consulta)
 				pagos = cursor.fetchall()
@@ -333,7 +349,152 @@ def vercompras():
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
-	return render_template('vercompras.html', title='Ventas', logeado=logeado, pagos=pagos)
+	return render_template('verventas.html', title='Ventas', logeado=logeado, pagos=pagos)
+
+@app.route('/aros', methods=['GET', 'POST'])
+def aros():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT a.codigo, a.color, m.marca, a.cantidad, a.precio, a.precio * 3, a.consignacion, a.idaro  from aro a inner join marca m on a.idmarca = m.idmarca order by m.marca asc, a.codigo asc"
+				cursor.execute(consulta)
+				aros = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('aros.html', title='Aros', logeado=logeado, aros=aros)
+
+@app.route('/marcas', methods=['GET', 'POST'])
+def marcas():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT idmarca, marca from marca order by marca asc"
+				cursor.execute(consulta)
+				marcas = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('marcas.html', title='Marcas', logeado=logeado, marcas=marcas)
+
+@app.route('/nuevamarca', methods=['GET', 'POST'])
+def nuevamarca():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	if request.method == 'POST':
+		marca = request.form["marca"]
+		try:
+			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "INSERT INTO marca(marca) values (%s)"
+					cursor.execute(consulta, marca)
+				conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('marcas'))
+	return render_template('nuevamarca.html', title='Nueva Marca', logeado=logeado)
+
+@app.route('/editarmarca/<id>', methods=['GET', 'POST'])
+def editarmarca(id):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT marca from marca where idmarca = %s"
+				cursor.execute(consulta, id)
+				marca = cursor.fetchone()
+				marca = marca[0]
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	if request.method == 'POST':
+		marcaedit = request.form["marca"]
+		try:
+			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "UPDATE marca set marca = %s where idmarca = %s"
+					cursor.execute(consulta, (marcaedit, id))
+				conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('marcas'))
+	return render_template('editarmarca.html', title='Editar Marca', logeado=logeado, marca=marca)
+
+@app.route('/ingresoaros', methods=['GET', 'POST'])
+def ingresoaros():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT idmarca, marca from marca order by marca asc"
+				cursor.execute(consulta)
+				marcas = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	if request.method == 'POST':
+		codigo = request.form["codigo"]
+		color = request.form["color"]
+		marca = request.form["marca"]
+		cantidad = request.form["cantidad"]
+		precio = request.form["precio"]
+		try:
+			consignacion = request.form["consignacion"]
+		except:
+			consignacion = 0
+		try:
+			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "INSERT INTO aro(codigo, color, idmarca, cantidad, precio, consignacion) values(%s,%s,%s,%s,%s,%s)"
+					cursor.execute(consulta, (codigo, color, marca, cantidad, precio, consignacion))
+				conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('ingresoaros'))
+	return render_template('ingresoaros.html', title='Ingreso de Aros', logeado=logeado, marcas=marcas)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -1528,8 +1689,8 @@ def recetas(idconsulta):
 	return render_template('recetas.html', title='Recetas', logeado=logeado, dataconsulta=dataconsulta, rf = rf, 
 	lenterecomendado=lenterecomendado, lencons=lencons, datagotero=datagotero, recetaref=recetaref, idconsulta=idconsulta)
 
-@app.route("/compra/<idconsulta>", methods=['GET', 'POST'])
-def compra(idconsulta):
+@app.route("/venta/<idconsulta>", methods=['GET', 'POST'])
+def venta(idconsulta):
 	try:
 		logeado = session['logeado1']
 	except:
@@ -1538,53 +1699,154 @@ def compra(idconsulta):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT idlenteheader, nombre from lenteheader;"
+				consulta = "SELECT idservicios, servicio, precio from servicios;"
+				cursor.execute(consulta)
+				servicios = cursor.fetchall()
+				consulta = "SELECT idlenteheader, nombre, idlaboratorio from lenteheader;"
 				cursor.execute(consulta)
 				lenteheader = cursor.fetchall()
+				consulta = "SELECT idlaboratorio, nombre from laboratorio;"
+				cursor.execute(consulta)
+				laboratorios = cursor.fetchall()
 				consulta = "SELECT idlentedesc, idlenteheader, nombre, precio, preciosug from lentedesc;"
 				cursor.execute(consulta)
 				lentedesc = cursor.fetchall()
-				consulta = "select a.idaro, m.marca, a.codigo, a.color, a.precio from aro a inner join marca m on a.idmarca = m.idmarca order by m.marca asc;"
+				consulta = "select a.idaro, m.marca, a.codigo, a.color, a.precio from aro a inner join marca m on a.idmarca = m.idmarca where a.cantidad > 0 order by m.marca asc;"
 				cursor.execute(consulta)
 				aros = cursor.fetchall()
-				consulta = "select nombrecliente, apellidocliente, nit, coddesc from facturaheader group by nit order by fecha;"
+				consulta = "select nombrecliente, apellidocliente, nit, coddesc from facturaheader group by nit order by fecha desc;"
 				cursor.execute(consulta)
 				datafacturas = cursor.fetchall()
+				consulta = "select p.nombre1, p.nombre2, p.apellido1, p.apellido2 from paciente p inner join consulta c on c.idpaciente = p.idpaciente where c.idconsulta = %s;"
+				cursor.execute(consulta, idconsulta)
+				datapaciente = cursor.fetchone()
 		finally:
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	if request.method == 'POST':
+		try:
+			referido = request.form["referido"]
+			nombreref = request.form["referidonombre"]
+		except:
+			referido = ""
+			nombreref = ""
 		nomcliente = request.form["nomcliente"]
 		apecliente = request.form["apecliente"]
 		nit = request.form["nit"]
 		coddesc = request.form["coddesc"]
 		if len(coddesc) < 1:
 			coddesc = 0
-		restotgen = request.form["restotgen"]
-		resdesc = request.form["resdesc"]
-		restotcan = request.form["restotcan"]
+		restotgen = float(request.form["restotgen"])
+		resdesc = float(request.form["resdesc"])
+		restotcan = float(request.form["restotcan"])
 		compraro = request.form["aro"]
 		if(compraro != '0'):
 			idaro = request.form["idaro"]
+			if len(idaro) < 1:
+				idaro = 0
 			precioaro = float(compraro)
 		else:
 			idaro = 0
 			precioaro = 0
 		
 		comprlen = request.form["lente"]
+		lab = request.form['lab']
+		if len(lab) < 1:
+			lab = 0
 		if(comprlen != '0'):
-			idlente = request.form["ld"]
 			preciolente = float(comprlen)
+			if lab == 1 or lab == '1':
+				try:
+					antireflejo = request.form['antireflejo']
+				except:
+					antireflejo = '-'
+				try:
+					montaje = request.form['montaje1']
+				except:
+					montaje = '-'
+				try:
+					tinte = request.form['tinte']
+				except:
+					tinte = '-'
+				try:
+					perforado = request.form['perforado1']
+					perforado = request.form['cantperf']
+				except:
+					perforado = '0'
+				try:
+					ranurado = request.form['ranurado1']
+				except:
+					ranurado = '-'
+				try:
+					facetado = request.form['facetado']
+				except:
+					facetado = '-'
+				try:
+					solo1ojo = request.form['solo1ojo']
+				except:
+					solo1ojo = '-'
+				try:
+					prismas = request.form['prismas']
+				except:
+					prismas = '-'
+				try:
+					doscaras = request.form['doscaras']
+				except:
+					doscaras = '-'
+				try:
+					moldes = request.form['moldes']
+				except:
+					moldes = '-'
+				idlenteoi = request.form["ld"]
+				idlenteod = request.form["ld"]
+				filtro = '0'
+			elif lab == 2 or lab == '2':
+				antireflejo = '-'
+				try:
+					montaje = request.form['montaje']
+				except:
+					montaje = '-'
+				try:
+					perforado = request.form['perforado']
+				except:
+					perforado = '0'
+				try:
+					ranurado = request.form['ranurado']
+				except:
+					ranurado = '-'
+				idlenteoi = request.form["lenteoloi"]
+				idlenteod = request.form["lenteolod"]
+				filtro = request.form["filtrool"]
+				tinte = '-'
+				facetado = '-'
+				solo1ojo = '-'
+				prismas = '-'
+				doscaras = '-'
+				moldes = '-'
 		else:
-			idlente = 0
+			idlenteoi = 0
+			idlenteod = 0
 			preciolente = 0
+			tinte = '-'
+			facetado = '-'
+			solo1ojo = '-'
+			prismas = '-'
+			doscaras = '-'
+			moldes = '-'
+			montaje = '-'
+			antireflejo = '-'
+			perforado = '0'
+			ranurado = '-'
+			filtro = '0'
 		try:
 			cons = request.form["precons"]
 			cons = 1
 		except:
 			cons = 0
-		totalaux = float(restotgen)
+		totalaux = float(restotcan)
+		topes = request.form["topes"]
+		colgadores = request.form["colgadores"]
 		if cons == 1:
 			totalaux = totalaux - 50
 		if precioaro == 0:
@@ -1593,81 +1855,290 @@ def compra(idconsulta):
 			precioaro = totalaux
 		else:
 			precioaro = totalaux - preciolente
-
-		
-		return redirect(url_for('factura', nomcliente=nomcliente,apecliente=apecliente,nit=nit,restotcan=restotcan,resdesc=resdesc,restotgen=restotgen,coddesc=coddesc,idconsulta=idconsulta,idaro=idaro,idlente=idlente,cons=cons,precioaro=precioaro,preciolente=preciolente))
-	return render_template('compra.html', title='Compra', logeado=logeado, lenteheader=lenteheader, lentedesc=lentedesc, aros=aros, datafacturas=datafacturas)
-
-@app.route("/factura/<nomcliente>&<apecliente>&<nit>&<restotcan>&<resdesc>&<restotgen>&<coddesc>&<idconsulta>&<idaro>&<idlente>&<cons>&<precioaro>&<preciolente>", methods=['GET', 'POST'])
-def factura(nomcliente,apecliente,nit,restotcan,resdesc,restotgen,coddesc,idconsulta,idaro,idlente,cons,precioaro,preciolente):
-	try:
-		logeado = session['logeado1']
-	except:
-		logeado = 0
-	precioaro = round(float(precioaro), 2)
-	preciolente = round(float(preciolente), 2)
-	restotcan = round(float(restotcan), 2)
-	resdesc = round(float(resdesc), 2)
-	restotgen = round(float(restotgen), 2)
-	if idlente == 0 or idlente == '0':
-		datalente = [0, "No aplica"]
-	else:
+		today = date.today()
+		d1 = today.strftime("%d/%m/%Y")
 		try:
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:
 				with conexion.cursor() as cursor:
-					consulta = "select idlentedesc, nombre from lentedesc where idlentedesc = %s;"
-					cursor.execute(consulta, idlente)
-					datalente = cursor.fetchall()
-					datalente = datalente[0]
-			finally:
-				conexion.close()
-		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
-			print("Ocurrió un error al conectar: ", e)
-	if idaro == 0 or idaro == '0':
-		dataaro = [0, "No", "Aplica", "-"]
-	else:
-		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
-			try:
-				with conexion.cursor() as cursor:
-					consulta = "select a.idaro, m.marca, a.codigo, a.color from aro a inner join marca m on a.idmarca = m.idmarca where a.idaro = %s;"
-					cursor.execute(consulta, idaro)
-					dataaro = cursor.fetchall()
-					dataaro = dataaro[0]
-			finally:
-				conexion.close()
-		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
-			print("Ocurrió un error al conectar: ", e)
-	today = date.today()
-
-	# dd/mm/YY
-	d1 = today.strftime("%d/%m/%Y")
-	if request.method == 'POST':
-		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
-			try:
-				with conexion.cursor() as cursor:
-					consulta = "insert into facturaheader(nombrecliente, apellidocliente, nit, preciogen, descuento, total, coddesc, fecha, idconsulta) values (%s, %s, %s, %s, %s, %s, %s, %s, %s);"
-					cursor.execute(consulta, (nomcliente, apecliente, nit, restotgen, resdesc, restotcan, coddesc, date.today(),idconsulta))
+					consulta = "SELECT nombre, cantidad FROM accesorios ORDER BY idaccesorios"
+					cursor.execute(consulta)
+					accesorios = cursor.fetchall()
+					tottopes = int(accesorios[0][1]) - int(topes)
+					totcolgadores = int(accesorios[1][1]) - int(colgadores)
+					consulta = "UPDATE accesorios set cantidad = " + str(tottopes) + " WHERE idaccesorios = 1"
+					cursor.execute(consulta)
+					consulta = "UPDATE accesorios set cantidad = " + str(totcolgadores) + " WHERE idaccesorios = 2"
+					cursor.execute(consulta)
+					consulta = "insert into facturaheader(nombrecliente, apellidocliente, nit, preciogen, descuento, total, coddesc, fecha, idconsulta, idlaboratorio, iduser) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+					cursor.execute(consulta, (nomcliente, apecliente, nit, restotgen, resdesc, restotcan, coddesc, date.today(),idconsulta, lab, session['iduser1']))
 				conexion.commit()
 				with conexion.cursor() as cursor:
 					consulta = "select max(idfacturaheader) from facturaheader;"
 					cursor.execute(consulta)
 					idfh = cursor.fetchall()
 					idfh = idfh[0][0]
-					consulta = "insert into facturadesc(idaro, idlente, consulta, idfacturaheader, precioaro, preciolente) values (%s, %s,%s,%s,%s,%s);"
-					cursor.execute(consulta, (idaro, idlente, cons, idfh, precioaro, preciolente))
+					consulta = "insert into facturadesc(idaro, idlenteoi, idlenteod, consulta, idfacturaheader, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+					cursor.execute(consulta, (idaro, idlenteoi, idlenteod, cons, idfh, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro))
+					if session['iduser1'] == '3' or session['iduser1'] == 3:
+						if nombreref == "":
+							cantcomision = round(float(restotcan * 0.03), 2)
+							consulta = 'insert into comisiones(nombreliquidacion, totalventa, comision, idfacturaheader) values (%s, %s, %s, %s);'
+							cursor.execute(consulta, ('Kevin Avendaño', restotcan, cantcomision, idfh))
+						else:
+							consulta = 'insert into comisiones(nombreliquidacion, totalventa, comision, idfacturaheader) values (%s, %s, %s, %s);'
+							cantcomision = round(float(restotcan * 0.025), 2)
+							cursor.execute(consulta, ('Kevin Avendaño', restotcan, cantcomision, idfh))
+							cantcomision = round(float(restotcan * 0.005), 2)
+							cursor.execute(consulta, (nombreref, restotcan, cantcomision, idfh))
+					else:
+						consulta = 'insert into comisiones(nombreliquidacion, totalventa, comision, idfacturaheader) values (%s, %s, %s, %s);'
+						nombreopto = session['nombreuser1'] + ' ' + session['apellidouser1']
+						if nombreref == "":
+							cantcomision = round(float(restotcan * 0.02), 2)
+							cantcomision1 = round(float(restotcan * 0.01), 2)
+							cursor.execute(consulta, (nombreopto, restotcan, cantcomision, idfh))
+							cursor.execute(consulta, ('Kevin Avendaño', restotcan, cantcomision1, idfh))
+						else:
+							cantcomision = round(float(restotcan * 0.0175), 2)
+							cantcomision1 = round(float(restotcan * 0.0075), 2)
+							cantcomision2 = round(float(restotcan * 0.005), 2)
+							cursor.execute(consulta, (nombreopto, restotcan, cantcomision, idfh))
+							cursor.execute(consulta, ('Kevin Avendaño', restotcan, cantcomision1, idfh))
+							cursor.execute(consulta, (nombreref, restotcan, cantcomision2, idfh))
+					if idaro != 0 and idaro != '0':
+						consulta = "select cantidad from aro where idaro = %s;"
+						cursor.execute(consulta, idaro)
+						cantidadaro = cursor.fetchall()
+						cantidadaro = int(cantidadaro[0][0]) - 1
+						consulta = "Update aro set cantidad = %s where idaro = %s;"
+						cursor.execute(consulta, (cantidadaro, idaro))
 					conexion.commit()
-					cantcomision = round(float(restotgen * 0.01), 2)
-					consulta = 'insert into comisiones(iduser, totalventa, comision) values (%s, %s, %s);'
-					cursor.execute(consulta, (session['iduser1'], restotgen, cantcomision))
 			finally:
 				conexion.close()
 		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 			print("Ocurrió un error al conectar: ", e)
 		return redirect(url_for('aprobados'))
-	return render_template('factura.html', title='Factura', logeado=logeado,nomcliente=nomcliente,apecliente=apecliente,nit=nit,restotcan=restotcan,resdesc=resdesc,restotgen=restotgen,coddesc=coddesc,precioaro=precioaro,preciolente=preciolente, d1=d1, dataaro=dataaro, datalente=datalente, cons=cons)
+	return render_template('venta.html', title='Venta', logeado=logeado, lenteheader=lenteheader, lentedesc=lentedesc, aros=aros, 
+	datafacturas=datafacturas, laboratorios=laboratorios, servicios=servicios, datapaciente = datapaciente)
+
+@app.route('/comisionliquidar', methods=['GET', 'POST'])
+def comisionliquidar():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = 'select f.nombrecliente, f.apellidocliente, f.nit, DATE_FORMAT(f.fecha, "%d/%m/%Y"), c.totalventa, c.comision, c.nombreliquidacion, c.idcomisiones from facturaheader f inner join comisiones c on c.idfacturaheader = f.idfacturaheader where c.liquidado = 0 and c.activo = 1 ORDER BY f.fecha desc, f.nombrecliente asc;'
+				cursor.execute(consulta)
+				comisiones = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('comisionliquidar.html', title='Comisiones por Liquidar', logeado=logeado, comisiones=comisiones)
+
+@app.route('/comision', methods=['GET', 'POST'])
+def comision():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = 'select f.nombrecliente, f.apellidocliente, f.nit, DATE_FORMAT(f.fecha, "%d/%m/%Y"), c.totalventa, c.comision, c.nombreliquidacion, DATE_FORMAT(c.fechaliquidado, "%d/%m/%Y") from facturaheader f inner join comisiones c on c.idfacturaheader = f.idfacturaheader where c.liquidado = 1 ORDER BY f.fecha desc, f.nombrecliente asc;'
+				cursor.execute(consulta)
+				comisiones = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('comision.html', title='Comisiones Liquidadas', logeado=logeado, comisiones=comisiones)
+
+@app.route('/liquidarcomision/<idcomision>', methods=['GET', 'POST'])
+def liquidarcomision(idcomision):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = 'update comisiones set liquidado = 1, fechaliquidado = %s where idcomisiones = %s;'
+				cursor.execute(consulta, (date.today(), idcomision))
+			conexion.commit()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return redirect(url_for('comisionliquidar'))
+
+@app.route("/factura/<idfacturaheader>", methods=['GET', 'POST'])
+def factura(idfacturaheader):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
+				cursor.execute(consulta)
+				dataventa = cursor.fetchall()
+				try:
+					consulta = "select a.idaro, m.marca, a.codigo, a.color from aro a inner join marca m on a.idmarca = m.idmarca where a.idaro = %s;"
+					cursor.execute(consulta, dataventa[0][7])
+					dataaro = cursor.fetchall()
+					dataaro = dataaro[0]
+				except:
+					dataaro = [0,'None','None', 'None']
+				datalente = []
+				try:
+					consulta = 'select nombre from lentedesc where idlentedesc = %s'
+					cursor.execute(consulta, dataventa[0][8])
+					datalente.append(cursor.fetchone())
+				except:
+					datalente.append(['None'])
+				try:
+					consulta = 'select nombre from lentedesc where idlentedesc = %s'
+					cursor.execute(consulta, dataventa[0][9])
+					datalente.append(cursor.fetchone())
+				except:
+					datalente.append(['None'])
+				datalente.append(cursor.fetchone())
+
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('factura.html', title='Factura', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente, idfacturaheader=idfacturaheader)
+
+@app.route("/segventas/<idfacturaheader>", methods=['GET', 'POST'])
+def segventas(idfacturaheader):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
+				print(consulta)
+				cursor.execute(consulta)
+				dataventa = cursor.fetchall()
+				consulta = "select terminado from facturaheader where idfacturaheader = " + str(idfacturaheader)
+				print(consulta)
+				cursor.execute(consulta)
+				terminado = cursor.fetchone()
+				try:
+					consulta = "select a.idaro, m.marca, a.codigo, a.color from aro a inner join marca m on a.idmarca = m.idmarca where a.idaro = %s;"
+					cursor.execute(consulta, dataventa[0][7])
+					dataaro = cursor.fetchall()
+					dataaro = dataaro[0]
+				except:
+					dataaro = [0,'None','None', 'None']
+				datalente = []
+				try:
+					consulta = 'select nombre from lentedesc where idlentedesc = %s'
+					cursor.execute(consulta, dataventa[0][8])
+					datalente.append(cursor.fetchone())
+				except:
+					datalente.append(['None'])
+				try:
+					consulta = 'select nombre from lentedesc where idlentedesc = %s'
+					cursor.execute(consulta, dataventa[0][9])
+					datalente.append(cursor.fetchone())
+				except:
+					datalente.append(['None'])
+				consulta = 'select s.comentario, s.fecha, u.nombre, u.apellido from segventas s inner join user u on s.iduser = u.iduser where idfacturaheader = %s order by s.fecha desc'
+				cursor.execute(consulta, idfacturaheader)
+				comentarios = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	if request.method == 'POST':
+		comentario = request.form['comentario']
+		fechaact = datetime.datetime.now()
+		try:
+			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			try:
+				with conexion.cursor() as cursor:
+					consulta = 'INSERT INTO segventas(comentario, fecha, iduser, idfacturaheader) values (%s, %s, %s, %s);'
+					cursor.execute(consulta, (comentario, fechaact, session['iduser1'], idfacturaheader))
+					if request.form['accion'] == 'fin':
+						consulta = 'UPDATE facturaheader set terminado = 1 where idfacturaheader = ' + str(idfacturaheader)
+						cursor.execute(consulta)
+						consulta = 'UPDATE comisiones set activo = 1 where idfacturaheader = ' + str(idfacturaheader)
+						cursor.execute(consulta)
+				conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('verventas'))
+	return render_template('segventas.html', title='Seguimiento', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente, idfacturaheader=idfacturaheader, comentarios=comentarios, terminado=terminado)
+
+@app.route('/imprimir/<idfacturaheader>')
+def imprimir(idfacturaheader):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
+				print(consulta)
+				cursor.execute(consulta)
+				dataventa = cursor.fetchall()
+				try:
+					consulta = "select a.idaro, m.marca, a.codigo, a.color from aro a inner join marca m on a.idmarca = m.idmarca where a.idaro = %s;"
+					cursor.execute(consulta, dataventa[0][7])
+					dataaro = cursor.fetchall()
+					dataaro = dataaro[0]
+				except:
+					dataaro = [0,'None','None', 'None']
+				datalente = []
+				consulta = 'select nombre from lentedesc where idlentedesc = %s'
+				cursor.execute(consulta, dataventa[0][8])
+				datalente.append(cursor.fetchone())
+				consulta = 'select nombre from lentedesc where idlentedesc = %s'
+				cursor.execute(consulta, dataventa[0][9])
+				datalente.append(cursor.fetchone())
+
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	
+	rendered = render_template('descventa.html', title='Factura', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente)
+	options = {'enable-local-file-access': None, 'page-size': 'A8', 'orientation': 'Portrait', 'margin-left': '0', 'margin-right': '0', 'margin-top': '0', 'margin-bottom': '5', 'encoding': 'utf-8', 'zoom': '0.8'}
+	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; filename=reportediario.pdf'
+	print(response)
+	return response
 
 @app.route("/pendaprobarc/<idconsulta>", methods=['GET', 'POST'])
 def pendaprobarc(idconsulta):
@@ -2742,7 +3213,7 @@ def recetalentespdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetalentespdf.html', title="Receta lente", dataconsulta=dataconsulta, rf = rf, lenterecomendado=lenterecomendado)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
@@ -2787,7 +3258,7 @@ def recetacontactopdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetacontactopdf.html', title="Receta contacto", dataconsulta=dataconsulta, lencons=lencons)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
@@ -2823,7 +3294,7 @@ def recetagotaspdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetagotaspdf.html', title="Receta gotas", dataconsulta=dataconsulta, datagotero=datagotero)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
@@ -2854,7 +3325,25 @@ def recetarefpdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetarefpdf.html', title="Receta Referencia", dataconsulta=dataconsulta, recetaref=recetaref)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-left': '70mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
+	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
+	response = make_response(pdf)
+	response.headers['Content-Type'] = 'application/pdf'
+	response.headers['Content-Disposition'] = 'inline; filename=reportediario.pdf'
+	print(response)
+	return response
+
+@app.route("/recetalentesblancopdf", methods=['GET', 'POST'])
+def recetalentesblancopdf():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	x = datetime.datetime.now()
+	fecha = x.strftime("%d/%m/%Y")
+	rendered = render_template('recetalentesblancopdf.html', title="Receta lente", fecha = fecha)
+	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)

@@ -5,8 +5,7 @@
         <ul class="nav nav-tabs">
             <li><a data-toggle="tab" id="t0" href="#home" class="panelb" onclick="colorespanel('0')">Estudiante</a></li>
             <li><a data-toggle="tab" id="t1" href="#menu1" class="panelb" onclick="colorespanel('1')">Paciente</a></li>
-            <li><a data-toggle="tab" id="t2" href="#menu2" class="panelb" onclick="colorespanel('2')">Exploración</a></li>
-            <li><a data-toggle="tab" id="t3" href="#menu3" class="panelb" onclick="colorespanel('3')">D.X/T.X.</a></li>
+            <li><a data-toggle="tab" id="t2" href="#menu2" class="panelb" onclick="colorespanel('2')">Exploración y D.X/T.X.</a></li>
         </ul>
         <form action="" method="POST">
 
@@ -771,9 +770,8 @@
                     <td><input type="text" class="inputtext1" id="retpeoi" name="retpeoi" value="{{obs[1][16]}}"></td>
                 </tr>
             </table>
-            
-          </div>
-          <div id="menu3" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h1>Diagnóstico Y Tratamiento</h1>
             <table>
                 <tr class="fondoblanco">
                     <th rowspan="3"><label for="diagnostico">Diagnóstico:</label></th>
@@ -963,7 +961,7 @@
         }
         function colorespanel(codpanel){
                 codpanel = parseInt(codpanel)
-                for(var i = 0; i<=3;i++){
+                for(var i = 0; i<=2;i++){
                     if(i == codpanel){
                         var aux = 't' + String(i);
                         var t = document.getElementById(aux)

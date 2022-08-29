@@ -5,8 +5,7 @@
         <ul class="nav nav-tabs">
             <li><a data-toggle="tab" id="t0" href="#menu0" class="panelb" onclick="colorespanel('0')">Estudiante</a></li>
             <li><a data-toggle="tab" id="t1" href="#menu1" class="panelb" onclick="colorespanel('1')">Paciente</a></li>
-            <li><a data-toggle="tab" id="t2" href="#menu2" class="panelb" onclick="colorespanel('2')">Exploracion</a></li>
-            <li><a data-toggle="tab" id="t3" href="#menu3" class="panelb" onclick="colorespanel('3')">D.X./T.X.</a></li>
+            <li><a data-toggle="tab" id="t2" href="#menu2" class="panelb" onclick="colorespanel('2')">Exploracion y D.X./T.X.</a></li>
         </ul>
         <form action="" method="POST">
 
@@ -663,15 +662,8 @@
                     <td><input type="text" class="inputtext1" id="retpeoi" name="retpeoi"></td>
                 </tr>
             </table>
-            <center>
-                <ul class="nav nav-tabs">
-                    <li><a data-toggle="tab" href="#menu1" class="panelb">Anterior</a></li>
-                    <li><a data-toggle="tab" href="#menu3" class="panelb">Siguiente</a></li>
-                </ul>
-            </center>
-            
-          </div>
-          <div id="menu3" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h1>Diagnóstico y Tratamiento</h1>
             <table>
                 <tr class="fondoblanco">
                     <th rowspan="3"><label for="diagnostico">Diagnóstico:</label></th>
@@ -949,7 +941,7 @@
         }
         function colorespanel(codpanel){
                 codpanel = parseInt(codpanel)
-                for(var i = 1; i<=3;i++){
+                for(var i = 1; i<=2;i++){
                     if(i == codpanel){
                         var aux = 't' + String(i);
                         var t = document.getElementById(aux)

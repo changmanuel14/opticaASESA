@@ -49,9 +49,9 @@
 
     </style>
     {% if title %}
-        <title>{{ title }} - Óptica ASESA</title>
+        <title>{{ title }} - Óptica Lasers</title>
     {% else %}
-        <title>Óptica ASESA</title>
+        <title>Óptica Lasers</title>
     {% endif %}
     <style type="text/css">
         * { margin: 0; padding: 0; }
@@ -125,10 +125,8 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-                <div id="tblinfo3" style="width: 100%;">
+                <div id="tblinfo1">
                     <div style="width: 40%; float: left; position: relative;">
-                        <br>
-                        <center><img src="C:\Users\USUARIO\Documents\optica\flaskapp\static\logo-optica.png" style="width: 80%;"> </center>
                         <br>
                     </div>
                     <div class="derecha">
@@ -137,45 +135,83 @@
                                 <th class="letragrande1"><center>Telefonos:<br>7767-3023<br>7763-5643</center></th>
                             </tr>
                             <tr>
-                                <th class="letragrande1" style="text-align: center;">Fecha: {{dataconsulta[0][4]}}</th>
+                                <th class="letragrande">Fecha: {{fecha}}</th>
                             </tr>
                         </table> 
                     </div>
-                    <center>
-                    <table style="width: 100%;">
-                        <tr style="border: white;">
-                            <th class="letragrande1 cursiva"  style="background-color: #0000FF; color: white; width: 45%; ">Nombre: </th>
-                            <td class="letragrande1 cursiva" style="text-align: center;">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}} {{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
-                        </tr>
-                    </table>
-                    <br>
-                    <h1>Referencia Oftalmológica/Médica</h1>
-                    <br>
-                    <table style="width: 100%;">
+                    <div class="izquierda">
+                        <center>
+                    <table style="width: 80%;">
                         <tr>
-                            <td class="letragrande1" style="width: 25%;"><strong>Lugar a referir</strong></td>
-                            <td class="letragrande1">{{recetaref[0][0]}}</td>
+                            <th class="letragrande1 " style="background-color: #0000FF; color: white; width: 30%;">Nombre:</th>
+                            <td class="letragrande1 " style="text-align: center;"></td>
                         </tr>
-                        <tr>
-                            <td colspan="2" class="letragrande1">
-                                <br>
-                                <strong>Descripción: </strong>{{recetaref[0][1]}}
-                            </td>
-                        </tr>
-                    </table>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <p>___________________________________________________</p>
-                    <h4 class="letragrande1">Lic. Kevin Avendaño</h4>
-                    </center>
-                </div>
+                    </table></center><br>
+                        <center>
+                            <table style="width: 80%;">
+                                <thead>
+                                    <tr>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">RX</th>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">Esfera</th>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">Cilindro</th>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">Eje</th>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">Prisma</th>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">Lente Recomendado</th>
+                                    </tr>
+                                </thead>
+                                    <tr>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">OD</th>
+                                        <td class="letragrande" id="esod"></td>
+                                        <td class="letragrande"  id="ciod"></td>
+                                        <td class="letragrande" id="ejod"></td>
+                                        <td class="letragrande" id="prod"></td>
+                                        <td rowspan="3" class="letragrande">Tipo: <br>Material: <br>Filtro: <br>Color: <br>Tallado: </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">OI</th>
+                                        <td class="letragrande" id="esoi"></td>
+                                        <td class="letragrande" id="cioi"></td>
+                                        <td class="letragrande" id="ejoi"></td>
+                                        <td class="letragrande" id="proi"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">DNP</th>
+                                        <td class="letragrande"></td>
+                                        <th class="letragrande1 " style="background-color: #0000FF; color: white;">ADD</th>
+                                        <td class="letragrande" id="add"></td>
+                                        <td class="letragrande"></td>
+                                    </tr>
+                            </table>
+                            <table style="width: 80%;">
+                                    <tr>
+                                        <th colspan="2" style="padding-top: 1.5%; padding-bottom: 1.5%;" class="letragrande" >Lente Oftalmico. Uso:   <br></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="letragrande " style="height: 50%; width: 30%; background-color: #0000FF; color: white;">Proxima evaluacion</th>
+                                        <th rowspan="2" class="letragrande"><br><br><br></th>
+                                    </tr>
+                                    <tr>
+                                        <th class="letragrande" style="color: red;"></th>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <th colspan="5" class="letragrande">Lic Kevin Avendaño</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </center>
+                    </div><br><br><br><br>
+                    </div>
             </div>
         </div>
     </main>
+    <br><br><br><br>
+    <footer class="page-footer font-small bg-steel">
+
+        <!-- Copyright -->
+        <!-- Copyright -->
+
+    </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

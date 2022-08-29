@@ -1,0 +1,676 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Venta</h1>
+    <div class="container">
+        <ul class="nav nav-tabs">
+          <li><a data-toggle="tab" href="#home" class="panelb">Aro</a></li>
+          <li><a data-toggle="tab" href="#menu1" class="panelb">Lente</a></li>
+          <li><a data-toggle="tab" href="#menu2" class="panelb">Resumen</a></li>
+        </ul>
+        <form action="" method="POST">
+
+        <div class="tab-content">
+          <div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
+            <br>
+            <h1>Seleccion de aro</h1>
+            <center>
+                <select name="idaro" id="idaro" class="inputtext" onchange="cambioaro()">
+                    <option value="">Seleccione el aro</option>
+                    {% for i in aros %}
+                    <option value="{{i[0]}}">{{i[1]}} {{i[2]}} {{i[3]}}</option>
+                    {% endfor %}
+                </select>
+				<br>
+				<br>
+				<div class="form-group col-md-3">
+					<h6>Topes</h6>
+					<input type="number" class="form-control" id="topes" name="topes" placeholder="Topes" value="0" onchange="cambioaro()">
+				</div>
+				<div class="form-group col-md-3">
+					<h6>Colgadores</h6>
+					<input type="number" class="form-control" id="colgadores" name="colgadores" placeholder="Colgadores" value="0" onchange="cambioaro()">
+				</div>
+            </center>
+            <h5 id="precioarov">Precio de Venta: Q0.00</h5>
+          </div>
+          <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h1>Seleccion de lente</h1>
+            <table>
+                <tr>
+                    <th style="width: 20%;">Laboratorio</th>
+                    <th colspan="2">
+                        <select name="lab" id="lab" class="inputtext" onchange="cambiolab()">
+                            <option value="">Seleccione el laboratorio</option>
+                            {% for i in laboratorios %}
+                            <option value="{{i[0]}}">{{i[1]}}</option>
+                            {% endfor %}
+                        </select>
+                    </th>
+                </tr>
+            </table>
+                <div id="solopt" style="display: none;">
+                    <table>
+                    <tr>
+                        <th style="width: 20%;">Tipo de Lente</th>
+                        <th colspan="2">
+                            <select name="lh" id="lh" class="inputtext" onchange="cambiolentes()">
+                                <option value="">Seleccione el tipo de lente</option>
+                                {% for i in lenteheader %}
+                                {% if i[2] == 1 or i[2] == '1' %}
+                                <option value="{{i[0]}}">{{i[1]}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Lente</th>
+                        <th colspan="2">
+                            <select name="ld" id="ld" class="inputtext" onchange="cambiolentes1()">
+                                <option value="">Seleccione el lente</option>
+                            </select>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Tratamiento Antireflejo Top Vision</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="antireflejo" name="antireflejo" value="1" onchange="cambiolentes1()">
+                                <label for="antireflejo">Q </label>
+                                <label for="antireflejo" id="antireflejol">{{servicios[0][2] * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Montaje</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="montaje1" name="montaje1" value="1" onchange="cambiolentes1()">
+                                <label for="montaje1">Q </label>
+                                <label for="montaje1" id="montaje1l">{{servicios[1][2] * 2 * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Tinte</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="tinte" name="tinte" value="1" onchange="cambiolentes1()">
+                                <label for="tinte">Q </label>
+                                <label for="tinte" id="tintel">{{servicios[2][2] * 2 * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Perforado</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="perforado1" name="perforado1" value="1" onchange="cambiolentes1()">
+                                <label for="perforado1">Q </label>
+                                <label for="perforado1" id="perforado1l">{{servicios[3][2] * 2}}</label>
+                                <input type="number" class="inputtext" id="cantperf" name="cantperf" value="0" onchange="cambiolentes1()">
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Ranurado</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="ranurado1" name="ranurado1" value="1" onchange="cambiolentes1()">
+                                <label for="ranurado1">Q </label>
+                                <label for="ranurado1" id="ranurado1l">{{servicios[4][2] * 2 * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Facetado</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="facetado" name="facetado" value="1" onchange="cambiolentes1()">
+                                <label for="facetado">Q </label>
+                                <label for="facetado" id="facetadol">{{servicios[5][2] * 2 * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Solo un ojo</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="solo1ojo" name="solo1ojo" value="1" onchange="cambiolentes1()">
+                                <label for="solo1ojo">Q </label>
+                                <label for="solo1ojo" id="solo1ojol">{{servicios[6][2] * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Prismas</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="prismas" name="prismas" value="1" onchange="cambiolentes1()">
+                                <label for="prismas">Q </label>
+                                <label for="prismas" id="prismasl">{{servicios[7][2] * 2 * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Dos Caras</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="doscaras" name="doscaras" value="1" onchange="cambiolentes1()">
+                                <label for="doscaras">Q </label>
+                                <label for="doscaras" id="doscarasl">{{servicios[8][2] * 2 * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Moldes</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="moldes" name="moldes" value="1" onchange="cambiolentes1()">
+                                <label for="moldes">Q </label>
+                                <label for="moldes" id="moldesl">{{servicios[9][2] * 2 * 2}}</label>
+                            </center>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+                <div id="opticalasers" style="display: none">
+                    <table>
+                    <tr>
+                        <th style="width: 20%;">Montaje</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="montaje" name="montaje" value="1"  onchange="cambiolentes1()">
+                                <label for="montaje">Q </label>
+                                <label for="montaje" id="montajel">44.80</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Ranurado</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="ranurado" name="ranurado" value="1"  onchange="cambiolentes1()">
+                                <label for="ranurado">Q </label>
+                                <label for="ranurado" id="ranuradol">67.20</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Perforado</th>
+                        <td colspan="2">
+                            <center>
+                                <input type="checkbox" id="perforado" name="perforado" value="1"  onchange="cambiolentes1()">
+                                <label for="perforado">Q </label>
+                                <label for="perforado" id="perforadol">89.60</label>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 20%;">Lente</th>
+                        <td>
+                            <select id="lenteoloi" name="lenteoloi" class="inputtext1"  onchange="cambiolentes1()">
+                                <option value="0">Lente OI</option>
+                                {% for i in lentedesc %}
+                                {% if i[1] == 17 or i[1] == '17' %}
+                                <option value="{{i[0]}}">{{i[2]}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select id="lenteolod" name="lenteolod" class="inputtext1"  onchange="cambiolentes1()">
+                                <option value="0">Lente OD</option>
+                                {% for i in lentedesc %}
+                                {% if i[1] == 17 or i[1] == '17' %}
+                                <option value="{{i[0]}}">{{i[2]}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Filtro</th>
+                        <td colspan="2"><center><input type="number" id="filtrool" name="filtrool" step="0.01"  class="inputtext" value="0"  onchange="cambiolentes1()" required></center></td>
+                    </tr>
+                </table>
+                </div>
+            </table>
+            <h5 id="preciolenv">Precio de Venta: Q0.00</h5>
+
+          </div>
+          <div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
+            <br>
+            <h1>Resumen</h1>
+            <div style="width: 30%; position: relative; float: left;">
+                <table>
+                    <tr>
+                        <th colspan="2">Aro</th>
+                    </tr>
+                    <tr>
+                        <th>Precio de Venta</th>
+                        <td>
+                            <input type="radio" id="aropreven" name="aro" value="1" disabled>
+                            <label for="aropreven" id="aroprevenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio General</th>
+                        <td>
+                            <input type="radio" id="aropregen" name="aro" value="1" onclick="calctotal()">
+                            <label for="aropregen" id="aropregenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio Galileo</th>
+                        <td>
+                            <input type="radio" id="aropredoc" name="aro" value="1" onclick="calctotal()">
+                            <label for="aropredoc" id="aropredocl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Ninguno</th>
+                        <td>
+                            <input type="radio" id="aroprenin" name="aro" value="0" onclick="calctotal()">
+                            <label for="aroprenin" id="aropreninl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Lente</th>
+                    </tr>
+                    <tr>
+                        <th>Precio Venta</th>
+                        <td>
+                            <input type="radio" id="lenpreven" name="lente" value="1" disabled>
+                            <label for="lenpreven" id="lenprevenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio General</th>
+                        <td>
+                            <input type="radio" id="lenpregen" name="lente" value="1" onclick="calctotal()">
+                            <label for="lenpregen" id="lenpregenl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Precio Galileo</th>
+                        <td>
+                            <input type="radio" id="lenpredoc" name="lente" value="1" onclick="calctotal()">
+                            <label for="lenpredoc" id="lenpredocl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Ninguno</th>
+                        <td>
+                            <input type="radio" id="lenprenin" name="lente" value="0" onclick="calctotal()">
+                            <label for="lenprenin" id="lenpreninl">Q 0.00</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Consulta</th>
+                    </tr>
+                    <tr>
+                        <th>Precio</th>
+                        <td>
+                            <label><input type="checkbox" id="precons" name="precons" value="50" onclick="calctotal()"> Q 50.00</label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="width: 60%; position: relative; float: left;">
+                <table>
+                    <tr>
+                        <th colspan="2">Datos de Facturación</th>
+                    </tr>
+                    <tr>
+                        <th>NIT</th>
+                        <td><input type="text" class="inputtext1" id="nit" name="nit" value="CF" onchange="datosfactura()"></td>
+                    </tr>
+                    <tr>
+                        <th>Nombre</th>
+                        <td><input type="text" class="inputtext1" id="nomcliente" name="nomcliente" value="{{datapaciente[0]}} {{datapaciente[1]}}"></td>
+                    </tr>
+                    <tr>
+                        <th>Apellido</th>
+                        <td><input type="text" class="inputtext1" id="apecliente" name="apecliente" value="{{datapaciente[2]}} {{datapaciente[3]}}"></td>
+                    </tr>
+                    <tr>
+                        <th>Codigo (Carnet/CodPers)</th>
+                        <td><input type="text" class="inputtext1" id="coddesc" name="coddesc"></td>
+                    </tr>
+                    <tr>
+                        <th>Referido</th>
+                        <td>
+                            <input type="checkbox" id="referido" name="referido" value="1" onclick="refer()">
+                            <label for="referido">Referido: </label>
+                            <input type="text" class="inputtext4" id="referidonombre" name="referidonombre" disabled>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Precios</th>
+                    </tr>
+                    <tr>
+                        <th>Total General</th>
+                        <td>Q <input type="text" class="inputtext1" id="restotgen" name="restotgen" onchange="cambcomb()"></td>
+                    </tr>
+                    <tr>
+                        <th>Descuento</th>
+                        <td>Q <input type="text" class="inputtext1" id="resdesc" name="resdesc" onchange="cambcomb()"></td>
+                    </tr>
+                    <tr>
+                        <th>Total a Cancelar</th>
+                        <td>Q <input type="text" class="inputtext1" id="restotcan" name="restotcan"></td>
+                    </tr>
+                </table>
+                <center><button onclick="submit" class="button">Aceptar</button></center>
+            </div>
+        </div>
+        </form>
+      </div>
+      <script type="text/javascript">
+        function cambcomb() {
+            var general = document.getElementById("restotgen");
+            var descuento = document.getElementById("resdesc");
+            var cancelar = document.getElementById("restotcan");
+            general.value = (parseFloat(general.value).toFixed(2))
+            descuento.value = (parseFloat(descuento.value).toFixed(2))
+            cancelar.value = (parseFloat(general.value) - parseFloat(descuento.value)).toFixed(2)
+        }
+        function refer() {
+            var cheque = document.getElementById("referido");
+            var cajatexto = document.getElementById("referidonombre");
+            if(cheque.checked == true) {
+                cajatexto.disabled = false;
+            }else {
+                cajatexto.disabled = true;
+            }
+        }
+        function cambiolab() {
+            var so = document.getElementById('solopt')
+            var ol = document.getElementById('opticalasers')
+            var select = document.getElementById('lab')
+            if(select.value == 1 || select.value == '1') {
+                so.style.display = 'block'
+                ol.style.display = 'none'
+            }else if(select.value == 2 || select.value == '2') {
+                so.style.display = 'none'
+                ol.style.display = 'block'
+            }else {
+                so.style.display = 'none'
+                ol.style.display = 'none'
+            }
+        }
+        function datosfactura(){
+            var textnit = document.getElementById("nit");
+            var textcoddesc = document.getElementById("coddesc");
+            var textnombre = document.getElementById("nomcliente");
+            var textapellido = document.getElementById("apecliente");
+            var nit = textnit.value
+            var arreglo = {{ datafacturas|tojson }};
+            var conteo = Object.keys(arreglo).length;
+            for (var i = conteo - 1; i>=0;i--){
+                if(nit==arreglo[i][2]){
+                    textnombre.value = arreglo[i][0]
+                    textapellido.value = arreglo[i][1]
+                    textcoddesc.value = arreglo[i][3]
+                }
+            }
+
+        }
+        function calctotal(){
+            var totalgen = 0
+            var totalcan = 0
+            var descuento = 0
+            var arogenc = document.getElementById("aropreven")
+            var aroestc = document.getElementById("aropregen")
+            var arodocc = document.getElementById("aropredoc")
+            var aroninc = document.getElementById("aroprenin")
+            var restotgen = document.getElementById("restotgen")
+            var resdesc = document.getElementById("resdesc")
+            var restotcan = document.getElementById("restotcan")
+            var lengenc = document.getElementById("lenpreven")
+            var lenestc = document.getElementById("lenpregen")
+            var lendocc = document.getElementById("lenpredoc")
+            var lenninc = document.getElementById("lenprenin")
+            var consu = document.getElementById("precons")
+            if (arogenc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(arogenc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
+            }else if (aroestc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(aroestc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
+            }else if (arodocc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(arodocc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
+            }
+
+            if (lengenc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(lengenc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(lengenc.value)
+            }else if (lenestc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(lenestc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(lengenc.value)
+            }else if (lendocc.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(lendocc.value)
+                totalgen = parseFloat(totalgen) + parseFloat(lengenc.value)
+            }
+
+            if (consu.checked == true){
+                totalcan = parseFloat(totalcan) + parseFloat(consu.value)
+                totalgen = parseFloat(totalgen) + parseFloat(consu.value)
+            }
+            totalcan = Math.round(totalcan * 100) / 100
+
+            while((totalcan) % 5 != 0){
+                totalcan = parseFloat(totalcan) + 0.01
+                totalcan = Math.round(totalcan * 100) / 100
+            }
+            if (totalcan % 10 == 0){
+                totalcan = totalcan+5;
+            }
+            if(totalcan == 55){
+                totalcan = 50
+            }
+            if(totalcan == 5){
+                totalcan = 0
+            }
+            if(totalcan > totalgen) {
+                totalgen = totalcan
+            }
+            descuento = totalgen - totalcan
+            totalcan = totalcan.toFixed(2)
+            restotcan.value = String(totalcan)
+            descuento = descuento.toFixed(2)
+            resdesc.value = String(descuento)
+            totalgen = totalgen.toFixed(2)
+            console.log(totalgen)
+            restotgen.value = String(totalgen)
+
+        }
+
+        function cambiolentes() {
+            var select = document.getElementById("lh");
+            var select1 = document.getElementById("ld");
+            var idlh = select.value;
+            var length = select.options.length;
+            for (i = length-1; i >= 1; i--) {
+                select1.options[i] = null;
+            }
+            var arreglo = {{ lentedesc|tojson }};
+            var conteo = Object.keys(arreglo).length;
+            for(var i = 0; i<conteo; i++){
+                if(parseInt(arreglo[i][1]) == parseInt(idlh)){
+                    var opt = document.createElement('option');
+                    opt.value = arreglo[i][0];
+                    opt.innerHTML = arreglo[i][2];
+                    select1.appendChild(opt);
+                }
+            }
+        }
+        function cambiolentes1(){
+            var lab = document.getElementById('lab')
+            var total = 0
+            var preg = document.getElementById("preciolenv");
+            var rpreg = document.getElementById("lenprevenl");
+            var rpree = document.getElementById("lenpregenl");
+            var rpred = document.getElementById("lenpredocl");
+            var rpreg1 = document.getElementById("lenpreven");
+            var rpree1 = document.getElementById("lenpregen");
+            var rpred1 = document.getElementById("lenpredoc");
+            if(lab.value == 1 || lab.value == '1'){
+                var select = document.getElementById("ld");
+                var idlh = select.value;
+                var arreglo = {{ lentedesc|tojson }};
+                var conteo = Object.keys(arreglo).length;
+                for(var i = 0; i<conteo; i++){
+                    if(parseInt(arreglo[i][0]) == parseInt(idlh)){
+                        total = total + (parseFloat(arreglo[i][3]) * 1.8)
+                    }
+                }
+                var antireflejo = document.getElementById('antireflejo')
+                var antireflejol = document.getElementById('antireflejol')
+                var montaje1 = document.getElementById('montaje1')
+                var montaje1l = document.getElementById('montaje1l')
+                var tinte = document.getElementById('tinte')
+                var tintel = document.getElementById('tintel')
+                var perforado1 = document.getElementById('perforado1')
+                var perforado1l = document.getElementById('perforado1l')
+                var cantperf = document.getElementById('cantperf')
+                var ranurado1 = document.getElementById('ranurado1')
+                var ranurado1l = document.getElementById('ranurado1l')
+                var facetado = document.getElementById('facetado')
+                var facetadol = document.getElementById('facetadol')
+                var solo1ojo = document.getElementById('solo1ojo')
+                var solo1ojol = document.getElementById('solo1ojol')
+                var prismas = document.getElementById('prismas')
+                var prismasl = document.getElementById('prismasl')
+                var doscaras = document.getElementById('doscaras')
+                var doscarasl = document.getElementById('doscarasl')
+                var moldes = document.getElementById('moldes')
+                var moldesl = document.getElementById('moldesl')
+                if(antireflejo.checked == true) {
+                    total = total + parseFloat(antireflejol.innerHTML)
+                }
+                if(montaje1.checked == true) {
+                    total = total + parseFloat(montaje1l.innerHTML)
+                }
+                if(tinte.checked == true) {
+                    total = total + parseFloat(tintel.innerHTML)
+                }
+                if(perforado1.checked == true) {
+                    total = total + (parseFloat(perforado1l.innerHTML) * cantperf.value)
+                }
+                if(ranurado1.checked == true) {
+                    total = total + parseFloat(ranurado1l.innerHTML)
+                }
+                if(facetado.checked == true) {
+                    total = total + parseFloat(facetadol.innerHTML)
+                }
+                if(solo1ojo.checked == true) {
+                    total = total + parseFloat(solo1ojol.innerHTML)
+                }
+                if(prismas.checked == true) {
+                    total = total + parseFloat(prismasl.innerHTML)
+                }
+                if(doscaras.checked == true) {
+                    total = total + parseFloat(doscarasl.innerHTML)
+                }
+                if(moldes.checked == true) {
+                    total = total + parseFloat(moldesl.innerHTML)
+                }
+            }else if (lab.value == 2 || lab.value == '2') {
+                var montaje = document.getElementById('montaje')
+                var montajel = document.getElementById('montajel')
+                var ranurado = document.getElementById('ranurado')
+                var ranuradol = document.getElementById('ranuradol')
+                var perforado = document.getElementById('perforado')
+                var perforadol = document.getElementById('perforadol')
+                if(montaje.checked == true) {
+                    total = total + parseFloat(montajel.innerText)
+                }
+                if(ranurado.checked == true) {
+                    total = total + parseFloat(ranuradol.innerText)
+                }
+                if(perforado.checked == true) {
+                    total = total + parseFloat(perforadol.innerText)
+                }
+                var lenteoloi = document.getElementById('lenteoloi')
+                var lenteolod = document.getElementById('lenteolod')
+                var arreglo = {{ lentedesc|tojson }};
+                var conteo = Object.keys(arreglo).length;
+                for(var i = 0; i<conteo; i++){
+                    if(parseInt(arreglo[i][0]) == parseInt(lenteoloi.value)){
+                        total = total + (parseFloat(arreglo[i][3]) * 2.5)
+                    }
+                    if(parseInt(arreglo[i][0]) == parseInt(lenteolod.value)){
+                        total = total + (parseFloat(arreglo[i][3]) * 2.5)
+                    }
+                }
+                var filtrool = document.getElementById('filtrool')
+                if (filtrool.value.length > 0){
+                    total = total + parseFloat(filtrool.value)
+                }
+                
+            }
+            preg.innerHTML = "Precio Venta: Q " + String(parseFloat(total).toFixed(2))
+            rpreg.innerHTML = "Q " + String(parseFloat(total).toFixed(2))
+            rpree.innerHTML = "Q " + String(parseFloat(total).toFixed(2))
+			if (lab.value == 1 || lab.value == '1'){
+				rpred.innerHTML = "Q " + String(parseFloat((total / 1.8) * 1.67).toFixed(2))
+				rpred1.value = String(parseFloat((total / 1.8) * 1.67).toFixed(2))
+			}else if (lab.value == 2 || lab.value == '2'){
+				rpred.innerHTML = "Q " + String(parseFloat((total / 2.5) * 2.375).toFixed(2))
+				rpred1.value = String(parseFloat((total / 2.5) * 2.375).toFixed(2))
+			}
+            rpreg1.value = String(parseFloat(total).toFixed(2))
+            rpree1.value = String(parseFloat(total).toFixed(2))
+            
+        }
+        function cambioaro(){
+            var select = document.getElementById("idaro");
+			var topes = document.getElementById("topes").value;
+			var colgadores = document.getElementById("colgadores").value;
+			var accesorios = (parseInt(topes) * 20) + (parseInt(colgadores) * 50)
+            var idlh = select.value;
+            var preg = document.getElementById("precioarov");
+            var pree = document.getElementById("precioarog");
+            var pred = document.getElementById("precioarod");
+            var rpreg = document.getElementById("aroprevenl");
+            var rpree = document.getElementById("aropregenl");
+            var rpred = document.getElementById("aropredocl");
+            var rpreg1 = document.getElementById("aropreven");
+            var rpree1 = document.getElementById("aropregen");
+            var rpred1 = document.getElementById("aropredoc");
+            var arreglo = {{ aros|tojson }};
+			var total = 0
+            var conteo = Object.keys(arreglo).length;
+            for(var i = 0; i<conteo; i++){
+                if(parseInt(arreglo[i][0]) == parseInt(idlh)){
+					total = total + 1
+					var total1 = parseFloat(arreglo[i][4])
+                    preg.innerHTML = "Precio Venta: Q " + String(((total1 * 3) + accesorios).toFixed(2))
+                    rpreg.innerHTML = "Q " + String(((total1 * 3) + accesorios).toFixed(2))
+                    rpree.innerHTML = "Q " + String(((total1 * 3) + accesorios).toFixed(2))
+                    rpred.innerHTML = "Q " + String(((total1 * 2.85) + accesorios).toFixed(2))
+                    rpreg1.value = String(((total1 * 3) + accesorios).toFixed(2))
+                    rpree1.value = String(((total1 * 3) + accesorios).toFixed(2))
+                    rpred1.value = String(((total1 * 2.85) + accesorios).toFixed(2))
+                }
+            }
+			if (total == 0) {
+				preg.innerHTML = "Precio Venta: Q " + String(accesorios)
+				rpreg.innerHTML = "Q " + String(accesorios)
+				rpree.innerHTML = "Q " + String(accesorios)
+				rpred.innerHTML = "Q " + String(accesorios)
+				rpreg1.value = String(accesorios)
+				rpree1.value = String(accesorios)
+				rpred1.value = String(accesorios)
+
+			}
+        }
+    </script>
+{% endblock %}
