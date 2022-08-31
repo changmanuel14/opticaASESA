@@ -3,6 +3,7 @@ import pymysql
 from datetime import date, timedelta
 import datetime
 import pdfkit
+import cryptography
 
 from werkzeug.utils import send_file
 
