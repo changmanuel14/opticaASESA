@@ -477,11 +477,21 @@ def ingresoaros():
 		color = request.form["color"]
 		marca = request.form["marca"]
 		cantidad = request.form["cantidad"]
-		precio = request.form["precio"]
+		precio = request.form["precio"] 
 		try:
 			consignacion = request.form["consignacion"]
 		except:
 			consignacion = 0
+		try:
+			descmarca = request.form["descmarca"]
+		except:
+			descmarca = 0
+		if consignacion != 0:
+			precio = float(precio) * 1.2
+		else:
+			precio = float(precio)
+		if descmarca != 0:
+			precio = precio * 2 / 3
 		try:
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:

@@ -18,8 +18,8 @@
             <td>{{i[1]}}</td>
             <td>{{i[0]}}</td>
             <td>{{i[3]}}</td>
-            <td>Q{{i[4]}}</td>
-            <td>Q{{i[5]}}</td>
+            <td>Q{{i[4] | round(2) }}</td>
+            <td>Q{{i[5] | round(2)}}</td>
 			{% if i[6] == 0 %}
 			<td>No</td>
 			{% else %}
