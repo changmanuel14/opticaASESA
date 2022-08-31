@@ -363,7 +363,7 @@
                     </tr>
                     <tr>
                         <th>Total a Cancelar</th>
-                        <td>Q <input type="text" class="inputtext1" id="restotcan" name="restotcan"></td>
+                        <td>Q <input type="number" step="0.01" class="inputtext1" id="restotcan" name="restotcan"></td>
                     </tr>
                 </table>
                 <center><button onclick="submit" class="button">Aceptar</button></center>
@@ -489,6 +489,7 @@
             totalgen = totalgen.toFixed(2)
             console.log(totalgen)
             restotgen.value = String(totalgen)
+			restotcan.setAttribute('min', totalcan)
 
         }
 
