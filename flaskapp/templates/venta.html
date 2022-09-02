@@ -316,6 +316,13 @@
                             <label><input type="checkbox" id="precons" name="precons" value="50" onclick="calctotal()"> Q 50.00</label>
                         </td>
                     </tr>
+					<tr>
+                        <th>Pago Efectivo</th>
+                        <td>
+                            <label><input type="checkbox" id="pagoefectivo" name="pagoefectivo" value="1" onclick="calctotal()"> Si aplica</label>
+                        </td>
+                    </tr>
+
                 </table>
             </div>
             <div style="width: 60%; position: relative; float: left;">
@@ -355,11 +362,11 @@
                     </tr>
                     <tr>
                         <th>Total General</th>
-                        <td>Q <input type="text" class="inputtext1" id="restotgen" name="restotgen" onchange="cambcomb()"></td>
+                        <td>Q <input type="text" class="inputtext1" id="restotgen" name="restotgen" onchange="cambcomb()" readonly></td>
                     </tr>
                     <tr>
                         <th>Descuento</th>
-                        <td>Q <input type="text" class="inputtext1" id="resdesc" name="resdesc" onchange="cambcomb()"></td>
+                        <td>Q <input type="text" class="inputtext1" id="resdesc" name="resdesc" onchange="cambcomb()" readonly></td>
                     </tr>
                     <tr>
                         <th>Total a Cancelar</th>
@@ -437,6 +444,7 @@
             var lendocc = document.getElementById("lenpredoc")
             var lenninc = document.getElementById("lenprenin")
             var consu = document.getElementById("precons")
+			var pagoefec = document.getElementById("pagoefectivo")
             if (arogenc.checked == true){
                 totalcan = parseFloat(totalcan) + parseFloat(arogenc.value)
                 totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
@@ -464,7 +472,13 @@
                 totalgen = parseFloat(totalgen) + parseFloat(consu.value)
             }
             totalcan = Math.round(totalcan * 100) / 100
-
+			if (pagoefec.checked == false){
+				totalgen = totalgen * 1.1
+				totalcan = totalcan * 1.1
+			}else {
+				totalgen = totalgen * 1.05
+				totalcan = totalcan * 1.05
+			}
             while((totalcan) % 5 != 0){
                 totalcan = parseFloat(totalcan) + 0.01
                 totalcan = Math.round(totalcan * 100) / 100
@@ -481,13 +495,13 @@
             if(totalcan > totalgen) {
                 totalgen = totalcan
             }
+			
             descuento = totalgen - totalcan
             totalcan = totalcan.toFixed(2)
             restotcan.value = String(totalcan)
             descuento = descuento.toFixed(2)
             resdesc.value = String(descuento)
             totalgen = totalgen.toFixed(2)
-            console.log(totalgen)
             restotgen.value = String(totalgen)
 			restotcan.setAttribute('min', totalcan)
 
