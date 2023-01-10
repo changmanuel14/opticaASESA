@@ -11,9 +11,22 @@
             <th>Precio Costo</th>
             <th>Precio Venta</th>
 			<th>Consignación</th>
+			<th>Meses en Existencia</th>
         </tr>
         {% for i in aros %}
-        <tr>
+		{% if i[6] == 0  %}
+			{% if i[3] | int > 0  %}
+				{% if i[8] | int >= 6  %}
+        			<tr style="background-color: lightgoldenrodyellow;" id="asd{{i[0]}}">
+				{% else %}
+					<tr id="qwe{{i[0]}}">
+				{% endif %}
+			{% else %}
+				<tr id="qwe{{i[0]}}">
+			{% endif %}
+		{% else %}
+			<tr id="qwe{{i[0]}}">
+		{% endif %}
             <td>{{i[2]}}</td>
             <td>{{i[1]}}</td>
             <td>{{i[0]}}</td>
@@ -25,6 +38,7 @@
 			{% else %}
 			<td>Si</td>
 			{% endif %}
+			<td>{{i[8]}}</td>
         </tr>
         {% endfor%}
     </table>

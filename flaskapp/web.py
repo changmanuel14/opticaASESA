@@ -364,7 +364,7 @@ def aros():
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT a.codigo, a.color, m.marca, a.cantidad, a.precio, a.precio * 3, a.consignacion, a.idaro  from aro a inner join marca m on a.idmarca = m.idmarca order by m.marca asc, a.codigo asc"
+				consulta = "SELECT a.codigo, a.color, m.marca, a.cantidad, a.precio, a.precio * 3, a.consignacion, a.idaro, TIMESTAMPDIFF(MONTH, a.fechaingreso, CURDATE())  from aro a inner join marca m on a.idmarca = m.idmarca order by a.cantidad, m.marca asc, a.codigo asc"
 				cursor.execute(consulta)
 				aros = cursor.fetchall()
 		finally:
@@ -478,7 +478,7 @@ def ingresoaros():
 		color = request.form["color"]
 		marca = request.form["marca"]
 		cantidad = request.form["cantidad"]
-		precio = request.form["precio"] 
+		precio = request.form["precio"]
 		try:
 			consignacion = request.form["consignacion"]
 		except:
@@ -497,7 +497,7 @@ def ingresoaros():
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:
 				with conexion.cursor() as cursor:
-					consulta = "INSERT INTO aro(codigo, color, idmarca, cantidad, precio, consignacion) values(%s,%s,%s,%s,%s,%s)"
+					consulta = "INSERT INTO aro(codigo, color, idmarca, cantidad, precio, consignacion, fechaingreso) values(%s,%s,%s,%s,%s,%s, CURDATE())"
 					cursor.execute(consulta, (codigo, color, marca, cantidad, precio, consignacion))
 				conexion.commit()
 			finally:
@@ -3269,7 +3269,7 @@ def recetacontactopdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetacontactopdf.html', title="Receta contacto", dataconsulta=dataconsulta, lencons=lencons)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
+	options = {"enable-local-file-access": "", "page-size": "A5", "orientation": "landscape", "zoom": "0.6", "margin-top": "10mm"}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
