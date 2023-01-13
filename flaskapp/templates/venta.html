@@ -322,6 +322,12 @@
                             <label><input type="checkbox" id="pagoefectivo" name="pagoefectivo" value="1" onclick="calctotal()"> Si aplica</label>
                         </td>
                     </tr>
+					<tr>
+                        <th>Oferta Telus</th>
+                        <td>
+                            <label><input type="checkbox" id="pagotelus" name="pagotelus" value="1" onclick="calctelus()"> Si aplica</label>
+                        </td>
+                    </tr>
 
                 </table>
             </div>
@@ -428,6 +434,22 @@
             }
 
         }
+		function calctelus() {
+			var pagotelus = document.getElementById("pagotelus")
+			var restotgen = document.getElementById("restotgen")
+            var resdesc = document.getElementById("resdesc")
+            var restotcan = document.getElementById("restotcan")
+			if (pagotelus.checked == true){
+                restotgen.value = parseFloat(550)
+                restotcan.value = parseFloat(550)
+				resdesc.value = parseFloat(0)
+				restotcan.setAttribute('min', 550)
+			} else {
+				calctotal()
+			}
+
+		}
+
         function calctotal(){
             var totalgen = 0
             var totalcan = 0
