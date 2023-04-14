@@ -4,6 +4,7 @@
 	<a href="/ingresoaros"><button class="btn btn-success">Ingreso de Aro</button></a>
     <table class="sortable">
         <tr>
+			<th>ID</th>
             <th>Marca</th>
             <th>Color</th>
             <th>Código</th>
@@ -27,6 +28,7 @@
 		{% else %}
 			<tr id="qwe{{i[0]}}">
 		{% endif %}
+			<td>{{i[9]}}</td>
             <td>{{i[2]}}</td>
             <td>{{i[1]}}</td>
             <td>{{i[0]}}</td>
