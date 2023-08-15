@@ -339,7 +339,7 @@ def verventas():
 			with conexion.cursor() as cursor:
 				consulta = '''
 				select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, 
-				h.descuento, h.total,  DATE_FORMAT(h.fecha,'%d/%m/%Y'), u.nombre, u.apellido, h.idfacturaheader, h.terminado
+				h.descuento, h.total,  DATE_FORMAT(h.fecha,'%d/%m/%Y'), u.nombre, u.apellido, h.idfacturaheader, h.terminado, h.nombrepaciente, h.apellidopaciente
 				from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader
 				inner join consulta c on c.idconsulta = h.idconsulta
 				inner join user u on u.iduser = h.iduser order by h.fecha desc
@@ -1744,6 +1744,8 @@ def venta(idconsulta):
 			nombreref = ""
 		nomcliente = request.form["nomcliente"]
 		apecliente = request.form["apecliente"]
+		nompaciente = request.form["nompaciente"]
+		apepaciente = request.form["apepaciente"]
 		nit = request.form["nit"]
 		coddesc = request.form["coddesc"]
 		if len(coddesc) < 1:
@@ -1881,8 +1883,8 @@ def venta(idconsulta):
 					cursor.execute(consulta)
 					consulta = "UPDATE accesorios set cantidad = " + str(totcolgadores) + " WHERE idaccesorios = 2"
 					cursor.execute(consulta)
-					consulta = "insert into facturaheader(nombrecliente, apellidocliente, nit, preciogen, descuento, total, coddesc, fecha, idconsulta, idlaboratorio, iduser) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-					cursor.execute(consulta, (nomcliente, apecliente, nit, restotgen, resdesc, restotcan, coddesc, date.today(),idconsulta, lab, session['iduser1']))
+					consulta = "insert into facturaheader(nombrecliente, apellidocliente, nit, preciogen, descuento, total, coddesc, fecha, idconsulta, idlaboratorio, iduser, nombrepaciente, apellidopaciente) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+					cursor.execute(consulta, (nomcliente, apecliente, nit, restotgen, resdesc, restotcan, coddesc, date.today(),idconsulta, lab, session['iduser1'], nompaciente, apepaciente))
 				conexion.commit()
 				with conexion.cursor() as cursor:
 					consulta = "select max(idfacturaheader) from facturaheader;"
@@ -3173,7 +3175,6 @@ def crearusuario():
 		logeado = session['logeado1']
 	except:
 		logeado = 0
-
 	if request.method == 'POST':
 		nombre = request.form["nombre"]
 		apellido = request.form["apellido"]
