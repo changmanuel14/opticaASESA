@@ -537,10 +537,7 @@
 		if (pagoefec.checked == false) {
 			totalgen = totalgen * 1.1
 			totalcan = totalcan * 1.1
-		} else {
-			totalgen = totalgen * 1.05
-			totalcan = totalcan * 1.05
-		}
+		} 
 		while ((totalcan) % 5 != 0) {
 			totalcan = parseFloat(totalcan) + 0.01
 			totalcan = Math.round(totalcan * 100) / 100
@@ -721,7 +718,7 @@
 		var rpreg1 = document.getElementById("aropreven");
 		var rpree1 = document.getElementById("aropregen");
 		var rpred1 = document.getElementById("aropredoc");
-		var arreglo = {{ aros| tojson }};
+		var arreglo = {{ aros | tojson }};
 		var total = 0
 		var conteo = Object.keys(arreglo).length;
 		for (var i = 0; i < conteo; i++) {
