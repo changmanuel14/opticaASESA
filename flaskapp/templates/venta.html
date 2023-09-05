@@ -537,7 +537,10 @@
 		if (pagoefec.checked == false) {
 			totalgen = totalgen * 1.1
 			totalcan = totalcan * 1.1
-		} 
+		} else {
+			totalgen = totalgen * 1.05
+			totalcan = totalcan * 1.05
+		}
 		while ((totalcan) % 5 != 0) {
 			totalcan = parseFloat(totalcan) + 0.01
 			totalcan = Math.round(totalcan * 100) / 100

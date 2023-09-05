@@ -2050,12 +2050,10 @@ def segventas(idfacturaheader):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
-				print(consulta)
+				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, h.paso from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
 				cursor.execute(consulta)
 				dataventa = cursor.fetchall()
 				consulta = "select terminado from facturaheader where idfacturaheader = " + str(idfacturaheader)
-				print(consulta)
 				cursor.execute(consulta)
 				terminado = cursor.fetchone()
 				try:
@@ -2094,8 +2092,20 @@ def segventas(idfacturaheader):
 				with conexion.cursor() as cursor:
 					consulta = 'INSERT INTO segventas(comentario, fecha, iduser, idfacturaheader) values (%s, %s, %s, %s);'
 					cursor.execute(consulta, (comentario, fechaact, session['iduser1'], idfacturaheader))
-					if request.form['accion'] == 'fin':
-						consulta = 'UPDATE facturaheader set terminado = 1 where idfacturaheader = ' + str(idfacturaheader)
+					paso = int(dataventa[0][25])
+					accion = request.form['accion']
+					if int(accion) == 1:
+						paso = paso + 1
+						consulta = f'UPDATE facturaheader set paso = {paso} where idfacturaheader = {idfacturaheader}'
+						cursor.execute(consulta)
+					elif int(accion) == 2:
+						if paso > 0:
+							paso = paso - 1
+						consulta = f'UPDATE facturaheader set paso = {paso} where idfacturaheader = {idfacturaheader}'
+						cursor.execute(consulta)
+					elif int(accion) == 3:
+						paso = paso + 1
+						consulta = f'UPDATE facturaheader set paso = {paso}, terminado = 1 where idfacturaheader = {idfacturaheader}'
 						cursor.execute(consulta)
 						consulta = 'UPDATE comisiones set activo = 1 where idfacturaheader = ' + str(idfacturaheader)
 						cursor.execute(consulta)

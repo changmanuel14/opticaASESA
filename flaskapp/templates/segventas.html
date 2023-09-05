@@ -13,15 +13,21 @@
     <h6><strong>Fecha: </strong> {{dataventa[0][6]}}</h6>
 	
 
-    <table style="width: 100%;">
+    <table class="table table-stripped">
+		<tr>
+			<th>Paso Actual</th>
+		</tr>
+		<tr>
+			<th>{{dataventa[0][25]}}</th>
+		</tr>
         <tr>
-            <th colspan="2">Aro</th>
+            <th>Aro</th>
         </tr>
         <tr>
-            <td style="width: 70%;">{{dataaro[0]}} - {{dataaro[1]}} {{dataaro[2]}} {{dataaro[3]}}</td>
+            <td>{{dataaro[0]}} - {{dataaro[1]}} {{dataaro[2]}} {{dataaro[3]}}</td>
         </tr>
         </table>
-        <table style="width: 100%;">
+        <table class="table table-stripped">
         <tr>
             <th colspan="2">Lente</th>
         </tr>
@@ -30,7 +36,7 @@
             <td style="width: 50%;"> Ojo Derecho:<br> {{datalente[1][0]}}</td>
         </tr>
         </table>
-        <table style="width: 100%;">
+        <table class="table table-stripped">
         {% if dataventa[0][24] == '1' or dataventa[0][24] == 1 %}
         <tr>
             <th colspan="2">Consulta</th>
@@ -112,7 +118,7 @@
     </table>
     <br>
     <h2>Seguimiento</h2>
-    <table style="width: 100%;">
+    <table class="table table-stripped">
         <tr>
             <th>Fecha</th>
             <th>Comentario</th>
@@ -128,14 +134,47 @@
     </table>
     <br>
     <br>
+	<table class="table table-stripped">
+		<tr>
+			<th colspan="2">Flujorama</th>
+		</tr>
+		<tr>
+			<th>No.</th>
+			<th>Paso</th>
+		</tr>
+		<tr>
+			<td>0</td>
+			<td>Ingreso de Solicitud</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>Pago de Servicio</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>Envío a laboratorio</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>Recepción de laboratorio</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>Entrega a Paciente</td>
+		</tr>
+	</table>
     {% if terminado[0] == 0 %}
     <div>
         <h2>Nuevo comentario</h2>
         <form action="" method="POST">
-            <textarea id="comentario" name="comentario" rows="4" cols="120"></textarea>
+            <textarea id="comentario" name="comentario" rows="4" cols="120" required></textarea>
             <br>
             <br>
-            <button onclick="submit" class="button" name="accion" value="ace">Aceptar</button>  <button onclick="submit" class="button" name="accion" value="fin">Finalizar</button>
+            <button onclick="submit" class="btn btn-primary" name="accion" value="1">Seguiente Paso</button>
+            <button onclick="submit" class="btn btn-danger" name="accion" value="2">Paso Anterior</button>
+			{% if dataventa[0][25] == 3 or dataventa[0][25] == '3'  %}
+			<button onclick="submit" class="btn btn-success" name="accion" value="3">Finalizar</button>
+			{% endif %}
         </form>
     </div>
     {% endif %}
