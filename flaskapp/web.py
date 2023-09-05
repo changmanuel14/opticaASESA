@@ -2046,6 +2046,7 @@ def segventas(idfacturaheader):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	idusuario = int(session['iduser1'])
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -2053,6 +2054,10 @@ def segventas(idfacturaheader):
 				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, h.paso from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
 				cursor.execute(consulta)
 				dataventa = cursor.fetchall()
+				if (idusuario == 2 or idusuario == 3 or idusuario == 7) and int(dataventa[0][25]) == 0:
+					permitido = False
+				else:
+					permitido = True
 				consulta = "select terminado from facturaheader where idfacturaheader = " + str(idfacturaheader)
 				cursor.execute(consulta)
 				terminado = cursor.fetchone()
@@ -2115,7 +2120,7 @@ def segventas(idfacturaheader):
 		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 			print("Ocurrió un error al conectar: ", e)
 		return redirect(url_for('verventas'))
-	return render_template('segventas.html', title='Seguimiento', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente, idfacturaheader=idfacturaheader, comentarios=comentarios, terminado=terminado)
+	return render_template('segventas.html', title='Seguimiento', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente, idfacturaheader=idfacturaheader, comentarios=comentarios, terminado=terminado, permitido=permitido)
 
 @app.route('/imprimir/<idfacturaheader>')
 def imprimir(idfacturaheader):

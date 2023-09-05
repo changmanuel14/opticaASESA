@@ -170,10 +170,14 @@
             <textarea id="comentario" name="comentario" rows="4" cols="120" required></textarea>
             <br>
             <br>
-            <button onclick="submit" class="btn btn-primary" name="accion" value="1">Seguiente Paso</button>
+			{% if permitido %}
+            <button onclick="submit" class="btn btn-primary" name="accion" value="1">Siguiente Paso</button>
             <button onclick="submit" class="btn btn-danger" name="accion" value="2">Paso Anterior</button>
 			{% if dataventa[0][25] == 3 or dataventa[0][25] == '3'  %}
 			<button onclick="submit" class="btn btn-success" name="accion" value="3">Finalizar</button>
+			{% endif %}
+			{% else %}
+			<h5 style="color: red;">Su usuario no está autorizado a realizar la siguiente accion</h5>
 			{% endif %}
         </form>
     </div>
