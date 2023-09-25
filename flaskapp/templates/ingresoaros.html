@@ -4,50 +4,60 @@
 <h1>Ingreso de Aros</h1>
 
 <form action="" method="POST">
-    <div class="form-row">
-        <div class="form-group col-md-6">
+	<div class="form-row">
+		<div class="form-group col-md-6">
 			<label for="marca">Marca</label>
 			<select id="marca" name="marca" class="form-control" required>
-			  <option selected>Seleccione la marca</option>
-			  {% for i in marcas %}
-			  <option value="{{i[0]}}">{{i[1]}}</option>
-			  {% endfor %}
+				<option selected>Seleccione la marca</option>
+				{% for i in marcas %}
+				<option value="{{i[0]}}">{{i[1]}}</option>
+				{% endfor %}
 			</select>
-		  </div>
-        <div class="form-group col-md-6">
-          <label for="codigo">Código</label>
-          <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código">
-        </div>
-      </div>
-	  <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="color">Color(es)</label>
-          <input type="text" class="form-control" id="color" name="color" placeholder="Color(es)">
-        </div>
-        <div class="form-group col-md-6">
-          <label for="precio">Precio</label>
-          <input type="number" step="0.01" class="form-control" id="precio" name="precio" placeholder="Precio">
-        </div>
-      </div>
-      <div class="form-row">
+		</div>
+		<div class="form-group col-md-6">
+			<label for="codigo">Código</label>
+			<input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código" required>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="color">Color(es)</label>
+			<input type="text" class="form-control" id="color" name="color" placeholder="Color(es)" required>
+		</div>
+		<div class="form-group col-md-6">
+			<label for="precio">Precio</label>
+			<input type="number" step="0.01" class="form-control" id="precio" name="precio" placeholder="Precio" required>
+		</div>
+	</div>
+	<div class="form-row">
+		<div class="form-group col-md-6">
+			<label for="proveedor">Proveedor</label>
+			<input type="text" class="form-control" id="proveedor" name="proveedor" placeholder="Proveedor" required>
+		</div>
+		<div class="form-group col-md-6">
+			<label for="factura">Factura</label>
+			<input type="text" class="form-control" id="factura" name="factura" placeholder="Factura" required>
+		</div>
+	</div>
+	<div class="form-row">
 		<div class="form-group col-md-6">
 			<label for="cantidad">Cantidad</label>
-			<input type="number"  class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad">
-		  </div>
+			<input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad" value="1" required>
 		</div>
-		<div class="form-check">
-			<input type="checkbox" class="form-check-input" id="consignacion" name="consignacion" value="1">
-			<label class="form-check-label" for="consignacion">Consignación</label>
-		</div>
-		<br>
-		<div class="form-check">
-			<input type="checkbox" class="form-check-input" id="descmarca" name="descmarca" value="1">
-			<label class="form-check-label" for="descmarca">¿Aro de Marca?</label>
-		</div>
-		<br>
-    </div>
-	
-      <button type="submit" class="btn btn-primary">Aceptar</button>
+	</div>
+	<div class="form-check">
+		<input type="checkbox" class="form-check-input" id="consignacion" name="consignacion" value="1">
+		<label class="form-check-label" for="consignacion">Consignación</label>
+	</div>
+	<br>
+	<div class="form-check">
+		<input type="checkbox" class="form-check-input" id="descmarca" name="descmarca" value="1">
+		<label class="form-check-label" for="descmarca">¿Aro de Marca?</label>
+	</div>
+	<br>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Aceptar</button>
 </form>
 
 {% endblock %}

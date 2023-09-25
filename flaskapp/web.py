@@ -364,7 +364,7 @@ def aros():
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT a.codigo, a.color, m.marca, a.cantidad, a.precio, a.precio * 3, a.consignacion, a.idaro, TIMESTAMPDIFF(MONTH, a.fechaingreso, CURDATE()), a.idaro  from aro a inner join marca m on a.idmarca = m.idmarca where a.cantidad > 0 order by m.marca asc, a.codigo asc"
+				consulta = "SELECT a.codigo, a.color, m.marca, a.cantidad, a.precio, a.precio * 3, a.consignacion, a.idaro, TIMESTAMPDIFF(MONTH, a.fechaingreso, CURDATE()), a.idaro, a.proveedor, a.factura from aro a inner join marca m on a.idmarca = m.idmarca where a.cantidad > 0 order by m.marca asc, a.codigo asc"
 				cursor.execute(consulta)
 				aros = cursor.fetchall()
 		finally:
@@ -479,6 +479,8 @@ def ingresoaros():
 		marca = request.form["marca"]
 		cantidad = request.form["cantidad"]
 		precio = request.form["precio"]
+		factura = request.form["factura"]
+		proveedor = request.form["proveedor"]
 		try:
 			consignacion = request.form["consignacion"]
 		except:
@@ -497,8 +499,8 @@ def ingresoaros():
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:
 				with conexion.cursor() as cursor:
-					consulta = "INSERT INTO aro(codigo, color, idmarca, cantidad, precio, consignacion, fechaingreso) values(%s,%s,%s,%s,%s,%s, CURDATE())"
-					cursor.execute(consulta, (codigo, color, marca, cantidad, precio, consignacion))
+					consulta = "INSERT INTO aro(codigo, color, idmarca, cantidad, precio, consignacion, fechaingreso, factura, proveedor) values(%s,%s,%s,%s,%s,%s, CURDATE(),%s,%s)"
+					cursor.execute(consulta, (codigo, color, marca, cantidad, precio, consignacion, factura, proveedor))
 				conexion.commit()
 			finally:
 				conexion.close()
@@ -2101,14 +2103,18 @@ def segventas(idfacturaheader):
 					accion = request.form['accion']
 					if int(accion) == 1:
 						paso = paso + 1
-						consulta = f'UPDATE facturaheader set paso = {paso} where idfacturaheader = {idfacturaheader}'
-						cursor.execute(consulta)
-					elif int(accion) == 2:
+						if paso == 4:
+							paso = paso - 1
+							accion = 3
+						else:
+							consulta = f'UPDATE facturaheader set paso = {paso} where idfacturaheader = {idfacturaheader}'
+							cursor.execute(consulta)
+					if int(accion) == 2:
 						if paso > 0:
 							paso = paso - 1
 						consulta = f'UPDATE facturaheader set paso = {paso} where idfacturaheader = {idfacturaheader}'
 						cursor.execute(consulta)
-					elif int(accion) == 3:
+					if int(accion) == 3:
 						paso = paso + 1
 						consulta = f'UPDATE facturaheader set paso = {paso}, terminado = 1 where idfacturaheader = {idfacturaheader}'
 						cursor.execute(consulta)

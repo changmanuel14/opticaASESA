@@ -1,47 +1,51 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Aros</h1>
-	<a href="/ingresoaros"><button class="btn btn-success">Ingreso de Aro</button></a>
-    <table class="sortable">
-        <tr>
-			<th>ID</th>
-            <th>Marca</th>
-            <th>Color</th>
-            <th>Código</th>
-            <th>Cantidad</th>
-            <th>Precio Costo</th>
-            <th>Precio Venta</th>
-			<th>Consignación</th>
-			<th>Meses en Existencia</th>
-        </tr>
-        {% for i in aros %}
-		{% if i[6] == 0  %}
-			{% if i[3] | int > 0  %}
-				{% if i[8] | int >= 6  %}
-        			<tr style="background-color: lightgoldenrodyellow;" id="asd{{i[0]}}">
-				{% else %}
-					<tr id="qwe{{i[0]}}">
-				{% endif %}
-			{% else %}
-				<tr id="qwe{{i[0]}}">
-			{% endif %}
+<h1>Aros</h1>
+<a href="/ingresoaros"><button class="btn btn-success">Ingreso de Aro</button></a>
+<table class="sortable">
+	<tr>
+		<th>ID</th>
+		<th>Marca</th>
+		<th>Color</th>
+		<th>Código</th>
+		<th>Cantidad</th>
+		<th>Precio Costo</th>
+		<th>Precio Venta</th>
+		<th>Consignación</th>
+		<th>Proveedor</th>
+		<th>Factura</th>
+		<th>Meses en Existencia</th>
+	</tr>
+	{% for i in aros %}
+	{% if i[6] == 0 %}
+	{% if i[3] | int > 0 %}
+	{% if i[8] | int >= 6 %}
+	<tr style="background-color: lightgoldenrodyellow;" id="asd{{i[0]}}">
 		{% else %}
-			<tr id="qwe{{i[0]}}">
+	<tr id="qwe{{i[0]}}">
 		{% endif %}
-			<td>{{i[9]}}</td>
-            <td>{{i[2]}}</td>
-            <td>{{i[1]}}</td>
-            <td>{{i[0]}}</td>
-            <td>{{i[3]}}</td>
-            <td>Q{{i[4] | round(2) }}</td>
-            <td>Q{{i[5] | round(2)}}</td>
-			{% if i[6] == 0 %}
-			<td>No</td>
-			{% else %}
-			<td>Si</td>
-			{% endif %}
-			<td>{{i[8]}}</td>
-        </tr>
-        {% endfor%}
-    </table>
+		{% else %}
+	<tr id="qwe{{i[0]}}">
+		{% endif %}
+		{% else %}
+	<tr id="qwe{{i[0]}}">
+		{% endif %}
+		<td>{{i[9]}}</td>
+		<td>{{i[2]}}</td>
+		<td>{{i[1]}}</td>
+		<td>{{i[0]}}</td>
+		<td>{{i[3]}}</td>
+		<td>Q{{i[4] | round(2) }}</td>
+		<td>Q{{i[5] | round(2)}}</td>
+		{% if i[6] == 0 %}
+		<td>No</td>
+		{% else %}
+		<td>Si</td>
+		{% endif %}
+		<td>{{i[10]}}</td>
+		<td>{{i[11]}}</td>
+		<td>{{i[8]}}</td>
+	</tr>
+	{% endfor%}
+</table>
 {% endblock %}
