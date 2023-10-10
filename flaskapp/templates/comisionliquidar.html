@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Comisiones Pendientes de Liquidación</h1>
+	<a class="btn btn-info" href="{{ url_for('exportarliquidacion') }}" role="button">Exportar Excel</a>
+	<a class="btn btn-info" href="{{ url_for('liquidarcomisiones') }}" role="button">Liquidar todo</a>
     <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
     <table class="sortable">
         <tr>
@@ -17,8 +19,8 @@
             <td>{{i[0]}} {{i[1]}}</td>
             <td>{{i[2]}}</td>
             <td>{{i[3]}}</td>
-            <td>Q.{{i[4]}}</td>
-            <td>Q.{{i[5]}}</td>
+            <td>Q{{i[4]}}</td>
+            <td>Q{{i[5]}}</td>
             <td>{{i[6]}}</td>
             <td><a href="/liquidarcomision/{{i[7]}}">Liquidar</a> </td>
         </tr>

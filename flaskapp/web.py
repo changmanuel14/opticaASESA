@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, url_for, redirect, session, make_response
+from flask import Flask, render_template, request, url_for, redirect, session, make_response, Response
 import pymysql
 from datetime import date, timedelta
 import datetime
 import pdfkit
+import io
+import xlwt
 import cryptography
 
 from werkzeug.utils import send_file
@@ -1958,6 +1960,117 @@ def comisionliquidar():
 		print("Ocurrió un error al conectar: ", e)
 	return render_template('comisionliquidar.html', title='Comisiones por Liquidar', logeado=logeado, comisiones=comisiones)
 
+@app.route('/exportarliquidacion', methods=['GET', 'POST'])
+def exportarliquidacion():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = 'select f.nombrecliente, f.apellidocliente, f.nit, DATE_FORMAT(f.fecha, "%d/%m/%Y"), c.totalventa, c.comision, c.nombreliquidacion, c.idcomisiones from facturaheader f inner join comisiones c on c.idfacturaheader = f.idfacturaheader where c.liquidado = 0 and c.activo = 1 ORDER BY f.fecha desc, f.nombrecliente asc;'
+				cursor.execute(consulta)
+				comisiones = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	output = io.BytesIO()
+	workbook = xlwt.Workbook(encoding="utf-8")
+	sh1 = workbook.add_sheet("Ciclo 1")
+
+	xlwt.add_palette_colour("Orange", 0x21) # the second argument must be a number between 8 and 64
+	workbook.set_colour_RGB(0x21, 255, 165, 0) # Red — 79, Green — 129, Blue — 189
+	xlwt.add_palette_colour("Lightgreen", 0x22) # the second argument must be a number between 8 and 64
+	workbook.set_colour_RGB(0x22, 144, 238, 144) # Red — 79, Green — 129, Blue — 189
+	
+
+	#bordes
+	borders = xlwt.Borders()
+	borders.left = 1
+	borders.right = 1
+	borders.top = 1
+	borders.bottom = 1
+
+	#encabezados
+	header_font = xlwt.Font()
+	header_font.name = 'Arial'
+	header_font.bold = True
+	header_style = xlwt.XFStyle()
+	header_style.font = header_font
+	header_style.borders = borders
+
+	#contenido1
+	content_font = xlwt.Font()
+	content_font.name = 'Arial'
+	content_pattern = xlwt.Pattern()
+	content_pattern.pattern = xlwt.Pattern.SOLID_PATTERN
+	content_pattern.pattern_fore_colour = xlwt.Style.colour_map['orange']
+	content_style = xlwt.XFStyle()
+	content_style.font = content_font
+	content_style.borders = borders
+	content_style.pattern = content_pattern
+
+	#contenido1
+	content_font1 = xlwt.Font()
+	content_font1.name = 'Arial'
+	content_pattern1 = xlwt.Pattern()
+	content_pattern1.pattern = xlwt.Pattern.SOLID_PATTERN
+	content_pattern1.pattern_fore_colour = xlwt.Style.colour_map['light_green']
+	content_style1 = xlwt.XFStyle()
+	content_style1.font = content_font1
+	content_style1.borders = borders
+	content_style1.pattern = content_pattern1
+
+	#titulos
+	tittle_font = xlwt.Font()
+	tittle_font.name = 'Arial'
+	tittle_font.bold = True
+	tittle_font.italic = True
+	tittle_font.height = 20*20
+	tittle_style = xlwt.XFStyle()
+	tittle_style.font = tittle_font
+
+	sh1.write(0,0,"Comisiones Pendientes de Liquidar", tittle_style)
+	sh1.write(3,0,"Cliente", header_style)
+	sh1.write(3,1,"Nit", header_style)
+	sh1.write(3,2,"Fecha", header_style)
+	sh1.write(3,3,"Precio", header_style)
+	sh1.write(3,4,"Comisión", header_style)
+	sh1.write(3,5,"User", header_style)
+
+	for i in range(len(comisiones)):
+		sh1.write(i+4,0,comisiones[i][0] + " " + comisiones[i][1])
+		sh1.write(i+4,1,comisiones[i][2])
+		sh1.write(i+4,2,comisiones[i][3])
+		sh1.write(i+4,3,comisiones[i][4])
+		sh1.write(i+4,4,comisiones[i][5])
+		sh1.write(i+4,5,comisiones[i][6])
+	
+	sh1.col(0).width = 0x0d00 + len("Comisiones Pendientes de Liquidar")
+	try:
+		sh1.col(1).width = 256 * (max([len(str(row[i])) for row in comisiones[i][0]]) + 1) * 10
+		sh1.col(2).width = 256 * (max([len(str(row[i])) for row in comisiones[i][1]]) + 1) * 10
+		sh1.col(3).width = 256 * (max([len(str(row[i])) for row in comisiones[i][2]]) + 1) * 10
+		sh1.col(4).width = 256 * (max([len(str(row[i])) for row in comisiones[i][3]]) + 1) * 10
+		sh1.col(5).width = 256 * (max([len(str(row[i])) for row in comisiones[i][4]]) + 1) * 10
+	except:
+		sh1.col(1).width = 256 * 20
+		sh1.col(2).width = 256 * 20
+		sh1.col(3).width = 256 * 20
+		sh1.col(4).width = 256 * 20
+		sh1.col(5).width = 256 * 20
+	
+	
+	workbook.save(output)
+	output.seek(0)
+
+	return Response(output, mimetype="application/ms-excel", headers={"Content-Disposition":"attachment;filename=comisionespendientes.xls"})
+
 @app.route('/comision', methods=['GET', 'POST'])
 def comision():
 	try:
@@ -1978,6 +2091,28 @@ def comision():
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	return render_template('comision.html', title='Comisiones Liquidadas', logeado=logeado, comisiones=comisiones)
+
+@app.route('/liquidarcomisiones', methods=['GET', 'POST'])
+def liquidarcomisiones():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('login'))
+	
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = 'update comisiones set liquidado = 1, fechaliquidado = %s where liquidado = 0;'
+				cursor.execute(consulta, (date.today()))
+			conexion.commit()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return redirect(url_for('comisionliquidar'))
 
 @app.route('/liquidarcomision/<idcomision>', methods=['GET', 'POST'])
 def liquidarcomision(idcomision):
