@@ -341,18 +341,19 @@ def verventas():
 			with conexion.cursor() as cursor:
 				consulta = '''
 				select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, 
-				h.descuento, h.total,  DATE_FORMAT(h.fecha,'%d/%m/%Y'), u.nombre, u.apellido, h.idfacturaheader, h.terminado, h.nombrepaciente, h.apellidopaciente
+				h.descuento, h.total,  DATE_FORMAT(h.fecha,'%d/%m/%Y'), u.nombre, u.apellido, h.idfacturaheader, h.terminado, h.nombrepaciente, h.apellidopaciente, h.paso
 				from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader
 				inner join consulta c on c.idconsulta = h.idconsulta
 				inner join user u on u.iduser = h.iduser order by h.fecha desc
 				'''
 				cursor.execute(consulta)
 				pagos = cursor.fetchall()
+				pasos = ["Ingreso de Solicitud", "Pago de Servicio", "Envío a laboratorio","Recepción de laboratorio", "Entrega a Paciente"]
 		finally:
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
-	return render_template('verventas.html', title='Ventas', logeado=logeado, pagos=pagos)
+	return render_template('verventas.html', title='Ventas', logeado=logeado, pagos=pagos, pasos = pasos)
 
 @app.route('/aros', methods=['GET', 'POST'])
 def aros():

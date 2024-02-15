@@ -10,6 +10,7 @@
             <th>Precio General</th>
             <th>Descuento</th>
             <th>Precio Total</th>
+            <th>Paso actual</th>
             <th>User</th>
             <th colspan="2">Opciones</th>
         </tr>
@@ -26,6 +27,7 @@
             <td>Q{{i[3]}}</td>
             <td>Q{{i[4]}}</td>
             <td>Q{{i[5]}}</td>
+            <td>{{i[13]}} - {{pasos[i[13] | int]}}</td>
             <td>{{i[7]}} {{i[8]}}</td>
             <td><a href="/factura/{{i[9]}}">Detalles</a></td>
             <td><a href="/segventas/{{i[9]}}">Seguimiento</a></td>
