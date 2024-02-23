@@ -2,56 +2,109 @@
 {% block content %}
 <h1>Bienvenido</h1>
 <div class="container">
-	<ul class="nav nav-tabs">
-		<li><a data-toggle="tab" id="t0" href="#home" class="panelb" onclick="colorespanel('0')">Estudiante</a></li>
-		<li><a data-toggle="tab" id="t1" href="#menu1" class="panelb" onclick="colorespanel('1')">Paciente</a></li>
+	<ul class="nav">
+		<li class="nav-item"><a data-toggle="tab" id="t0" href="#home" class="nav-link" onclick="colorespanel('0')">Estudiante</a></li>
+		<li class="nav-item"><a data-toggle="tab" id="t1" href="#menu1" class="nav-link" onclick="colorespanel('1')">Paciente</a></li>
 	</ul>
+	<hr>
 	<form action="" method="POST">
 		<div class="tab-content">
 			<div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
 				<br>
 				<h3>Datos de Estudiante</h3>
-				<center>
-					<input type="number" id="carnet" name="carnet" class="inputtext" tabindex="1" required
-						placeholder="  Carné" minlength="8" maxlength="8" onchange="dataestudiante()">&nbsp;&nbsp;&nbsp;
-					<input type="text" id="apellido" name="apellido" class="inputtext" tabindex="2" required
-						placeholder="  Apellido(s)">&nbsp;&nbsp;&nbsp;
-					<input type="text" id="nombre" name="nombre" class="inputtext" tabindex="3" required
-						placeholder="  Nombre(s)"><br>
-				</center>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="carnet">Carnet*</label>
+						<input type="number" class="form-control" name="carnet" id="carnet" placeholder="Carnet"
+							min="1000000" max="99999999" onchange="dataestudiante()" required>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="aoellido">Apellido(s)*</label>
+						<input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido(s)"
+							required>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="nombre">Nombre(s)*</label>
+						<input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre(s)"
+							required>
+					</div>
+				</div>
 			</div>
 			<div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
 				<br>
 				<h3>Datos de Paciente</h3>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="cui">DPI*</label>
+						<input type="number" id="cui" name="cui" class="form-control" placeholder="DPI"
+						min="999999999999" max="9999999999999" required onchange="datapaciente()">
+					</div>
+					<div class="col-md-6">
+						<label for="sexo">Sexo*</label>
+						<select name="sexo" id="sexo" class="form-control" required>
+							<option value="">Seleccione sexo</option>
+							{% for i in sexo %}
+							<option value="{{i[0]}}">{{i[1]}}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="nombre1">Primer Nombre*</label>
+						<input type="text" id="nombre1" name="nombre1" class="form-control" placeholder="Primer Nombre"
+						required>
+					</div>
+					<div class="col-md-6">
+						<label for="nombre2">Segundo Nombre</label>
+						<input type="text" id="nombre2" name="nombre2" class="form-control" placeholder="Segundo Nombre">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="apellido1">Primer Apellido*</label>
+						<input type="text" id="apellido1" name="apellido1" class="form-control" placeholder="Primer Apellido"
+						required>
+					</div>
+					<div class="col-md-6">
+						<label for="apellido2">Segundo Apellido</label>
+						<input type="text" id="apellido2" name="apellido2" class="form-control" placeholder="Segundo Apellido">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="telefono">Teléfono 1*</label>
+						<input type="number" id="telefono" name="telefono" class="form-control" placeholder="Teléfono 1">
+					</div>
+					<div class="col-md-6">
+						<label for="telefono1">Teléfono 2*</label>
+						<input type="number" id="telefono1" name="telefono1" class="form-control" placeholder="Teléfono 2">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="profesion">Profesión*</label>
+						<input type="text" id="profesion" name="profesion" class="form-control" placeholder="Profesión" required>
+					</div>
+					<div class="col-md-6">
+						<label for="fechanac">Fecha de Nacimiento*</label>
+						<input type="date" id="fechanac" name="fechanac" class="form-control" placeholder="Fecha de nacimiento (dd/mm/aaaa)" required>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="direccion">Dirección*</label>
+						<input type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección" required>
+					</div>
+				</div>
+				<br>
 				<center>
-					<input type="number" id="cui" name="cui" class="inputtext" tabindex="4" placeholder="  CUI"
-						maxlength="13" minlength="0" required onchange="datapaciente()">&nbsp;&nbsp;&nbsp;
-					<select name="sexo" id="sexo" class="inputtext" tabindex="5" required>
-						<option value="">Seleccione sexo</option>
-						{% for i in sexo %}
-						<option value="{{i[0]}}">{{i[1]}}</option>
-						{% endfor %}
-					</select><br>
-					<input type="text" id="nombre1" name="nombre1" class="inputtext" tabindex="6" required
-						placeholder="  Primer Nombre">&nbsp;&nbsp;&nbsp;
-					<input type="text" id="nombre2" name="nombre2" class="inputtext" tabindex="7"
-						placeholder="  Segundo Nombre"><br>
-					<input type="text" id="apellido1" name="apellido1" class="inputtext" tabindex="8" required
-						placeholder="  Primer Apellido">&nbsp;&nbsp;&nbsp;
-					<input type="text" id="apellido2" name="apellido2" class="inputtext" tabindex="9"
-						placeholder="  Segundo Apellido"><br>
-					<input type="number" id="telefono" name="telefono" class="inputtext" tabindex="10"
-						placeholder="  Teléfono 1" maxlength="8" minlength="0">&nbsp;&nbsp;&nbsp;
-					<input type="number" id="telefono1" name="telefono1" class="inputtext" tabindex="11"
-						placeholder="  Teléfono 2" maxlength="8" minlength="0"><br>
-					<input type="text" id="profesion" name="profesion" class="inputtext" tabindex="12" required
-						placeholder="  Profesión">&nbsp;&nbsp;&nbsp;
-					<input type="text" id="direccion" name="direccion" class="inputtext" tabindex="13"
-						placeholder="  Dirección"><br>
-					<input type="date" id="fechanac" name="fechanac" class="inputtext" title="Fecha de nacimiento"
-						placeholder="Fecha de nacimiento (dd/mm/aaaa)" tabindex="14" required>
+					<input class="btn btn-primary" type="submit" value="Aceptar">
 				</center>
-				<center><button onclick="submit" class="button">Aceptar</button></center>
 			</div>
 		</div>
 	</form>

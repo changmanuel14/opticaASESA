@@ -1,1107 +1,1299 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Ingreso de Datos Clínicos</h1>
-    <div class="container">
-        <ul class="nav nav-tabs">
-            <li><a data-toggle="tab" id="t0" href="#menu0" class="panelb" onclick="colorespanel('0')">Estudiante</a></li>
-            <li><a data-toggle="tab" id="t1" href="#menu1" class="panelb" onclick="colorespanel('1')">Paciente</a></li>
-            <li><a data-toggle="tab" id="t2" href="#menu2" class="panelb" onclick="colorespanel('2')">Exploracion y D.X./T.X.</a></li>
-        </ul>
-        <form action="" method="POST">
+<h1>Ingreso de Datos Clínicos</h1>
+<div class="container">
+	<ul class="nav">
+		<li class="nav-item"><a data-toggle="tab" id="t0" href="#menu0" class="nav-link" onclick="colorespanel('0')">Estudiante</a></li>
+		<li class="nav-item"><a data-toggle="tab" id="t1" href="#menu1" class="nav-link" onclick="colorespanel('1')">Paciente</a></li>
+		<li class="nav-item"><a data-toggle="tab" id="t2" href="#menu2" class="nav-link" onclick="colorespanel('2')">Exploracion y
+				D.X./T.X.</a></li>
+	</ul>
+	<hr>
+	<form action="" method="POST">
 
-        <div class="tab-content">
-            <div id="menu0" class="tab-pane fade in active" style="padding-left: 5%;">
-                <br>
-                <h3>Datos de Estudiante</h3>
-                
-                    <center>
-                        <input type="number" id="carnet" name="carnet" class="inputtext" tabindex="1" disabled placeholder="  Carné" minlength="8" maxlength="8" value="{{estudiante[2]}}">&nbsp;&nbsp;&nbsp;
-                        <input type="text" id="apellido" name="apellido" class="inputtext" tabindex="2" disabled placeholder="  Apellido(s)" value="{{estudiante[1]}}">&nbsp;&nbsp;&nbsp;
-                        <input type="text" id="nombre" name="nombre" class="inputtext" tabindex="3" disabled placeholder="  Nombre(s)" value="{{estudiante[0]}}"><br>
-                    </center>
-                    
-              </div>
-          <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
-            <br>
-            <h3>Datos de Paciente</h3>
-            <center>
-                <input type="number" id="cui" name="cui" class="inputtext" tabindex="4" placeholder="  CUI" maxlength="13" minlength="0" disabled value="{{paciente[8]}}">&nbsp;&nbsp;&nbsp;
-                <input type="text" class="inputtext" disabled value="{{paciente[5]}}"><br>
-                <input type="text" id="nombre1" name="nombre1" class="inputtext" tabindex="6" required placeholder="  Primer Nombre" disabled value="{{paciente[0]}}">&nbsp;&nbsp;&nbsp;
-                <input type="text" id="nombre2" name="nombre2" class="inputtext" tabindex="7" placeholder="  Segundo Nombre" disabled value="{{paciente[1]}}"><br>
-                <input type="text" id="apellido1" name="apellido1" class="inputtext" tabindex="8" required placeholder="  Primer Apellido" disabled value="{{paciente[2]}}">&nbsp;&nbsp;&nbsp;
-                <input type="text" id="apellido2" name="apellido2" class="inputtext" tabindex="9" placeholder="  Segundo Apellido" disabled value="{{paciente[3]}}"><br>
-                <input type="number" id="telefono" name="telefono" class="inputtext" tabindex="10" placeholder="  Teléfono 1" maxlength="8" minlength="0" disabled value="{{paciente[9]}}">&nbsp;&nbsp;&nbsp;
-                <input type="number" id="telefono1" name="telefono1" class="inputtext" tabindex="11" placeholder="  Teléfono 2" maxlength="8" minlength="0" disabled value="{{paciente[10]}}"><br>
-                <input type="text" id="profesion" name="profesion" class="inputtext" tabindex="12" required placeholder="  Profesión" disabled value="{{paciente[6]}}">&nbsp;&nbsp;&nbsp;
-                <input type="text" id="direccion" name="direccion" class="inputtext" tabindex="13" placeholder="  Dirección" disabled value="{{paciente[7]}}"><br>
-                <input type="date" id="fechanac" name="fechanac" class="inputtext" tabindex="14" title="Fecha de Nacimiento" required disabled value="{{paciente[4]}}">
-                <br>
-                <br>
-            </center>
-            <br>
-            <h3>Motivo de Consulta</h3>
-            <table>
-                <tr>
-                    <th style="width: 35%;">Motivo de la Consulta</th>
-                    <th colspan="3"><textarea id="motivoconsulta" name="motivoconsulta" rows="2" cols="80" placeholder="   Motivo de la Consulta" ></textarea></th>
-                </tr>
-            </table>
-            <br>
-            <h3>Antecedentes</h3>
-            <center><button type="button" class="button" onclick="agantmed()">Agregar Antecedente Médico</button>&nbsp;<button type="button" class="button" onclick="agantquir()">Agregar Antecedente Quirúrgico</button></center>
-            <table>
-                <tr>
-                    <th><label for="ultimaevmes">Última evaluación</label></th>
-                    <td><select class="inputtext" id="ultimaevmes" name="ultimaevmes" tabindex="15">
-                        <option value="">Seleccione mes</option>
-                        <option value="0">No aplica</option>
-                        {% for i in meses %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select>
-                    <select class="inputtext" id="ultimaevanio" name="ultimaevanio" tabindex="16">
-                        <option value="">Seleccione año</option>
-                        <option value="0">No aplica</option>
-                        {% for i in anios %}
-                        <option value="{{i}}">{{i}}</option>
-                        {% endfor %}
-                    </select></td>
-                </tr>
-                <tr>
-                    <th><label for="tiempolentes">Tiempo utilizando lentes</label></th>
-                    <td>
-                        <input type="text" id="tiempolentes" name="tiempolentes" class="inputtext">
-                    </td>
-                </tr>
-            </table><br>
-            <table>
-                <tr>
-                    <th style="width: 35%;">Antecedentes Oftalmológicos</th>
-                    <th colspan="3"><textarea id="antoftal" name="antoftal" rows="2" cols="80" placeholder="   Antecedentes Oftalmológicos" ></textarea></th>
-                </tr>
-            </table>
-            <table id="antecedentesmedicos">
-                <tr>
-                    <th style="width: 35%;">Antecedentes Médicos <input type="number" id="numantmed" name="numantmed" value="1" style="width: 15%;" readonly> </th>
-                    <td><select class="inputtext1" id="enfermedad1" name="enfermedad1" onchange="mediotro()">
-                        <option value="">Seleccione Enfermedad</option>
-                        {% for i in enfermedades %}
-                        <option value="{{i[0]}}">{{i[0]}}</option>
-                        {% endfor %}
-                        <option value="Otro">Otro</option>
-                    </select></td>
-                    <td><input type="text" class="inputtext1" id="medotro1" name="medotro1" placeholder="Otro" disabled></td>
-                    <td><input type="text" class="inputtext1" id="tiempoevolucionm1" name="tiempoevolucionm1" placeholder="Tiempo de Evolución"></td>
-                    <td><input type="text" class="inputtext1" id="controlm1" name="controlm1" placeholder="Control (Medicamento)"></td>
-                </tr>
-            </table>
-            <table id="antecedentesquirurgicos">
-                <tr>
-                    <th style="width: 35%;">Antecedentes Quirúrgicos <input type="number" id="numantqui" name="numantqui"  value="1" style="width: 15%;" readonly> </th>
-                    <td><input type="text" class="inputtext1" id="cirugia1" name="cirugia1" placeholder="Cirugía"></td>
-                    <td><input type="text" class="inputtext1" id="tiempoevolucionq1" name="tiempoevolucionq1" placeholder="Tiempo de Evolución"></td>
-                    <td><input type="text" class="inputtext1" id="controlq1" name="controlq1" placeholder="Control (Medicamento)"></td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <th style="width: 35%;">Antecedentes Alérgicos</th>
-                    <th colspan="3"><textarea id="antaler" name="antaler" rows="2" cols="80" placeholder="   Antecedentes Alérgicos" ></textarea></th>
-                </tr>
-                <tr>
-                    <th style="width: 35%;">Antecedentes Familiares</th>
-                    <th colspan="3"><textarea id="antfam" name="antfam" rows="2" cols="80" placeholder="   Antecedentes Familiares"></textarea></th>
-                </tr>
-                <tr>
-                    <th style="width: 35%;">Antecedentes Glaucoma</th>
-                    <th colspan="3"><textarea id="antgla" name="antgla" rows="2" cols="80" placeholder="   Antecedentes Glaucoma"></textarea></th>
-                </tr>
-                
-            </table>
-            <center>
-                <ul class="nav nav-tabs">
-                    <li><a data-toggle="tab" href="#menu2" class="panelb">Siguiente</a></li>
-                </ul>
-            </center>
-          </div>
-          <div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
-            <br>
-            <center><h3>Agudeza Visual</h3></center>
-            <table>
-                <thead>
-                    <tr>
-                        <th>A.V.S.C.</th>
-                        <th>Agudeza Visual Lejana</th>
-                        <th>Agujero Estenopeico</th>
-                        <th>Agudeza Visual Cercana</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="avlod" name="avlod" list="av" autocomplete="false" ></td>
-                        <td><input type="text" class="inputtext1" id="aeod" name="aeod" ></td>
-                        <td><input type="text" class="inputtext1" id="avclod" name="avcod" list="av" autocomplete="false" ></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="avloi" name="avloi" list="av" autocomplete="false" ></td>
-                        <td><input type="text" class="inputtext1" id="aeoi" name="aeoi"></td>
-                        <td><input type="text" class="inputtext1" id="avcloi" name="avcoi" list="av" autocomplete="false" ></td>
-                    </tr>
-            </table>
-            <br>
-            <center><h3>Refracción actual</h3></center>
-            <table>
-                <thead>
-                    <tr>
-                        <th>C.A.</th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="raeod" name="raeod"></td>
-                        <td><input type="text" class="inputtext1" id="racod" name="racod"></td>
-                        <td><input type="text" class="inputtext1" id="raejod" name="raejod"></td>
-                        <td><input type="text" class="inputtext1" id="rapod" name="rapod"></td>
-                        <td><input type="text" class="inputtext1" id="raavcc1od" name="raavcc1od" list="av" autocomplete="false"></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="raeoi" name="raeoi"></td>
-                        <td><input type="text" class="inputtext1" id="racoi" name="racoi"></td>
-                        <td><input type="text" class="inputtext1" id="raejoi" name="raejoi"></td>
-                        <td><input type="text" class="inputtext1" id="rapoi" name="rapoi"></td>
-                        <td><input type="text" class="inputtext1" id="raavcc1oi" name="raavcc1oi" list="av" autocomplete="false"></td>
-                    </tr>
-                    <tr>
-                        <th>DNP</th>
-                        <td><input type="text" class="inputtext1" id="dnp1" name="dnp1"></td>
-                        <th>A.D.D.</th>
-                        <td><input type="text" class="inputtext1" id="add1" name="add1"></td>
-                        <td><input type="text" class="inputtext1" id="add2" name="add2"></td>
-                        <td><input type="text" class="inputtext1" id="add3" name="add3" list="av" autocomplete="false"></td>
-                    </tr>
-                </thead>
-            </table><br>    
-            <h3>Visión Cercana</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="vceod" name="vceod" ></td>
-                        <td><input type="text" class="inputtext1" id="vccod" name="vccod" ></td>
-                        <td><input type="text" class="inputtext1" id="vcejod" name="vcejod" ></td>
-                        <td><input type="text" class="inputtext1" id="vcpod" name="vcpod"></td>
-                        <td><input type="text" class="inputtext1" id="vcavccod" name="vcavccod" list="av" autocomplete="false"></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="vceoi" name="vceoi" ></td>
-                        <td><input type="text" class="inputtext1" id="vccoi" name="vccoi" ></td>
-                        <td><input type="text" class="inputtext1" id="vcejoi" name="vcejoi" ></td>
-                        <td><input type="text" class="inputtext1" id="vcpoi" name="vcpoi"></td>
-                        <td><input type="text" class="inputtext1" id="vcavccoi" name="vcavccoi" list="av" autocomplete="false"></td>
-                        
-                    </tr>
-            </table>
-            <br>
-            <center><h3>Refracción Objetiva Alumno</h3></center>
-            <table>
-                <thead>
-                    <tr>
-                        <th>C.A.</th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>DVertice</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="roaeod" name="roaeod" onchange="changeeod()"></td>
-                        <td><input type="text" class="inputtext1" id="roacod" name="roacod"onchange="changecod()"></td>
-                        <td><input type="text" class="inputtext1" id="roaejod" name="roaejod" onchange="changeejod()"></td>
-                        <td><input type="text" class="inputtext1" id="roapod" name="roapod" onchange="changepod()"></td>
-                        <td><input type="text" class="inputtext1" id="roavod" name="roavod" ></td>
-                        <td><input type="text" class="inputtext1" id="roaavccod" name="roaavccod" list="av" autocomplete="false" onchange="changeavccod()"></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="roaeoi" name="roaeoi" onchange="changeeoi()"></td>
-                        <td><input type="text" class="inputtext1" id="roacoi" name="roacoi" onchange="changecoi()"></td>
-                        <td><input type="text" class="inputtext1" id="roaejoi" name="roaejoi" onchange="changeejoi()"></td>
-                        <td><input type="text" class="inputtext1" id="roapoi" name="roapoi" onchange="changepoi()"></td>
-                        <td><input type="text" class="inputtext1" id="roavoi" name="roavoi" ></td>
-                        <td><input type="text" class="inputtext1" id="roaavccoi" name="roaavccoi" list="av" autocomplete="false" onchange="changeavccoi()"></td>
-                    </tr>
-            </table><br>
-            <center><h3>Refracción Objetiva de Referencia</h3></center>
-            <table>
-                <thead>
-                    <tr>
-                        <th>C.A.</th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>DVertice</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="roreod" name="roreod"></td>
-                        <td><input type="text" class="inputtext1" id="rorcod" name="rorcod"></td>
-                        <td><input type="text" class="inputtext1" id="rorejod" name="rorejod"></td>
-                        <td><input type="text" class="inputtext1" id="rorpod" name="rorpod" ></td>
-                        <td><input type="text" class="inputtext1" id="rorvod" name="rorvod" ></td>
-                        <td><input type="text" class="inputtext1" id="roravccod" name="roravccod"></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="roreoi" name="roreoi" ></td>
-                        <td><input type="text" class="inputtext1" id="rorcoi" name="rorcoi" ></td>
-                        <td><input type="text" class="inputtext1" id="rorejoi" name="rorejoi" ></td>
-                        <td><input type="text" class="inputtext1" id="rorpoi" name="rorpoi" ></td>
-                        <td><input type="text" class="inputtext1" id="rorvoi" name="rorvoi" ></td>
-                        <td><input type="text" class="inputtext1" id="roravccoi" name="roravccoi"></td>
-                    </tr>
-            </table>   
-            <br>
-            <center><h3>Refracción Subjetiva</h3></center>
-            <table>
-                <thead>
-                    <tr>
-                        <th>C.A.</th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="rseod" name="rseod"></td>
-                        <td><input type="text" class="inputtext1" id="rscod" name="rscod"></td>
-                        <td><input type="text" class="inputtext1" id="rsejod" name="rsejod"></td>
-                        <td><input type="text" class="inputtext1" id="rspod" name="rspod"></td>
-                        <td><input type="text" class="inputtext1" id="rsavccod" name="rsavccod" list="av" autocomplete="false"></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="rseoi" name="rseoi"></td>
-                        <td><input type="text" class="inputtext1" id="rscoi" name="rscoi"></td>
-                        <td><input type="text" class="inputtext1" id="rsejoi" name="rsejoi"></td>
-                        <td><input type="text" class="inputtext1" id="rspoi" name="rspoi"></td>
-                        <td><input type="text" class="inputtext1" id="rsavccoi" name="rsavccoi" list="av" autocomplete="false"></td>
-                    </tr>
-            </table>
-            <br>
-            <label><input type="checkbox" id="pruamb" name="pruamb" value="1"><strong>  Prueba Ambulatoria</strong></label><br>
-            <label><input type="checkbox" id="testbi" name="testbi" value="1"><strong>  Test Bicromatico</strong></label><br>
-            <label><input type="checkbox" id="equibino" name="equibino" value="1"><strong>  Equilibrio Binocular</strong></label><br>
-            <label><input type="checkbox" id="pruest" name="pruest" value="1"><strong>  Prueba de Estereopsis</strong></label><br>
-            <label><input type="checkbox" id="ciljackson" name="ciljackson" value="1"><strong>  Cilindro Cruzado de Jackson</strong></label>
-            <br>
-            <center><h3>Refracción Final</h3></center>
-            <center><button type="button" class="button" onclick="shdc()"> Distancia Cercana</button>&nbsp;<button type="button" class="button" onclick="shdm()"> Distancia Media</button></center>
-            <table>
-                <thead>
-                    <tr>
-                        <th>C.A.</th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="rfe1od" name="rfe1od"></td>
-                        <td><input type="text" class="inputtext1" id="rfc1od" name="rfc1od"></td>
-                        <td><input type="text" class="inputtext1" id="rfej1od" name="rfej1od"></td>
-                        <td><input type="text" class="inputtext1" id="rfp1od" name="rfp1od"></td>
-                        <td><input type="text" class="inputtext1" id="rfavcc1od" name="rfavcc1od" list="av" autocomplete="false"></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="rfe1oi" name="rfe1oi"></td>
-                        <td><input type="text" class="inputtext1" id="rfc1oi" name="rfc1oi"></td>
-                        <td><input type="text" class="inputtext1" id="rfej1oi" name="rfej1oi"></td>
-                        <td><input type="text" class="inputtext1" id="rfp1oi" name="rfp1oi"></td>
-                        <td><input type="text" class="inputtext1" id="rfavcc1oi" name="rfavcc1oi" list="av" autocomplete="false"></td>
-                    </tr>
-                    <tr>
-                        <th>DNP</th>
-                        <td><input type="text" class="inputtext1" id="dnp" name="dnp"></td>
-                        <th>A.D.D.</th>
-                        <td><input type="text" class="inputtext1" id="add11" name="add11"></td>
-                        <td><input type="text" class="inputtext1" id="add22" name="add22"></td>
-                        <td><input type="text" class="inputtext1" id="add33" name="add33" list="av" autocomplete="false"></td>
-                    </tr>
-                </thead>
-            </table><br><br>  
-            <div id="distanciacercana" style="display: none">
-                <h3>Fórmula para Distancia Cercana</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                <tr>
-                    <th>Ojo Derecho</th>
-                    <td><input type="text" class="inputtext1" id="rfe2od" name="rfe2od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfc2od" name="rfc2od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfej2od" name="rfej2od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfp2od" name="rfp2od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfavcc2od" name="rfavcc2od" value="0" list="av" autocomplete="false"></td>
-                </tr>
-                <tr>
-                    <th>Ojo Izquierdo</th>
-                    <td><input type="text" class="inputtext1" id="rfe2oi" name="rfe2oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfc2oi" name="rfc2oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfej2oi" name="rfej2oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfp2oi" name="rfp2oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfavcc2oi" name="rfavcc2oi" value="0" list="av" autocomplete="false"></td>
-                </tr>
-                <tr>
-                    <th>DNP</th>
-                    <td><input type="text" class="inputtext1" id="dnp2" name="dnp2" value="0"></td>
-                </tr>
-            </table>
-            <br><br> 
-            </div>  
-            <div id="distanciamedia" style="display: none">
-                <h3>Fórmula para Distancia Media</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Esfera</th>
-                        <th>Cilindro</th>
-                        <th>Eje</th>
-                        <th>Prisma</th>
-                        <th>A.V.C.C</th>
-                    </tr>
-                </thead>
-                <tr>
-                    <th>Ojo Derecho</th>
-                    <td><input type="text" class="inputtext1" id="rfe3od" name="rfe3od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfc3od" name="rfc3od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfej3od" name="rfej3od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfp3od" name="rfp3od" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfavcc3od" name="rfavcc3od" value="0" list="av" autocomplete="false"></td>
-                </tr>
-                <tr>
-                    <th>Ojo Izquierdo</th>
-                    <td><input type="text" class="inputtext1" id="rfe3oi" name="rfe3oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfc3oi" name="rfc3oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfej3oi" name="rfej3oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfp3oi" name="rfp3oi" value="0"></td>
-                    <td><input type="text" class="inputtext1" id="rfavcc3oi" name="rfavcc3oi" value="0" list="av" autocomplete="false"></td>
-                </tr>
-                <tr>
-                    <th>DNP</th>
-                    <td><input type="text" class="inputtext1" id="dnp3" name="dnp3" value="0"></td>
-                </tr>
-            </table>
-            </div>
-            <br>
-            <h3>Final</h3>
-            <table>
-                <tr class="fondoblanco">
-                    <th><label for="proxcita">Próxima Cita:</label></th>
-                    <td colspan="5"><input type="date" class="inputtext" id="proxicita" name="proxicita" value="{{new_date}}"></td>
-                </tr>
-                <tr class="fondoblanco">
-                    <th><label for="usolent">Uso Lentes:</label></th>
-                    <td colspan="5"><select name="usolent" id="usolent" class="inputtext">
-                        <option value="">Seleccione uso</option>
-                        {% for i in usolen %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                </tr>
-                <tr class="fondoblanco">
-                    <th><label for="lenrecom">Lente Recomendado:</label></th>
-                    <td><select name="tipolent" id="tipolent" class="inputtext1">
-                        <option value="">Seleccione tipo</option>
-                        {% for i in tipolen %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                    <td><select name="lentedetalladolent" id="lentedetalladolent" class="inputtext1">
-                        <option value="">Seleccione Lente detallado</option>
-                        {% for i in lentedetalladolen %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                    <td><select name="materiallent" id="materiallent" class="inputtext1">
-                        <option value="">Seleccione material</option>
-                        {% for i in materiallen %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                    <td><select name="filtrolent" id="filtrolent" class="inputtext1">
-                        <option value="">Seleccione filtro</option>
-                        {% for i in filtrolen %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                    <td><select name="colorlent" id="colorlent" class="inputtext1">
-                        <option value="">Seleccione color</option>
-                        {% for i in colorlen %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                </tr>
-            </table> 
-            <br>
-            <center><h3>Motilidad Ocular</h3></center>
-            <table>
-                <thead>
-                    <tr>
-                        <th>M.E.O.</th>
-                        <th>Movilidad Muscular Fija</th>
-                        <th>Forias</th>
-                        <th>Tropias</th>
-                        <th>Ducciones</th>
-                        <th>Versiones</th>
-                        <th>Convergencia</th>
-                    </tr>
-                </thead>
-                    <tr>
-                        <th>Ojo Derecho</th>
-                        <td><input type="text" class="inputtext1" id="mmfod" name="mmfod"></td>
-                        <td><input type="text" class="inputtext1" id="forod" name="forod"></td>
-                        <td><input type="text" class="inputtext1" id="trood" name="trood"></td>
-                        <td><input type="text" class="inputtext1" id="duccod" name="duccod"></td>
-                        <td rowspan="2"><input type="text" class="inputtext1"  id="versiones" name="versiones"></td>
-                        <td rowspan="2"><input type="text" class="inputtext1"  id="convergencia" name="convergencia"></td>
-                    </tr>
-                    <tr>
-                        <th>Ojo Izquierdo</th>
-                        <td><input type="text" class="inputtext1" id="mmfoi" name="mmfoi"></td>
-                        <td><input type="text" class="inputtext1" id="foroi" name="foroi"></td>
-                        <td><input type="text" class="inputtext1" id="trooi" name="trooi"></td>
-                        <td><input type="text" class="inputtext1" id="duccoi" name="duccoi"></td>
-                    </tr>
-            </table>
-            <br>
-            <label><input type="checkbox" id="ortofotico" name="ortoforico" value="1"><strong>  Ortofórico</strong></label><br>
+		<div class="tab-content">
+			<div id="menu0" class="tab-pane fade in active" style="padding-left: 5%;">
+				<br>
+				<h3>Datos de Estudiante</h3>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="carnet">Carnet*</label>
+						<input type="number" class="form-control" name="carnet" id="carnet" placeholder="Carnet"
+							min="1000000" max="99999999" value="{{estudiante[2]}}" disabled>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="aoellido">Apellido(s)*</label>
+						<input type="text" class="form-control" name="apellido" id="apellido" placeholder="Apellido(s)"
+						value="{{estudiante[1]}}" disabled>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="nombre">Nombre(s)*</label>
+						<input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre(s)"
+						value="{{estudiante[0]}}" disabled>
+					</div>
+				</div>
+			</div>
+			<div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
+				<br>
+				<h3>Datos de Paciente</h3>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="cui">DPI*</label>
+						<input type="number" id="cui" name="cui" class="form-control" placeholder="DPI"
+						min="999999999999" max="9999999999999" disabled value="{{paciente[8]}}">
+					</div>
+					<div class="col-md-6">
+						<label for="sexo">Sexo*</label>
+						<input type="text" id="sexo" name="sexo" class="form-control" disabled value="{{paciente[5]}}">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="nombre1">Primer Nombre*</label>
+						<input type="text" id="nombre1" name="nombre1" class="form-control" placeholder="Primer Nombre"
+						disabled value="{{paciente[0]}}">
+					</div>
+					<div class="col-md-6">
+						<label for="nombre2">Segundo Nombre</label>
+						<input type="text" id="nombre2" name="nombre2" class="form-control" placeholder="Segundo Nombre" disabled value="{{paciente[1]}}">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="apellido1">Primer Apellido*</label>
+						<input type="text" id="apellido1" name="apellido1" class="form-control" placeholder="Primer Apellido"
+						disabled value="{{paciente[2]}}">
+					</div>
+					<div class="col-md-6">
+						<label for="apellido2">Segundo Apellido</label>
+						<input type="text" id="apellido2" name="apellido2" class="form-control" placeholder="Segundo Apellido" disabled value="{{paciente[3]}}">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="telefono">Teléfono 1*</label>
+						<input type="number" id="telefono" name="telefono" class="form-control" placeholder="Teléfono 1" disabled
+						value="{{paciente[9]}}">
+					</div>
+					<div class="col-md-6">
+						<label for="telefono1">Teléfono 2*</label>
+						<input type="number" id="telefono1" name="telefono1" class="form-control" placeholder="Teléfono 2" disabled value="{{paciente[10]}}">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-6">
+						<label for="profesion">Profesión*</label>
+						<input type="text" id="profesion" name="profesion" class="form-control" placeholder="Profesión" disabled value="{{paciente[6]}}">
+					</div>
+					<div class="col-md-6">
+						<label for="fechanac">Fecha de Nacimiento*</label>
+						<input type="date" id="fechanac" name="fechanac" class="form-control" placeholder="Fecha de nacimiento (dd/mm/aaaa)" disabled value="{{paciente[4]}}">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col-md-12">
+						<label for="direccion">Dirección*</label>
+						<input type="text" id="direccion" name="direccion" class="form-control" placeholder="Dirección" disabled value="{{paciente[7]}}">
+					</div>
+				</div>
+				<br>
+				<h3>Motivo de Consulta</h3>
+				<table>
+					<tr>
+						<th style="width: 35%;">Motivo de la Consulta</th>
+						<th colspan="3"><textarea id="motivoconsulta" name="motivoconsulta" class="form-control" rows="2" cols="80"
+								placeholder="Motivo de la Consulta"></textarea></th>
+					</tr>
+				</table>
+				<br>
+				<h3>Antecedentes</h3>
+				<center>
+					<button type="button" class="btn btn-success" onclick="agantmed()">Agregar Antecedente Médico</button> 
+					<button type="button" class="btn btn-success" onclick="agantquir()">Agregar Antecedente Quirúrgico</button>
+				</center>
+				<table>
+					<tr>
+						<th><label for="ultimaevmes">Última evaluación</label></th>
+						<td>
+							<div class="form-row">
+								<div class="col-md-6">
+									<select class="form-control" id="ultimaevmes" name="ultimaevmes" tabindex="15">
+										<option value="">Seleccione mes</option>
+										<option value="0">No aplica</option>
+										{% for i in meses %}
+										<option value="{{i[0]}}">{{i[1]}}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" id="ultimaevanio" name="ultimaevanio" tabindex="16">
+										<option value="">Seleccione año</option>
+										<option value="0">No aplica</option>
+										{% for i in anios %}
+										<option value="{{i}}">{{i}}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th><label for="tiempolentes">Tiempo utilizando lentes</label></th>
+						<td>
+							<input type="text" id="tiempolentes" name="tiempolentes" class="form-control">
+						</td>
+					</tr>
+				</table><br>
+				<table>
+					<tr>
+						<th style="width: 35%;">Antecedentes Oftalmológicos</th>
+						<th colspan="3"><textarea id="antoftal" name="antoftal" rows="2" cols="80" class="form-control"
+								placeholder="Antecedentes Oftalmológicos"></textarea></th>
+					</tr>
+				</table>
+				<table id="antecedentesmedicos">
+					<tr>
+						<th style="width: 35%;">Antecedentes Médicos 
+							<input type="hidden" id="numantmed" name="numantmed" value="1" style="width: 15%;" readonly> 
+						</th>
+						<td>
+							<select class="form-control" id="enfermedad1" name="enfermedad1" onchange="mediotro()">
+								<option value="">Seleccione Enfermedad</option>
+								{% for i in enfermedades %}
+								<option value="{{i[0]}}">{{i[0]}}</option>
+								{% endfor %}
+								<option value="Otro">Otro</option>
+							</select>
+						</td>
+						<td>
+							<input type="text" class="form-control" id="medotro1" name="medotro1" placeholder="Otro" disabled>
+						</td>
+						<td>
+							<input type="text" class="form-control" id="tiempoevolucionm1" name="tiempoevolucionm1"
+								placeholder="Tiempo de Evolución">
+							</td>
+						<td>
+							<input type="text" class="form-control" id="controlm1" name="controlm1" placeholder="Control (Medicamento)">
+						</td>
+					</tr>
+				</table>
+				<table id="antecedentesquirurgicos">
+					<tr>
+						<th style="width: 35%;">Antecedentes Quirúrgicos 
+							<input type="hidden" id="numantqui" name="numantqui" value="1" style="width: 15%;" readonly>
+						</th>
+						<td>
+							<input type="text" class="form-control" id="cirugia1" name="cirugia1" placeholder="Cirugía">
+						</td>
+						<td>
+							<input type="text" class="form-control" id="tiempoevolucionq1" name="tiempoevolucionq1" placeholder="Tiempo de Evolución">
+						</td>
+						<td>
+							<input type="text" class="form-control" id="controlq1" name="controlq1" placeholder="Control (Medicamento)">
+						</td>
+					</tr>
+				</table>
+				<table>
+					<tr>
+						<th style="width: 35%;">Antecedentes Alérgicos</th>
+						<th colspan="3">
+							<textarea id="antaler" name="antaler" rows="2" cols="80" placeholder="Antecedentes Alérgicos" class="form-control"></textarea>
+						</th>
+					</tr>
+					<tr>
+						<th style="width: 35%;">Antecedentes Familiares</th>
+						<th colspan="3">
+							<textarea id="antfam" name="antfam" rows="2" cols="80" placeholder="Antecedentes Familiares" class="form-control"></textarea>
+						</th>
+					</tr>
+					<tr>
+						<th style="width: 35%;">Antecedentes Glaucoma</th>
+						<th colspan="3">
+							<textarea id="antgla" name="antgla" rows="2" cols="80" placeholder="Antecedentes Glaucoma" class="form-control"></textarea>
+						</th>
+					</tr>
+				</table>
+			</div>
+			<div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
+				<br>
+				<center>
+					<h3>Agudeza Visual</h3>
+				</center>
+				<table>
+					<thead>
+						<tr>
+							<th>A.V.S.C.</th>
+							<th>Agudeza Visual Lejana</th>
+							<th>Agujero Estenopeico</th>
+							<th>Agudeza Visual Cercana</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="avlod" name="avlod" list="av"
+								autocomplete="false"></td>
+						<td><input type="text" class="form-control" id="aeod" name="aeod"></td>
+						<td><input type="text" class="form-control" id="avclod" name="avcod" list="av"
+								autocomplete="false"></td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="avloi" name="avloi" list="av"
+								autocomplete="false"></td>
+						<td><input type="text" class="form-control" id="aeoi" name="aeoi"></td>
+						<td><input type="text" class="form-control" id="avcloi" name="avcoi" list="av"
+								autocomplete="false"></td>
+					</tr>
+				</table>
+				<br>
+				<center>
+					<h3>Refracción actual</h3>
+				</center>
+				<table>
+					<thead>
+						<tr>
+							<th>C.A.</th>
+							<th>Esfera</th>
+							<th>Cilindro</th>
+							<th>Eje</th>
+							<th>Prisma</th>
+							<th>A.V.C.C</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="raeod" name="raeod"></td>
+						<td><input type="text" class="form-control" id="racod" name="racod"></td>
+						<td><input type="text" class="form-control" id="raejod" name="raejod"></td>
+						<td><input type="text" class="form-control" id="rapod" name="rapod"></td>
+						<td><input type="text" class="form-control" id="raavcc1od" name="raavcc1od" list="av"
+								autocomplete="false"></td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="raeoi" name="raeoi"></td>
+						<td><input type="text" class="form-control" id="racoi" name="racoi"></td>
+						<td><input type="text" class="form-control" id="raejoi" name="raejoi"></td>
+						<td><input type="text" class="form-control" id="rapoi" name="rapoi"></td>
+						<td><input type="text" class="form-control" id="raavcc1oi" name="raavcc1oi" list="av"
+								autocomplete="false"></td>
+					</tr>
+					<tr>
+						<th>DNP</th>
+						<td><input type="text" class="form-control" id="dnp1" name="dnp1"></td>
+						<th>A.D.D.</th>
+						<td><input type="text" class="form-control" id="add1" name="add1"></td>
+						<td><input type="text" class="form-control" id="add2" name="add2"></td>
+						<td><input type="text" class="form-control" id="add3" name="add3" list="av" autocomplete="false">
+						</td>
+					</tr>
+					</thead>
+				</table><br>
+				<h3>Visión Cercana</h3>
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>Esfera</th>
+							<th>Cilindro</th>
+							<th>Eje</th>
+							<th>Prisma</th>
+							<th>A.V.C.C</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="vceod" name="vceod"></td>
+						<td><input type="text" class="form-control" id="vccod" name="vccod"></td>
+						<td><input type="text" class="form-control" id="vcejod" name="vcejod"></td>
+						<td><input type="text" class="form-control" id="vcpod" name="vcpod"></td>
+						<td><input type="text" class="form-control" id="vcavccod" name="vcavccod" list="av"
+								autocomplete="false"></td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="vceoi" name="vceoi"></td>
+						<td><input type="text" class="form-control" id="vccoi" name="vccoi"></td>
+						<td><input type="text" class="form-control" id="vcejoi" name="vcejoi"></td>
+						<td><input type="text" class="form-control" id="vcpoi" name="vcpoi"></td>
+						<td><input type="text" class="form-control" id="vcavccoi" name="vcavccoi" list="av"
+								autocomplete="false"></td>
 
-            <br>
-            <center><h3>Salud Ocular</h3></center>  
-            <label><input type="checkbox" id="ojsal" name="ojsal" value="1"><strong>  Ambos ojos saludables - Valores normales</strong></label><br>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Observaciones</th>
-                        <th>Ojo Derecho</th>
-                        <th>Ojo Izquierdo</th>
-                    </tr>
-                </thead>
-                <tr>
-                    <th>Órbita</th>
-                    <td><input type="text" class="inputtext1" id="orbod" name="orbod"></td>
-                    <td><input type="text" class="inputtext1" id="orboi" name="orboi"></td>
-                </tr>
-                <tr>
-                    <th>Cejas</th>
-                    <td><input type="text" class="inputtext1" id="cejod" name="cejod"></td>
-                    <td><input type="text" class="inputtext1" id="cejoi" name="cejoi"></td>
-                </tr>
-                <tr>
-                    <th rowspan="2">Lágrima</th>
-                    <td><input type="text" class="inputtext1" id="lagod" name="lagod"></td>
-                    <td><input type="text" class="inputtext1" id="lagoi" name="lagoi"></td>
-                </tr>
-                <tr>
-                    <td>
-                        <select class="inputtext2" id="schod" name="schod">
-                            <option value="">Prueba de Schirmer</option>
-                            {% for i in mms %}
-                            <option value="{{i}}">{{i}} mm</option>
-                            {% endfor %}
-                        </select>
-                        <select class="inputtext2" id="butod" name="butod">
-                            <option value="">Prueba de But</option>
-                            {% for i in numeros %}
-                            <option value="{{i}}">{{i}} seg</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td>
-                        <select class="inputtext2" id="schoi" name="schoi">
-                            <option value="">Prueba de Schirmer</option>
-                            {% for i in mms %}
-                            <option value="{{i}}">{{i}} mm</option>
-                            {% endfor %}
-                        </select>
-                        <select class="inputtext2" id="butoi" name="butoi">
-                            <option value="">Prueba de But</option>
-                            {% for i in numeros %}
-                            <option value="{{i}}">{{i}} seg</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Vias Lagrimales</th>
-                    <td><input type="text" class="inputtext1" id="vilagod" name="vilagod"></td>
-                    <td><input type="text" class="inputtext1" id="vilagoi" name="vilagoi"></td>
-                </tr>
-                <tr>
-                    <th>Parpados y pestañas</th>
-                    <td><input type="text" class="inputtext1" id="pypod" name="pypod"></td>
-                    <td><input type="text" class="inputtext1" id="pypoi" name="pypoi"></td>
-                </tr>
-                <tr>
-                    <th>Conjuntiva</th>
-                    <td><input type="text" class="inputtext1" id="conjod" name="conjod"></td>
-                    <td><input type="text" class="inputtext1" id="conjoi" name="conjoi"></td>
-                </tr>
-                <tr>
-                    <th>Esclera</th>
-                    <td><input type="text" class="inputtext1" id="esclod" name="esclod"></td>
-                    <td><input type="text" class="inputtext1" id="escloi" name="escloi"></td>
-                </tr>
-                <tr>
-                    <th>Córnea</th>
-                    <td><input type="text" class="inputtext1" id="cornod" name="cornod"></td>
-                    <td><input type="text" class="inputtext1" id="cornoi" name="cornoi"></td>
-                </tr>
-                <tr>
-                    <th>Cámara Anterior</th>
-                    <td><input type="text" class="inputtext1" id="camaod" name="camaod"></td>
-                    <td><input type="text" class="inputtext1" id="camaoi" name="camaoi"></td>
-                </tr>
-                <tr>
-                    <th>Iris</th>
-                    <td><input type="text" class="inputtext1" id="iriod" name="iriod"></td>
-                    <td><input type="text" class="inputtext1" id="irioi" name="irioi"></td>
-                </tr>
-                <tr>
-                    <th>Pupila</th>
-                    <td><input type="text" class="inputtext1" id="pupiod" name="pupiod"></td>
-                    <td><input type="text" class="inputtext1" id="pupioi" name="pupioi"></td>
-                </tr>
-                <tr>
-                    <th>Cristalino</th>
-                    <td><input type="text" class="inputtext1" id="crisod" name="crisod"></td>
-                    <td><input type="text" class="inputtext1" id="crisoi" name="crisoi"></td>
-                </tr>
-                <tr>
-                    <th>Vítreo</th>
-                    <td><input type="text" class="inputtext1" id="vitod" name="vitod"></td>
-                    <td><input type="text" class="inputtext1" id="vitoi" name="vitoi"></td>
-                </tr>
-                <tr>
-                    <th>Nervio Óptico/Papila</th>
-                    <td><select class="inputtext1" id="nervood" name="nervood">
-                        <option value="">Nervio Óptico</option>
-                        {% for i in nervos %}
-                        <option value="{{i}}">{{i/10}}</option>
-                        {% endfor %}
-                    </select></td>
-                    <td><select class="inputtext1" id="nervooi" name="nervooi">
-                        <option value="">Nervio Óptico</option>
-                        {% for i in nervos %}
-                        <option value="{{i}}">{{i/10}}</option>
-                        {% endfor %}
-                    </select></td>
-                </tr>
-                <tr>
-                    <th>Relación Vena/Arteria</th>
-                    <td><select class="inputtext1" id="retppod" name="retppod">
-                        <option value="">Relación V/A</option>
-                        {% for i in relva %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                    <td><select class="inputtext1" id="retppoi" name="retppoi">
-                        <option value="">Relación V/A</option>
-                        {% for i in relva %}
-                        <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endfor %}
-                    </select></td>
-                </tr>
-                <tr>
-                    <th>Retina Macular</th>
-                    <td><input type="text" class="inputtext1" id="retmacod" name="retmacod"></td>
-                    <td><input type="text" class="inputtext1" id="retmacoi" name="retmacoi"></td>
-                </tr>
-                <tr>
-                    <th>Retina Periférica</th>
-                    <td><input type="text" class="inputtext1" id="retpeod" name="retpeod"></td>
-                    <td><input type="text" class="inputtext1" id="retpeoi" name="retpeoi"></td>
-                </tr>
-            </table>
-            <br>
-            <h1>Diagnóstico y Tratamiento</h1>
-            <table>
-                <tr class="fondoblanco">
-                    <th rowspan="3"><label for="diagnostico">Diagnóstico:</label></th>
-                    <td colspan="2">
-                        <select name="ambliopia" id="ambliopia" class="inputtext1" onchange="ojosambliopia()">
-                            <option value="0">-----Ambliopía-----</option>
-                            <option value="0">Ninguno</option>
-                            {% for i in dataojo %}
-                            <option value="{{i[0]}}">{{i[1]}}</option>
-                            {% endfor %}
-                        </select>
-                        <input type="text" name="ambliopiaoi" id="ambliopiaoi" class="inputtext1" placeholder="   Ambliopía OI" disabled>
-                        <input type="text" name="ambliopiaod" id="ambliopiaod" class="inputtext1" placeholder="   Ambliopía OD" disabled>
-                    </td>
-                    <td colspan="3">
-                        <select name="ametropia" id="ametropia" class="inputtext1">
-                            <option value="0">-----Ametropía OD-----</option>
-                            <option value="0">Ninguno</option>
-                            {% for i in dataametropia %}
-                            <option value="{{i[0]}}">{{i[1]}}</option>
-                            {% endfor %}
-                        </select>
-                        <select name="ametropiaoi" id="ametropiaoi" class="inputtext1">
-                            <option value="0">-----Ametropía OI-----</option>
-                            <option value="0">Ninguno</option>
-                            {% for i in dataametropia %}
-                            <option value="{{i[0]}}">{{i[1]}}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                </tr>
-                <tr class="fondoblanco">
-                    <td colspan="2">
-                        <label><input type="checkbox" id="emetropia" name="emetropia" value="1"><strong>  Emetropía</strong></label>
-                    </td>
-                    <td colspan="3">
-                        <label><input type="checkbox" id="antimetropia" name="antimetropia" value="1"><strong>  Antimetropía</strong></label>
-                    </td>
-                </tr>
-                <tr class="fondoblanco">
-                    <td colspan="2">
-                        <label><input type="checkbox" id="anisometropia" name="anisometropia" value="1"><strong>  Anisometropia</strong></label>
-                    </td>
-                    <td colspan="3">
-                        <label><input type="checkbox" id="patologiaocular" name="patologiaocular" value="1" onclick="hdpatologiaocular()"><strong>  Patología Ocular</strong></label><br>
-                        <input type="text" class="inputtext1" id="patologiaoculartext" name="patologiaoculartext" disabled>
-                    </td>
-                </tr>
-                <tr class="fondoblanco">
-                    <th rowspan="2"><label for="tratamiento">Tratamiento:</label></th>
-                    <td colspan="2">
-                        <label><input type="checkbox" id="lentesoftalmicos" name="lentesoftalmicos" value="1"><strong>  Lentes Oftálmicos</strong></label>
-                    </td>
-                    <td colspan="3">
-                        <label><input type="checkbox" id="lentescontacto" name="lentescontacto" value="1"><strong>  Lentes de Contacto</strong></label>
-                    </td>
-                </tr>
-                <tr class="fondoblanco">
-                    <td colspan="2">
-                        <label><input type="checkbox" id="refoftalmologica" name="refoftalmologica" value="1" onchange="shref()"><strong>  Referencia Oftalmológica</strong></label>
-                    </td>
-                    <td colspan="3">
-                        <label><input type="checkbox" id="farmaco" name="farmaco" value="1" onchange="shgotas()"><strong>  Fármaco</strong></label>
-                    </td>
-                </tr>
-            </table>
-            <br>
-            <table>
-                <tr>
-                    <th>Anotaciones</th>
-                    <td style="width: 80%;">
-                        <textarea id="notas" name="notas" rows="2" cols="65" style="font-size: 25px;"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <div id="tablegotas" style="display: none;">
-                <h6>Datos Gotero</h6>
-            <table>
-                <tr>
-                    <td>Medicamento: <input type="text" class="inputtextrecetas1" id="gmed1" name="gmed1"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <textarea id="gdesc1" name="gdesc1" rows="2" cols="65" style="font-size: 25px;"></textarea>
-                    </td>
-                </tr>
-            </table>
-            <br>
-                <table>
-                <tr>
-                    <td>Medicamento: <input type="text" class="inputtextrecetas1" id="gmed2" name="gmed2"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <textarea id="gdesc2" name="gdesc2" rows="2" cols="65" style="font-size: 25px;"></textarea>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div id="referencia" style="display: none;">
-            <h6>Referencia Oftálmica
-            </h6>
-            <table>
-                <tr>
-                    <td>Lugar a referir: <input type="text" class="inputtextrecetas1" id="lugarref" name="lugarref"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <textarea id="descref" name="descref" rows="2" cols="65" style="font-size: 25px;"></textarea>
-                    </td>
-                </tr>
-            </table>
-        </div>
-            <center>
-                <ul class="nav nav-tabs">
-                    <li><a data-toggle="tab" href="#menu2" class="panelb">Anterior</a></li>
-                </ul>
-            </center>
-            <center><button onclick="submit" class="button">Aceptar</button></center>
-            
-          </div>
-        </div>
-        </form>
-      </div>
-      <datalist id="av">
-        <option value="0.05">
-        <option value="0.08">
-        <option value="0.1">
-        <option value="0.12">
-        <option value="0.16">
-        <option value="0.2">
-        <option value="0.25">
-        <option value="0.32">
-        <option value="0.4">
-        <option value="0.5">
-        <option value="0.63">
-        <option value="0.8">
-        <option value="1.0">
-        <option value="1.25">
-        <option value="1.6">
-      </datalist>
-      <script type="text/javascript">
-      function ojosambliopia(){
-            var select = document.getElementById('ambliopia')
-            console.log(select.value)
-            if (select.value == 0){
-                console.log('Entronin')
-                document.getElementById('ambliopiaoi').disabled = true
-                document.getElementById('ambliopiaod').disabled = true
-            }else if (select.value == 1) {
-                console.log('Entroiz')
-                document.getElementById('ambliopiaoi').disabled = false
-                document.getElementById('ambliopiaod').disabled = true
-            }else if (select.value == 2) {
-                console.log('Entroder')
-                document.getElementById('ambliopiaoi').disabled = true
-                document.getElementById('ambliopiaod').disabled = false
-            }else if (select.value == 3) {
-                console.log('Entroam')
-                document.getElementById('ambliopiaoi').disabled = false
-                document.getElementById('ambliopiaod').disabled = false
-            }
-        }
-       function shref(){
-                var x = document.getElementById("referencia");
-                if (x.style.display === "none") {
-                    x.style.display = "block";
-                } else {
-                    x.style.display = "none";
-                }
-            }
-      function shgotas(){
-                var x = document.getElementById("tablegotas");
-                if (x.style.display === "none") {
-                    x.style.display = "block";
-                } else {
-                    x.style.display = "none";
-                }
-            }
-        function changeeod() {
-            var ro = document.getElementById('roaeod')
-            var rs = document.getElementById('rseod')
-            var rf = document.getElementById('rfe1od')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changeeoi() {
-            var ro = document.getElementById('roaeoi')
-            var rs = document.getElementById('rseoi')
-            var rf = document.getElementById('rfe1oi')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changecod() {
-            var ro = document.getElementById('roacod')
-            var rs = document.getElementById('rscod')
-            var rf = document.getElementById('rfc1od')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changecoi() {
-            var ro = document.getElementById('roacoi')
-            var rs = document.getElementById('rscoi')
-            var rf = document.getElementById('rfc1oi')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changeejod() {
-            var ro = document.getElementById('roaejod')
-            var rs = document.getElementById('rsejod')
-            var rf = document.getElementById('rfej1od')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changeejoi() {
-            var ro = document.getElementById('roaejoi')
-            var rs = document.getElementById('rsejoi')
-            var rf = document.getElementById('rfej1oi')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changepod() {
-            var ro = document.getElementById('roapod')
-            var rs = document.getElementById('rspod')
-            var rf = document.getElementById('rfp1od')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changepoi() {
-            var ro = document.getElementById('roapoi')
-            var rs = document.getElementById('rspoi')
-            var rf = document.getElementById('rfp1oi')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changeavccod() {
-            var ro = document.getElementById('roaavccod')
-            var rs = document.getElementById('rsavccod')
-            var rf = document.getElementById('rfavcc1od')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function changeavccoi() {
-            var ro = document.getElementById('roaavccoi')
-            var rs = document.getElementById('rsavccoi')
-            var rf = document.getElementById('rfavcc1oi')
-            var valor = ro.value
-            rs.value = valor
-            rf.value = valor
-        }
-        function mediotro(){
-            var num = document.getElementById('numantmed').value
-            num = parseInt(num)
-            for(var i = 1; i<=num; i++){
-                var aux = 'enfermedad' + String(i)
-                var select = document.getElementById(aux)
-                var valor = select.value
-                if(String(valor) == 'Otro'){
-                    var aux1 = 'medotro' + String(i)
-                    document.getElementById(aux1).disabled = false
-                }else {
-                    var aux1 = 'medotro' + String(i)
-                    document.getElementById(aux1).disabled = true
-                }
-            }
-        }
-        function colorespanel(codpanel){
-                codpanel = parseInt(codpanel)
-                for(var i = 1; i<=2;i++){
-                    if(i == codpanel){
-                        var aux = 't' + String(i);
-                        var t = document.getElementById(aux)
-                        t.style.backgroundColor = '#5BC0DE'
-                        t.style.color = 'white'
-                    }else{
-                        var aux = 't' + String(i);
-                        var t = document.getElementById(aux)
-                        t.style.backgroundColor = 'white'
-                        t.style.color = 'black'
-                    }
-                }
-            }
-          function hdpatologiaocular(){
-                var cheque = document.getElementById("patologiaocular");
-                var cajatexto = document.getElementById("patologiaoculartext");
-                if(cheque.checked == true) {
-                    cajatexto.disabled = false;
-                }else {
-                    cajatexto.disabled = true;
-                }
-            }
-            function shdc(){
-                var x = document.getElementById("distanciacercana");
-                if (x.style.display === "none") {
-                    x.style.display = "block";
-                } else {
-                    x.style.display = "none";
-                }
-            }
-            function shdm(){
-                var x = document.getElementById("distanciamedia");
-                if (x.style.display === "none") {
-                    x.style.display = "block";
-                } else {
-                    x.style.display = "none";
-                }
-            }
-            function agantquir(){
-                var divgen = document.getElementById("antecedentesquirurgicos");
-                var inputnum = document.getElementById("numantqui");
-                var num = parseInt(inputnum.value) + 1
-                inputnum.value = num
-                var tr = document.createElement('tr')
-                var th = document.createElement('th')
-                tr.append(th)
-                var td1 = document.createElement('td')
-                var input = document.createElement('input')
-                aux = 'cirugia' + String(num)
-                input.type = 'text'
-                input.className = 'inputtext1'
-                input.id = aux
-                input.name = aux
-                input.placeholder = 'Cirugia'
-                td1.append(input)
-                tr.append(td1)
-                var td2 = document.createElement('td')
-                var input1 = document.createElement('input')
-                aux = 'tiempoevolucionq' + String(num)
-                input1.type = 'text'
-                input1.className = 'inputtext1'
-                input1.id = aux
-                input1.name = aux
-                input1.placeholder = 'Tiempo de Evolución'
-                td2.append(input1)
-                tr.append(td2)
-                var td3 = document.createElement('td')
-                var input2 = document.createElement('input')
-                aux = 'controlq' + String(num)
-                input2.type = 'text'
-                input2.className = 'inputtext1'
-                input2.id = aux
-                input2.name = aux
-                input2.placeholder = 'Control (Medicamento)'
-                td3.append(input2)
-                tr.append(td3)
-                divgen.append(tr)
-            }
-            function agantmed(){
-                var divgen = document.getElementById("antecedentesmedicos");
-                var inputnum = document.getElementById("numantmed");
-                var num = parseInt(inputnum.value) + 1
-                inputnum.value = num
-                var tr = document.createElement('tr')
-                var th = document.createElement('th')
-                tr.append(th)
-                var td1 = document.createElement('td')
-                var select = document.createElement('select')
-                select.className = 'inputtext1'
-                select.setAttribute('onchange', "mediotro()")
-                var aux = 'enfermedad'+ String(num)
-                select.name = aux
-                select.id = aux
-                var opt1 = document.createElement('option')
-                opt1.innerHTML = 'Seleccione enfermedad'
-                opt1.value = ""
-                select.append(opt1)
-                var opt2 = document.createElement('option')
-                opt2.innerHTML = 'Diabetes Mellitus'
-                opt1.value = "Diabetes Mellitus"
-                select.append(opt2)
-                var opt3 = document.createElement('option')
-                opt3.innerHTML = 'Hipertensión Arterial'
-                opt3.value = "Hipertensión Arterial"
-                select.append(opt3)
-                var opt4 = document.createElement('option')
-                opt4.innerHTML = 'Artritis Reumatoidea'
-                opt4.value = "Artritis Reumatoidea"
-                select.append(opt4)
-                var opt5 = document.createElement('option')
-                opt5.innerHTML = 'Virus Inmunodeficiencia Humana'
-                opt5.value = "Virus Inmunodeficiencia Humana"
-                select.append(opt5)
-                var opt6 = document.createElement('option')
-                opt6.innerHTML = 'Hipertrigliceridemia'
-                opt6.value = "Hipertrigliceridemia"
-                select.append(opt6)
-                var opt7 = document.createElement('option')
-                opt7.innerHTML = 'Colesterolemia'
-                opt7.value = "Colesterolemia"
-                select.append(opt7)
-                var opt8 = document.createElement('option')
-                opt8.innerHTML = 'Otro'
-                opt8.value = "Otro"
-                select.append(opt8)
-                td1.append(select)
-                tr.append(td1)
-                var td4 = document.createElement('td')
-                var input3 = document.createElement('input')
-                aux = 'medotro' + String(num)
-                input3.type = 'text'
-                input3.className = 'inputtext1'
-                input3.id = aux
-                input3.name = aux
-                input3.placeholder = 'Otro'
-                input3.disabled = true
-                td4.append(input3)
-                tr.append(td4)
+					</tr>
+				</table>
+				<br>
+				<center>
+					<h3>Refracción Objetiva Alumno</h3>
+				</center>
+				<table>
+					<thead>
+						<tr>
+							<th>C.A.</th>
+							<th>Esfera</th>
+							<th>Cilindro</th>
+							<th>Eje</th>
+							<th>Prisma</th>
+							<th>DVertice</th>
+							<th>A.V.C.C</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="roaeod" name="roaeod" onchange="changeeod()"></td>
+						<td><input type="text" class="form-control" id="roacod" name="roacod" onchange="changecod()"></td>
+						<td><input type="text" class="form-control" id="roaejod" name="roaejod" onchange="changeejod()">
+						</td>
+						<td><input type="text" class="form-control" id="roapod" name="roapod" onchange="changepod()"></td>
+						<td><input type="text" class="form-control" id="roavod" name="roavod"></td>
+						<td><input type="text" class="form-control" id="roaavccod" name="roaavccod" list="av"
+								autocomplete="false" onchange="changeavccod()"></td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="roaeoi" name="roaeoi" onchange="changeeoi()"></td>
+						<td><input type="text" class="form-control" id="roacoi" name="roacoi" onchange="changecoi()"></td>
+						<td><input type="text" class="form-control" id="roaejoi" name="roaejoi" onchange="changeejoi()">
+						</td>
+						<td><input type="text" class="form-control" id="roapoi" name="roapoi" onchange="changepoi()"></td>
+						<td><input type="text" class="form-control" id="roavoi" name="roavoi"></td>
+						<td><input type="text" class="form-control" id="roaavccoi" name="roaavccoi" list="av"
+								autocomplete="false" onchange="changeavccoi()"></td>
+					</tr>
+				</table><br>
+				<center>
+					<h3>Refracción Objetiva de Referencia</h3>
+				</center>
+				<table>
+					<thead>
+						<tr>
+							<th>C.A.</th>
+							<th>Esfera</th>
+							<th>Cilindro</th>
+							<th>Eje</th>
+							<th>Prisma</th>
+							<th>DVertice</th>
+							<th>A.V.C.C</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="roreod" name="roreod"></td>
+						<td><input type="text" class="form-control" id="rorcod" name="rorcod"></td>
+						<td><input type="text" class="form-control" id="rorejod" name="rorejod"></td>
+						<td><input type="text" class="form-control" id="rorpod" name="rorpod"></td>
+						<td><input type="text" class="form-control" id="rorvod" name="rorvod"></td>
+						<td><input type="text" class="form-control" id="roravccod" name="roravccod"></td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="roreoi" name="roreoi"></td>
+						<td><input type="text" class="form-control" id="rorcoi" name="rorcoi"></td>
+						<td><input type="text" class="form-control" id="rorejoi" name="rorejoi"></td>
+						<td><input type="text" class="form-control" id="rorpoi" name="rorpoi"></td>
+						<td><input type="text" class="form-control" id="rorvoi" name="rorvoi"></td>
+						<td><input type="text" class="form-control" id="roravccoi" name="roravccoi"></td>
+					</tr>
+				</table>
+				<br>
+				<center>
+					<h3>Refracción Subjetiva</h3>
+				</center>
+				<table>
+					<thead>
+						<tr>
+							<th>C.A.</th>
+							<th>Esfera</th>
+							<th>Cilindro</th>
+							<th>Eje</th>
+							<th>Prisma</th>
+							<th>A.V.C.C</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="rseod" name="rseod"></td>
+						<td><input type="text" class="form-control" id="rscod" name="rscod"></td>
+						<td><input type="text" class="form-control" id="rsejod" name="rsejod"></td>
+						<td><input type="text" class="form-control" id="rspod" name="rspod"></td>
+						<td><input type="text" class="form-control" id="rsavccod" name="rsavccod" list="av"
+								autocomplete="false"></td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="rseoi" name="rseoi"></td>
+						<td><input type="text" class="form-control" id="rscoi" name="rscoi"></td>
+						<td><input type="text" class="form-control" id="rsejoi" name="rsejoi"></td>
+						<td><input type="text" class="form-control" id="rspoi" name="rspoi"></td>
+						<td><input type="text" class="form-control" id="rsavccoi" name="rsavccoi" list="av"
+								autocomplete="false"></td>
+					</tr>
+				</table>
+				<br>
+				<label>
+					<input type="checkbox" id="pruamb" name="pruamb" value="1">
+					<strong> Prueba Ambulatoria</strong>
+				</label><br>
+				<label>
+					<input type="checkbox" id="testbi" name="testbi" value="1">
+					<strong>Test Bicromatico</strong>
+				</label><br>
+				<label>
+					<input type="checkbox" id="equibino" name="equibino" value="1">
+					<strong>Equilibrio Binocular</strong>
+				</label><br>
+				<label>
+					<input type="checkbox" id="pruest" name="pruest" value="1">
+					<strong>Prueba de Estereopsis</strong>
+				</label><br>
+				<label>
+					<input type="checkbox" id="ciljackson" name="ciljackson" value="1">
+					<strong>Cilindro Cruzado de Jackson</strong>
+				</label><br>
+				<center>
+					<h3>Refracción Final</h3>
+				</center>
+				<center>
+					<button type="button" class="btn btn-success" onclick="shdc()"> Distancia Cercana</button>
+					<button type="button" class="btn btn-success" onclick="shdm()"> Distancia Media</button>
+				</center>
+				<table>
+					<thead>
+						<tr>
+							<th>C.A.</th>
+							<th>Esfera</th>
+							<th>Cilindro</th>
+							<th>Eje</th>
+							<th>Prisma</th>
+							<th>A.V.C.C</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="rfe1od" name="rfe1od"></td>
+						<td><input type="text" class="form-control" id="rfc1od" name="rfc1od"></td>
+						<td><input type="text" class="form-control" id="rfej1od" name="rfej1od"></td>
+						<td><input type="text" class="form-control" id="rfp1od" name="rfp1od"></td>
+						<td><input type="text" class="form-control" id="rfavcc1od" name="rfavcc1od" list="av"
+								autocomplete="false"></td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="rfe1oi" name="rfe1oi"></td>
+						<td><input type="text" class="form-control" id="rfc1oi" name="rfc1oi"></td>
+						<td><input type="text" class="form-control" id="rfej1oi" name="rfej1oi"></td>
+						<td><input type="text" class="form-control" id="rfp1oi" name="rfp1oi"></td>
+						<td><input type="text" class="form-control" id="rfavcc1oi" name="rfavcc1oi" list="av"
+								autocomplete="false"></td>
+					</tr>
+					<tr>
+						<th>DNP</th>
+						<td><input type="text" class="form-control" id="dnp" name="dnp"></td>
+						<th>A.D.D.</th>
+						<td><input type="text" class="form-control" id="add11" name="add11"></td>
+						<td><input type="text" class="form-control" id="add22" name="add22"></td>
+						<td><input type="text" class="form-control" id="add33" name="add33" list="av"
+								autocomplete="false"></td>
+					</tr>
+					</thead>
+				</table><br><br>
+				<div id="distanciacercana" style="display: none">
+					<h3>Fórmula para Distancia Cercana</h3>
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Esfera</th>
+								<th>Cilindro</th>
+								<th>Eje</th>
+								<th>Prisma</th>
+								<th>A.V.C.C</th>
+							</tr>
+						</thead>
+						<tr>
+							<th>Ojo Derecho</th>
+							<td><input type="text" class="form-control" id="rfe2od" name="rfe2od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfc2od" name="rfc2od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfej2od" name="rfej2od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfp2od" name="rfp2od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfavcc2od" name="rfavcc2od" value="0"
+									list="av" autocomplete="false"></td>
+						</tr>
+						<tr>
+							<th>Ojo Izquierdo</th>
+							<td><input type="text" class="form-control" id="rfe2oi" name="rfe2oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfc2oi" name="rfc2oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfej2oi" name="rfej2oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfp2oi" name="rfp2oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfavcc2oi" name="rfavcc2oi" value="0"
+									list="av" autocomplete="false"></td>
+						</tr>
+						<tr>
+							<th>DNP</th>
+							<td><input type="text" class="form-control" id="dnp2" name="dnp2" value="0"></td>
+						</tr>
+					</table>
+					<br><br>
+				</div>
+				<div id="distanciamedia" style="display: none">
+					<h3>Fórmula para Distancia Media</h3>
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Esfera</th>
+								<th>Cilindro</th>
+								<th>Eje</th>
+								<th>Prisma</th>
+								<th>A.V.C.C</th>
+							</tr>
+						</thead>
+						<tr>
+							<th>Ojo Derecho</th>
+							<td><input type="text" class="form-control" id="rfe3od" name="rfe3od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfc3od" name="rfc3od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfej3od" name="rfej3od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfp3od" name="rfp3od" value="0"></td>
+							<td><input type="text" class="form-control" id="rfavcc3od" name="rfavcc3od" value="0"
+									list="av" autocomplete="false"></td>
+						</tr>
+						<tr>
+							<th>Ojo Izquierdo</th>
+							<td><input type="text" class="form-control" id="rfe3oi" name="rfe3oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfc3oi" name="rfc3oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfej3oi" name="rfej3oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfp3oi" name="rfp3oi" value="0"></td>
+							<td><input type="text" class="form-control" id="rfavcc3oi" name="rfavcc3oi" value="0"
+									list="av" autocomplete="false"></td>
+						</tr>
+						<tr>
+							<th>DNP</th>
+							<td><input type="text" class="form-control" id="dnp3" name="dnp3" value="0"></td>
+						</tr>
+					</table>
+				</div>
+				<br>
+				<h3>Final</h3>
+				<table>
+					<tr class="fondoblanco">
+						<th><label for="proxcita">Próxima Cita:</label></th>
+						<td colspan="5"><input type="date" class="form-control" id="proxicita" name="proxicita"
+								value="{{new_date}}"></td>
+					</tr>
+					<tr class="fondoblanco">
+						<th><label for="usolent">Uso Lentes:</label></th>
+						<td colspan="5"><select name="usolent" id="usolent" class="form-control">
+								<option value="">Seleccione uso</option>
+								{% for i in usolen %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+					</tr>
+					<tr class="fondoblanco">
+						<th><label for="lenrecom">Lente Recomendado:</label></th>
+						<td><select name="tipolent" id="tipolent" class="form-control">
+								<option value="">Seleccione tipo</option>
+								{% for i in tipolen %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+						<td><select name="lentedetalladolent" id="lentedetalladolent" class="form-control">
+								<option value="">Seleccione Lente detallado</option>
+								{% for i in lentedetalladolen %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+						<td><select name="materiallent" id="materiallent" class="form-control">
+								<option value="">Seleccione material</option>
+								{% for i in materiallen %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+						<td><select name="filtrolent" id="filtrolent" class="form-control">
+								<option value="">Seleccione filtro</option>
+								{% for i in filtrolen %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+						<td><select name="colorlent" id="colorlent" class="form-control">
+								<option value="">Seleccione color</option>
+								{% for i in colorlen %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+					</tr>
+				</table>
+				<br>
+				<center>
+					<h3>Motilidad Ocular</h3>
+				</center>
+				<table>
+					<thead>
+						<tr>
+							<th>M.E.O.</th>
+							<th>Movilidad Muscular Fija</th>
+							<th>Forias</th>
+							<th>Tropias</th>
+							<th>Ducciones</th>
+							<th>Versiones</th>
+							<th>Convergencia</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Ojo Derecho</th>
+						<td><input type="text" class="form-control" id="mmfod" name="mmfod"></td>
+						<td><input type="text" class="form-control" id="forod" name="forod"></td>
+						<td><input type="text" class="form-control" id="trood" name="trood"></td>
+						<td><input type="text" class="form-control" id="duccod" name="duccod"></td>
+						<td rowspan="2"><input type="text" class="form-control" id="versiones" name="versiones"></td>
+						<td rowspan="2"><input type="text" class="form-control" id="convergencia" name="convergencia">
+						</td>
+					</tr>
+					<tr>
+						<th>Ojo Izquierdo</th>
+						<td><input type="text" class="form-control" id="mmfoi" name="mmfoi"></td>
+						<td><input type="text" class="form-control" id="foroi" name="foroi"></td>
+						<td><input type="text" class="form-control" id="trooi" name="trooi"></td>
+						<td><input type="text" class="form-control" id="duccoi" name="duccoi"></td>
+					</tr>
+				</table>
+				<br>
+				<label>
+					<input type="checkbox" id="ortofotico" name="ortoforico" value="1">
+					<strong>Ortofórico</strong>
+				</label><br>
+				<center>
+					<h3>Salud Ocular</h3>
+				</center>
+				<label>
+					<input type="checkbox" id="ojsal" name="ojsal" value="1">
+					<strong>Ambos ojos saludables - Valores normales</strong>
+				</label><br>
+				<table>
+					<thead>
+						<tr>
+							<th>Observaciones</th>
+							<th>Ojo Derecho</th>
+							<th>Ojo Izquierdo</th>
+						</tr>
+					</thead>
+					<tr>
+						<th>Órbita</th>
+						<td><input type="text" class="form-control" id="orbod" name="orbod"></td>
+						<td><input type="text" class="form-control" id="orboi" name="orboi"></td>
+					</tr>
+					<tr>
+						<th>Cejas</th>
+						<td><input type="text" class="form-control" id="cejod" name="cejod"></td>
+						<td><input type="text" class="form-control" id="cejoi" name="cejoi"></td>
+					</tr>
+					<tr>
+						<th rowspan="2">Lágrima</th>
+						<td><input type="text" class="form-control" id="lagod" name="lagod"></td>
+						<td><input type="text" class="form-control" id="lagoi" name="lagoi"></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="form-row">
+								<div class="col-md-6">
+									<select class="form-control" id="schod" name="schod">
+										<option value="">Prueba de Schirmer</option>
+										{% for i in mms %}
+										<option value="{{i}}">{{i}} mm</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" id="butod" name="butod">
+										<option value="">Prueba de But</option>
+										{% for i in numeros %}
+										<option value="{{i}}">{{i}} seg</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="form-row">
+								<div class="col-md-6">
+									<select class="form-control" id="schoi" name="schoi">
+										<option value="">Prueba de Schirmer</option>
+										{% for i in mms %}
+										<option value="{{i}}">{{i}} mm</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-md-6">
+									<select class="form-control" id="butoi" name="butoi">
+										<option value="">Prueba de But</option>
+										{% for i in numeros %}
+										<option value="{{i}}">{{i}} seg</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<th>Vias Lagrimales</th>
+						<td><input type="text" class="form-control" id="vilagod" name="vilagod"></td>
+						<td><input type="text" class="form-control" id="vilagoi" name="vilagoi"></td>
+					</tr>
+					<tr>
+						<th>Parpados y pestañas</th>
+						<td><input type="text" class="form-control" id="pypod" name="pypod"></td>
+						<td><input type="text" class="form-control" id="pypoi" name="pypoi"></td>
+					</tr>
+					<tr>
+						<th>Conjuntiva</th>
+						<td><input type="text" class="form-control" id="conjod" name="conjod"></td>
+						<td><input type="text" class="form-control" id="conjoi" name="conjoi"></td>
+					</tr>
+					<tr>
+						<th>Esclera</th>
+						<td><input type="text" class="form-control" id="esclod" name="esclod"></td>
+						<td><input type="text" class="form-control" id="escloi" name="escloi"></td>
+					</tr>
+					<tr>
+						<th>Córnea</th>
+						<td><input type="text" class="form-control" id="cornod" name="cornod"></td>
+						<td><input type="text" class="form-control" id="cornoi" name="cornoi"></td>
+					</tr>
+					<tr>
+						<th>Cámara Anterior</th>
+						<td><input type="text" class="form-control" id="camaod" name="camaod"></td>
+						<td><input type="text" class="form-control" id="camaoi" name="camaoi"></td>
+					</tr>
+					<tr>
+						<th>Iris</th>
+						<td><input type="text" class="form-control" id="iriod" name="iriod"></td>
+						<td><input type="text" class="form-control" id="irioi" name="irioi"></td>
+					</tr>
+					<tr>
+						<th>Pupila</th>
+						<td><input type="text" class="form-control" id="pupiod" name="pupiod"></td>
+						<td><input type="text" class="form-control" id="pupioi" name="pupioi"></td>
+					</tr>
+					<tr>
+						<th>Cristalino</th>
+						<td><input type="text" class="form-control" id="crisod" name="crisod"></td>
+						<td><input type="text" class="form-control" id="crisoi" name="crisoi"></td>
+					</tr>
+					<tr>
+						<th>Vítreo</th>
+						<td><input type="text" class="form-control" id="vitod" name="vitod"></td>
+						<td><input type="text" class="form-control" id="vitoi" name="vitoi"></td>
+					</tr>
+					<tr>
+						<th>Nervio Óptico/Papila</th>
+						<td><select class="form-control" id="nervood" name="nervood">
+								<option value="">Nervio Óptico</option>
+								{% for i in nervos %}
+								<option value="{{i}}">{{i/10}}</option>
+								{% endfor %}
+							</select></td>
+						<td><select class="form-control" id="nervooi" name="nervooi">
+								<option value="">Nervio Óptico</option>
+								{% for i in nervos %}
+								<option value="{{i}}">{{i/10}}</option>
+								{% endfor %}
+							</select></td>
+					</tr>
+					<tr>
+						<th>Relación Vena/Arteria</th>
+						<td><select class="form-control" id="retppod" name="retppod">
+								<option value="">Relación V/A</option>
+								{% for i in relva %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+						<td><select class="form-control" id="retppoi" name="retppoi">
+								<option value="">Relación V/A</option>
+								{% for i in relva %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select></td>
+					</tr>
+					<tr>
+						<th>Retina Macular</th>
+						<td><input type="text" class="form-control" id="retmacod" name="retmacod"></td>
+						<td><input type="text" class="form-control" id="retmacoi" name="retmacoi"></td>
+					</tr>
+					<tr>
+						<th>Retina Periférica</th>
+						<td><input type="text" class="form-control" id="retpeod" name="retpeod"></td>
+						<td><input type="text" class="form-control" id="retpeoi" name="retpeoi"></td>
+					</tr>
+				</table>
+				<br>
+				<h1>Diagnóstico y Tratamiento</h1>
+				<table>
+					<tr class="fondoblanco">
+						<th rowspan="3"><label for="diagnostico">Diagnóstico:</label></th>
+						<td colspan="2">
+							<select name="ambliopia" id="ambliopia" class="form-control" onchange="ojosambliopia()">
+								<option value="0">-----Ambliopía-----</option>
+								<option value="0">Ninguno</option>
+								{% for i in dataojo %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select>
+							<input type="text" name="ambliopiaoi" id="ambliopiaoi" class="form-control"
+								placeholder="Ambliopía OI" disabled>
+							<input type="text" name="ambliopiaod" id="ambliopiaod" class="form-control"
+								placeholder="Ambliopía OD" disabled>
+						</td>
+						<td colspan="3">
+							<select name="ametropia" id="ametropia" class="form-control">
+								<option value="0">-----Ametropía OD-----</option>
+								<option value="0">Ninguno</option>
+								{% for i in dataametropia %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select>
+							<select name="ametropiaoi" id="ametropiaoi" class="form-control">
+								<option value="0">-----Ametropía OI-----</option>
+								<option value="0">Ninguno</option>
+								{% for i in dataametropia %}
+								<option value="{{i[0]}}">{{i[1]}}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr class="fondoblanco">
+						<td colspan="2">
+							<label>
+								<input type="checkbox" id="emetropia" name="emetropia" value="1">
+								<strong>Emetropía</strong>
+							</label>
+						</td>
+						<td colspan="3">
+							<label>
+								<input type="checkbox" id="antimetropia" name="antimetropia" value="1">
+								<strong>Antimetropía</strong>
+							</label>
+						</td>
+					</tr>
+					<tr class="fondoblanco">
+						<td colspan="2">
+							<label>
+								<input type="checkbox" id="anisometropia" name="anisometropia" value="1">
+								<strong>Anisometropia</strong>
+							</label>
+						</td>
+						<td colspan="3">
+							<label>
+								<input type="checkbox" id="patologiaocular" name="patologiaocular" value="1" onclick="hdpatologiaocular()">
+								<strong> Patología Ocular</strong>
+							</label><br>
+							<input type="text" class="form-control" id="patologiaoculartext" name="patologiaoculartext" disabled>
+						</td>
+					</tr>
+					<tr class="fondoblanco">
+						<th rowspan="2"><label for="tratamiento">Tratamiento:</label></th>
+						<td colspan="2">
+							<label>
+								<input type="checkbox" id="lentesoftalmicos" name="lentesoftalmicos" value="1">
+								<strong>Lentes Oftálmicos</strong>
+							</label>
+						</td>
+						<td colspan="3">
+							<label>
+								<input type="checkbox" id="lentescontacto" name="lentescontacto" value="1">
+								<strong>Lentes de Contacto</strong>
+							</label>
+						</td>
+					</tr>
+					<tr class="fondoblanco">
+						<td colspan="2">
+							<label>
+								<input type="checkbox" id="refoftalmologica" name="refoftalmologica" value="1" onchange="shref()">
+								<strong>Referencia Oftalmológica</strong>
+							</label>
+						</td>
+						<td colspan="3">
+							<label>
+								<input type="checkbox" id="farmaco" name="farmaco" value="1" onchange="shgotas()">
+								<strong>Fármaco</strong>
+							</label>
+						</td>
+					</tr>
+				</table>
+				<br>
+				<table>
+					<tr>
+						<th>Anotaciones</th>
+						<td style="width: 80%;">
+							<textarea id="notas" name="notas" rows="2" cols="65" style="font-size: 25px;" class="form-control"></textarea>
+						</td>
+					</tr>
+				</table>
+				<div id="tablegotas" style="display: none;">
+					<h6>Datos Gotero</h6>
+					<table>
+						<tr>
+							<td>Medicamento: <input type="text" class="form-control" id="gmed1" name="gmed1"></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea id="gdesc1" name="gdesc1" rows="2" cols="65" class="form-control"
+									style="font-size: 25px;"></textarea>
+							</td>
+						</tr>
+					</table>
+					<br>
+					<table>
+						<tr>
+							<td>Medicamento: <input type="text" class="form-control" id="gmed2" name="gmed2"></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea id="gdesc2" name="gdesc2" rows="2" cols="65" class="form-control"
+									style="font-size: 25px;"></textarea>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id="referencia" style="display: none;">
+					<h6>Referencia Oftálmica
+					</h6>
+					<table>
+						<tr>
+							<td>Lugar a referir: <input type="text" class="form-control" id="lugarref"
+									name="lugarref"></td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea id="descref" name="descref" rows="2" cols="65" class="form-control"
+									style="font-size: 25px;"></textarea>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<center>
+					<input class="btn btn-primary" type="submit" value="Aceptar">
+				</center>
+			</div>
+		</div>
+	</form>
+</div>
+<datalist id="av">
+	<option value="0.05">
+	<option value="0.08">
+	<option value="0.1">
+	<option value="0.12">
+	<option value="0.16">
+	<option value="0.2">
+	<option value="0.25">
+	<option value="0.32">
+	<option value="0.4">
+	<option value="0.5">
+	<option value="0.63">
+	<option value="0.8">
+	<option value="1.0">
+	<option value="1.25">
+	<option value="1.6">
+</datalist>
+<script type="text/javascript">
+	function ojosambliopia() {
+		var select = document.getElementById('ambliopia')
+		console.log(select.value)
+		if (select.value == 0) {
+			console.log('Entronin')
+			document.getElementById('ambliopiaoi').disabled = true
+			document.getElementById('ambliopiaod').disabled = true
+		} else if (select.value == 1) {
+			console.log('Entroiz')
+			document.getElementById('ambliopiaoi').disabled = false
+			document.getElementById('ambliopiaod').disabled = true
+		} else if (select.value == 2) {
+			console.log('Entroder')
+			document.getElementById('ambliopiaoi').disabled = true
+			document.getElementById('ambliopiaod').disabled = false
+		} else if (select.value == 3) {
+			console.log('Entroam')
+			document.getElementById('ambliopiaoi').disabled = false
+			document.getElementById('ambliopiaod').disabled = false
+		}
+	}
+	function shref() {
+		var x = document.getElementById("referencia");
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
+	function shgotas() {
+		var x = document.getElementById("tablegotas");
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
+	function changeeod() {
+		var ro = document.getElementById('roaeod')
+		var rs = document.getElementById('rseod')
+		var rf = document.getElementById('rfe1od')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changeeoi() {
+		var ro = document.getElementById('roaeoi')
+		var rs = document.getElementById('rseoi')
+		var rf = document.getElementById('rfe1oi')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changecod() {
+		var ro = document.getElementById('roacod')
+		var rs = document.getElementById('rscod')
+		var rf = document.getElementById('rfc1od')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changecoi() {
+		var ro = document.getElementById('roacoi')
+		var rs = document.getElementById('rscoi')
+		var rf = document.getElementById('rfc1oi')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changeejod() {
+		var ro = document.getElementById('roaejod')
+		var rs = document.getElementById('rsejod')
+		var rf = document.getElementById('rfej1od')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changeejoi() {
+		var ro = document.getElementById('roaejoi')
+		var rs = document.getElementById('rsejoi')
+		var rf = document.getElementById('rfej1oi')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changepod() {
+		var ro = document.getElementById('roapod')
+		var rs = document.getElementById('rspod')
+		var rf = document.getElementById('rfp1od')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changepoi() {
+		var ro = document.getElementById('roapoi')
+		var rs = document.getElementById('rspoi')
+		var rf = document.getElementById('rfp1oi')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changeavccod() {
+		var ro = document.getElementById('roaavccod')
+		var rs = document.getElementById('rsavccod')
+		var rf = document.getElementById('rfavcc1od')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function changeavccoi() {
+		var ro = document.getElementById('roaavccoi')
+		var rs = document.getElementById('rsavccoi')
+		var rf = document.getElementById('rfavcc1oi')
+		var valor = ro.value
+		rs.value = valor
+		rf.value = valor
+	}
+	function mediotro() {
+		var num = document.getElementById('numantmed').value
+		num = parseInt(num)
+		for (var i = 1; i <= num; i++) {
+			var aux = 'enfermedad' + String(i)
+			var select = document.getElementById(aux)
+			var valor = select.value
+			if (String(valor) == 'Otro') {
+				var aux1 = 'medotro' + String(i)
+				document.getElementById(aux1).disabled = false
+			} else {
+				var aux1 = 'medotro' + String(i)
+				document.getElementById(aux1).disabled = true
+			}
+		}
+	}
+	function colorespanel(codpanel) {
+		codpanel = parseInt(codpanel)
+		for (var i = 0; i <= 2; i++) {
+			if (i == codpanel) {
+				var aux = 't' + String(i);
+				var t = document.getElementById(aux)
+				t.style.backgroundColor = '#5BC0DE'
+				t.style.color = 'white'
+			} else {
+				var aux = 't' + String(i);
+				var t = document.getElementById(aux)
+				t.style.backgroundColor = 'white'
+				t.style.color = 'black'
+			}
+		}
+	}
+	function hdpatologiaocular() {
+		var cheque = document.getElementById("patologiaocular");
+		var cajatexto = document.getElementById("patologiaoculartext");
+		if (cheque.checked == true) {
+			cajatexto.disabled = false;
+		} else {
+			cajatexto.disabled = true;
+		}
+	}
+	function shdc() {
+		var x = document.getElementById("distanciacercana");
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
+	function shdm() {
+		var x = document.getElementById("distanciamedia");
+		if (x.style.display === "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
+	function agantquir() {
+		var divgen = document.getElementById("antecedentesquirurgicos");
+		var inputnum = document.getElementById("numantqui");
+		var num = parseInt(inputnum.value) + 1
+		inputnum.value = num
+		var tr = document.createElement('tr')
+		var th = document.createElement('th')
+		tr.append(th)
+		var td1 = document.createElement('td')
+		var input = document.createElement('input')
+		aux = 'cirugia' + String(num)
+		input.type = 'text'
+		input.className = 'form-control'
+		input.id = aux
+		input.name = aux
+		input.placeholder = 'Cirugia'
+		td1.append(input)
+		tr.append(td1)
+		var td2 = document.createElement('td')
+		var input1 = document.createElement('input')
+		aux = 'tiempoevolucionq' + String(num)
+		input1.type = 'text'
+		input1.className = 'form-control'
+		input1.id = aux
+		input1.name = aux
+		input1.placeholder = 'Tiempo de Evolución'
+		td2.append(input1)
+		tr.append(td2)
+		var td3 = document.createElement('td')
+		var input2 = document.createElement('input')
+		aux = 'controlq' + String(num)
+		input2.type = 'text'
+		input2.className = 'form-control'
+		input2.id = aux
+		input2.name = aux
+		input2.placeholder = 'Control (Medicamento)'
+		td3.append(input2)
+		tr.append(td3)
+		divgen.append(tr)
+	}
+	function agantmed() {
+		var divgen = document.getElementById("antecedentesmedicos");
+		var inputnum = document.getElementById("numantmed");
+		var num = parseInt(inputnum.value) + 1
+		inputnum.value = num
+		var tr = document.createElement('tr')
+		var th = document.createElement('th')
+		tr.append(th)
+		var td1 = document.createElement('td')
+		var select = document.createElement('select')
+		select.className = 'form-control'
+		select.setAttribute('onchange', "mediotro()")
+		var aux = 'enfermedad' + String(num)
+		select.name = aux
+		select.id = aux
+		var opt1 = document.createElement('option')
+		opt1.innerHTML = 'Seleccione enfermedad'
+		opt1.value = ""
+		select.append(opt1)
+		var opt2 = document.createElement('option')
+		opt2.innerHTML = 'Diabetes Mellitus'
+		opt1.value = "Diabetes Mellitus"
+		select.append(opt2)
+		var opt3 = document.createElement('option')
+		opt3.innerHTML = 'Hipertensión Arterial'
+		opt3.value = "Hipertensión Arterial"
+		select.append(opt3)
+		var opt4 = document.createElement('option')
+		opt4.innerHTML = 'Artritis Reumatoidea'
+		opt4.value = "Artritis Reumatoidea"
+		select.append(opt4)
+		var opt5 = document.createElement('option')
+		opt5.innerHTML = 'Virus Inmunodeficiencia Humana'
+		opt5.value = "Virus Inmunodeficiencia Humana"
+		select.append(opt5)
+		var opt6 = document.createElement('option')
+		opt6.innerHTML = 'Hipertrigliceridemia'
+		opt6.value = "Hipertrigliceridemia"
+		select.append(opt6)
+		var opt7 = document.createElement('option')
+		opt7.innerHTML = 'Colesterolemia'
+		opt7.value = "Colesterolemia"
+		select.append(opt7)
+		var opt8 = document.createElement('option')
+		opt8.innerHTML = 'Otro'
+		opt8.value = "Otro"
+		select.append(opt8)
+		td1.append(select)
+		tr.append(td1)
+		var td4 = document.createElement('td')
+		var input3 = document.createElement('input')
+		aux = 'medotro' + String(num)
+		input3.type = 'text'
+		input3.className = 'form-control'
+		input3.id = aux
+		input3.name = aux
+		input3.placeholder = 'Otro'
+		input3.disabled = true
+		td4.append(input3)
+		tr.append(td4)
 
-                var td2 = document.createElement('td')
-                var input1 = document.createElement('input')
-                aux = 'tiempoevolucionm' + String(num)
-                input1.type = 'text'
-                input1.className = 'inputtext1'
-                input1.id = aux
-                input1.name = aux
-                input1.placeholder = 'Tiempo de Evolución'
-                td2.append(input1)
-                tr.append(td2)
-                var td3 = document.createElement('td')
-                var input2 = document.createElement('input')
-                aux = 'controlm' + String(num)
-                input2.type = 'text'
-                input2.className = 'inputtext1'
-                input2.id = aux
-                input2.name = aux
-                input2.placeholder = 'Control (Medicamento)'
-                td3.append(input2)
-                tr.append(td3)
-                divgen.append(tr)
-            }
-      </script>
+		var td2 = document.createElement('td')
+		var input1 = document.createElement('input')
+		aux = 'tiempoevolucionm' + String(num)
+		input1.type = 'text'
+		input1.className = 'form-control'
+		input1.id = aux
+		input1.name = aux
+		input1.placeholder = 'Tiempo de Evolución'
+		td2.append(input1)
+		tr.append(td2)
+		var td3 = document.createElement('td')
+		var input2 = document.createElement('input')
+		aux = 'controlm' + String(num)
+		input2.type = 'text'
+		input2.className = 'form-control'
+		input2.id = aux
+		input2.name = aux
+		input2.placeholder = 'Control (Medicamento)'
+		td3.append(input2)
+		tr.append(td3)
+		divgen.append(tr)
+	}
+</script>
 {% endblock %}
