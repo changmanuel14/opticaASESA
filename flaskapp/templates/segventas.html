@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-<button type="button" class="button"><a href="/imprimir/{{idfacturaheader}}" target="_blank" style="color: white;">Imprimir Descripción</a></button>
+<a href="/imprimir/{{idfacturaheader}}" target="_blank" style="color: white;"><button type="button" class="btn btn-primary">Imprimir Descripción</button></a>
+<a href="/subirdocumentos/{{idfacturaheader}}%260" style="color: white;"><button type="button" class="btn btn-primary">Adjuntar Documentos</button></a>
 <br>
 <br>
 <br>
@@ -132,6 +133,26 @@
         </tr>
         {% endfor %}
     </table>
+	<br>
+    <h2>Archivos</h2>
+	<table class="table table-stripped">
+		<tr>
+			<th>Documento</th>
+			<th>Archivo</th>
+		</tr>
+		{% if factura == 1 %}
+		<tr>
+			<td>Factura</td>
+			<td><a href="/verfactura/{{idfacturaheader}}" target="_blank">Ver archivo</a></td>
+		</tr>
+		{% endif %}
+		{% if ordentrabajo == 1 %}
+		<tr>
+			<td>Orden de Trabajo</td>
+			<td><a href="/verorden/{{idfacturaheader}}" target="_blank">Ver archivo</a></td>
+		</tr>
+		{% endif %}
+	</table>
     <br>
     <br>
 	<table class="table table-stripped">

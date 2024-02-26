@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, session, make_response, Response
+from flask import Flask, render_template, request, url_for, redirect, session, make_response, Response, Blueprint
 import pymysql
 from datetime import date, timedelta
 import datetime
@@ -6,12 +6,17 @@ import pdfkit
 import io
 import xlwt
 import cryptography
+from os import getcwd, path
 
 from werkzeug.utils import send_file
 
 app = Flask(__name__)
 app.secret_key = 'd589d3d0d15d764ed0a98ff5a37af547'
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
+route_files = Blueprint("route_files", __name__)
+mi_string = chr(92)
+PATH_FILE = getcwd() + f'{mi_string}flaskapp{mi_string}static{mi_string}documentos{mi_string}'
 
 @app.route('/')
 @app.route('/home')
@@ -276,10 +281,8 @@ def nuevaconsulta():
 						idpaciente = paciente[0][0]
 						exicui = 1
 					else:
-						print('entró paciente')
 						consulta = "insert into paciente(nombre1, nombre2, apellido1, apellido2, fechanac, idsexo, profesion, direccion, cui, telefono, telefono2, ultimaev) values(%s, %s, %s, %s, %s, %s,%s, %s, %s,%s, %s, %s);"
 						cursor.execute(consulta,(nombre1, nombre2,apellido1, apellido2, fechanac, se, profesion, direccion, cui, telefono, telefono1, date.today()))
-					
 					consulta = "select idestudiante, pacientes from estudiante where carnet = %s;"
 					cursor.execute(consulta, carnet)
 					estudiante = cursor.fetchall()
@@ -289,7 +292,6 @@ def nuevaconsulta():
 						consulta = "update estudiante set pacientes = %s where idestudiante = %s"
 						cursor.execute(consulta, (int(estudiante[0][1]) + 1, idestudiante))
 					else:
-						print('entró estudiante')
 						consulta = "insert into estudiante(nombre, apellido, carnet,pacientes) values(%s, %s, %s,1);"
 						cursor.execute(consulta,(nombre, apellido,carnet))
 				conexion.commit()
@@ -2226,6 +2228,15 @@ def segventas(idfacturaheader):
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
+	factura = 0
+	ordentrabajo = 0
+	nombrefactura = PATH_FILE + f"factura{idfacturaheader}.pdf"
+	nombreorden = PATH_FILE + f"orden{idfacturaheader}.pdf"
+	print(nombrefactura, nombreorden)
+	if path.exists(nombrefactura):
+		factura = 1
+	if path.exists(nombreorden):
+		ordentrabajo = 1
 	if request.method == 'POST':
 		comentario = request.form['comentario']
 		fechaact = datetime.datetime.now()
@@ -2262,7 +2273,63 @@ def segventas(idfacturaheader):
 		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 			print("Ocurrió un error al conectar: ", e)
 		return redirect(url_for('verventas'))
-	return render_template('segventas.html', title='Seguimiento', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente, idfacturaheader=idfacturaheader, comentarios=comentarios, terminado=terminado, permitido=permitido)
+	return render_template('segventas.html', title='Seguimiento', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente, idfacturaheader=idfacturaheader, comentarios=comentarios, terminado=terminado, permitido=permitido, factura = factura, ordentrabajo = ordentrabajo, ruta = PATH_FILE)
+
+@app.route("/verfactura/<idfacturaheader>", methods=['GET', 'POST'])
+def verfactura(idfacturaheader):
+	if 'logeadocaja' in session:
+		logeado = session['logeadocaja']
+	else:
+		return redirect(url_for('login'))
+	return render_template('verfactura.html', title='Factura de Venta', logeado=logeado, idfacturaheader = idfacturaheader)
+
+@app.route("/verorden/<idfacturaheader>", methods=['GET', 'POST'])
+def verorden(idfacturaheader):
+	if 'logeadocaja' in session:
+		logeado = session['logeadocaja']
+	else:
+		return redirect(url_for('login'))
+	return render_template('verorden.html', title='Orden de Trabajo', logeado=logeado, idfacturaheader = idfacturaheader)
+
+@app.route("/subirdocumentos/<idfacturaheader>&<mensaje>", methods=['GET', 'POST'])
+def subirdocumentos(idfacturaheader, mensaje):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	factura = 0
+	ordentrabajo = 0
+	nombrefactura = PATH_FILE + f"factura{idfacturaheader}.pdf"
+	nombreorden = PATH_FILE + f"orden{idfacturaheader}.pdf"
+	if path.exists(nombrefactura):
+		factura = 1
+	if path.exists(nombreorden):
+		ordentrabajo = 1
+	if request.method == 'POST':
+		if factura == 0:
+			try:
+				archivofactura = request.files['factura']
+				if archivofactura.filename != '':
+					if ".pdf" not in archivofactura.filename:
+						mensaje = 1
+						return redirect(url_for('subirdocumentos', idfacturaheader = idfacturaheader, mensaje = mensaje))
+					else:
+						archivofactura.save(path.join(PATH_FILE, f"factura{idfacturaheader}.pdf"))
+			except:
+				print("No subió documento factura")
+		if ordentrabajo == 0:
+			try:
+				archivoordentrabajo = request.files['ordentrabajo']
+				if archivoordentrabajo.filename != '':
+					if ".pdf" not in archivoordentrabajo.filename:
+						mensaje = 1
+						return redirect(url_for('subirdocumentos', idfacturaheader = idfacturaheader, mensaje = mensaje))
+					else:
+						archivoordentrabajo.save(path.join(PATH_FILE, f"orden{idfacturaheader}.pdf"))
+			except:
+				print("No subió documento orden")
+		return redirect(url_for('segventas', idfacturaheader = idfacturaheader))
+	return render_template('subirdocumentos.html', title='Adjuntar documentos', logeado=logeado, factura=factura, ordentrabajo=ordentrabajo, mensaje = mensaje)
 
 @app.route('/imprimir/<idfacturaheader>')
 def imprimir(idfacturaheader):

@@ -114,13 +114,11 @@
 		var carnet = document.getElementById('carnet').value
 		var nombre = document.getElementById('nombre')
 		var apellido = document.getElementById('apellido')
-		var arreglo = {{ dataest| tojson
-	}};
+		var arreglo = {{ dataest| tojson }};
 	var conteo = Object.keys(arreglo).length;
 	var encontro = 0
 	for (var i = 0; i < conteo; i++) {
 		if (String(carnet) == arreglo[i][2]) {
-			console.log('entro')
 			document.getElementById('nombre').value = arreglo[i][0]
 			document.getElementById('apellido').value = arreglo[i][1]
 			encontro++
@@ -130,8 +128,8 @@
 		nombre.value = ""
 		apellido.value = ""
 	}
-
             }
+
 	function datapaciente() {
 		var cui = document.getElementById('cui').value
 		var nombre1 = document.getElementById('nombre1')
@@ -144,8 +142,7 @@
 		var telefono = document.getElementById('telefono')
 		var telefono1 = document.getElementById('telefono1')
 		var sexo = document.getElementById('sexo')
-		var arreglo = {{ datapac| tojson
-	}};
+		var arreglo = {{ datapac| tojson }};
 	var conteo = Object.keys(arreglo).length;
 	for (var i = 0; i < conteo; i++) {
 		if (String(cui) != '0') {
