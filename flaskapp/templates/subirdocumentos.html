@@ -21,16 +21,16 @@
 {% if mensaje == '1' or mensaje == 1 %}
 <div class="alert alert-danger" role="alert">
 	<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-	Solo documentos PDF estan admitidos!
+	Solo documentos PDF, JPG, JPEG, PNG y GIF estan admitidos!
 </div>
 {% endif %}
-<h6>*Solo documentos PDF estan admitidos</h6>
+<h6>*Solo documentos PDF, JPG, JPEG, PNG y GIF estan admitidos</h6>
 <form action="" method="POST" enctype=multipart/form-data>
 	<div class="form-row">
 		<div class="col-md-6">
 			{% if factura == 0 %}
-			<label for="factura">Factura</label><br>
-			<input type="file" class="form-control" id="factura" name="factura" accept=".pdf">
+			<label for="factura">Factura</label>
+			<input type="file" class="form-control" id="factura" name="factura" accept="image/jpeg,image/gif,image/png,application/pdf">
 			{% elif factura == 1 %}
 			<div class="alert alert-success" role="alert">
 				Ya se ha adjuntado Factura!
@@ -39,8 +39,8 @@
 		</div>
 		<div class="col-md-6">
 			{% if ordentrabajo == 0 %}
-			<label for="ordentrabajo">Orden de Trabajo</label><br>
-			<input type="file" class="form-control" id="ordentrabajo" name="ordentrabajo" accept=".pdf">
+			<label for="ordentrabajo">Orden de Trabajo</label>
+			<input type="file" class="form-control" id="ordentrabajo" name="ordentrabajo" accept="image/jpeg,image/gif,image/png,application/pdf">
 			{% elif ordentrabajo == 1 %}
 			<div class="alert alert-success" role="alert">
 				Ya se ha adjuntado Orden de Trabajo!

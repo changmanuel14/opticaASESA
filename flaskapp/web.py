@@ -5,8 +5,10 @@ import datetime
 import pdfkit
 import io
 import xlwt
-import cryptography
 from os import getcwd, path
+import os
+from PIL import Image
+from fpdf import FPDF
 
 from werkzeug.utils import send_file
 
@@ -2311,8 +2313,24 @@ def subirdocumentos(idfacturaheader, mensaje):
 				archivofactura = request.files['factura']
 				if archivofactura.filename != '':
 					if ".pdf" not in archivofactura.filename:
-						mensaje = 1
-						return redirect(url_for('subirdocumentos', idfacturaheader = idfacturaheader, mensaje = mensaje))
+						if archivofactura.filename.split('.')[-1].lower() not in ['jpg', 'jpeg', 'png', 'gif']:
+							mensaje = 1
+							return redirect(url_for('subirdocumentos', idfacturaheader = idfacturaheader, mensaje = mensaje))
+						else:
+							archivofactura.save('temp.png')
+							if archivofactura.filename.split('.')[-1].lower() == 'png':
+								img = Image.open('temp.png')
+								rgb_img = img.convert('RGB')
+								rgb_img.save('temp.jpg')
+								imagen_path = 'temp.jpg'
+							else:
+								imagen_path = 'temp.png'
+							pdf = FPDF('P', 'mm', 'Letter')  # Ajustar a tamaño Carta
+							pdf.add_page()
+							print("Llego")
+							pdf.image(imagen_path, 0, 0, 215.9, 279.4)
+							pdf.output(path.join(PATH_FILE, f"factura{idfacturaheader}.pdf"), 'F')
+							os.remove(imagen_path)
 					else:
 						archivofactura.save(path.join(PATH_FILE, f"factura{idfacturaheader}.pdf"))
 			except:
@@ -2322,8 +2340,24 @@ def subirdocumentos(idfacturaheader, mensaje):
 				archivoordentrabajo = request.files['ordentrabajo']
 				if archivoordentrabajo.filename != '':
 					if ".pdf" not in archivoordentrabajo.filename:
-						mensaje = 1
-						return redirect(url_for('subirdocumentos', idfacturaheader = idfacturaheader, mensaje = mensaje))
+						if archivoordentrabajo.filename.split('.')[-1].lower() not in ['jpg', 'jpeg', 'png', 'gif']:
+							mensaje = 1
+							return redirect(url_for('subirdocumentos', idfacturaheader = idfacturaheader, mensaje = mensaje))
+						else:
+							archivoordentrabajo.save('temp.png')
+							if archivoordentrabajo.filename.split('.')[-1].lower() == 'png':
+								img = Image.open('temp.png')
+								rgb_img = img.convert('RGB')
+								rgb_img.save('temp.jpg')
+								imagen_path = 'temp.jpg'
+							else:
+								imagen_path = 'temp.png'
+							pdf = FPDF('P', 'mm', 'Letter')  # Ajustar a tamaño Carta
+							pdf.add_page()
+							print("Llego")
+							pdf.image(imagen_path, 0, 0, 215.9, 279.4)
+							pdf.output(path.join(PATH_FILE, f"orden{idfacturaheader}.pdf"), 'F')
+							os.remove(imagen_path)
 					else:
 						archivoordentrabajo.save(path.join(PATH_FILE, f"orden{idfacturaheader}.pdf"))
 			except:
