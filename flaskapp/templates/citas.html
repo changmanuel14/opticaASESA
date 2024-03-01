@@ -1,35 +1,39 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Citas Programadas</h1>
-    <form action="" method="POST">
-        <div class="izquierda1">
-            <h3>Seleccione fecha</h3>
-        <input type="date" id="fecha" name="fecha" class="inputtext1">
-        <center><button onclick="submit" class="button">Aceptar</button></center>
-        </div>
-    </form>
-        <div class="derecha1">
-            <button type="button" class="button"><a href="/nuevacita" style="color: white;"> Nueva Cita</a></button>
-            <table>
-                <tr>
-                    <th class="letragrande">Nombre</th>
-                    <th class="letragrande">Hora</th>
-                    <th class="letragrande">Fecha</th>
-                    <th class="letragrande">Telefono</th>
-                    <th colspan="2" class="letragrande">Opciones</th>
-
-                </tr>
-                {% for j in data %} 
-                <tr>
-                    <td class="letragrande">{{j[0]}} {{j[1]}}</td>
-                    <td class="letragrande">{{j[3]}}</td>
-                    <td class="letragrande">{{j[2]}}</td>
-                    <td class="letragrande">{{j[4]}}</td>
-                    <td class="letragrande"><a href="ceditar/{{j[5]}}">Editar</a></td>
-                    <td class="letragrande"><a href="celiminar/{{j[5]}}">Eliminar</a></td>
-                </tr>         
-                {% endfor %}
-            </table>
-        </div>
-    
+<h1>Citas Programadas</h1>
+<div class="form-row">
+	<div class="form-group col-md-6">
+		<form action="" method="POST">
+				<h3>Seleccione fecha</h3>
+				<input type="date" id="fecha" name="fecha" class="form-control">
+				<center><button type="submit" class="btn btn-primary">Aceptar</button></center>
+		</form>
+	</div>
+	<div class="form-group col-md-6">
+		<a href="/nuevacita"><button type="button" class="btn btn-primary">Nueva cita</button></a>
+		<table>
+			<tr>
+				<th >Nombre</th>
+				<th >Hora</th>
+				<th >Fecha</th>
+				<th >Telefono</th>
+				<th colspan="2" >Opciones</th>
+			</tr>
+			{% for j in data %}
+			<tr>
+				<td >{{j[0]}} {{j[1]}}</td>
+				<td >{{j[3]}}</td>
+				<td >{{j[2]}}</td>
+				<td >{{j[4]}}</td>
+				<td><a href="/ceditar/{{j[5]}}"><button type="button" class="btn btn-primary">Editar</button></a></td>
+				<td><a href="/celiminar/{{j[5]}}" onclick="return confirm('¿Estás seguro de eliminar?');"><button type="button" class="btn btn-danger">Eliminar</button></a></td>
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
 {% endblock %}

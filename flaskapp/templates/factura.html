@@ -1,133 +1,143 @@
 {% extends "layout.html" %}
 {% block content %}
-<button type="button" class="button"><a href="/imprimir/{{idfacturaheader}}" target="_blank" style="color: white;">Imprimir Descripción</a></button>
-<br>
-<br>
+<a href="/imprimir/{{idfacturaheader}}" target="_blank"><button type="button" class="btn btn-primary">Imprimir Descripción</button></a>
 <br>
 <div id="tblinfo1" class="tblinfo1">
-    <center>
-    <h1>Orden de Trabajo</h1>
-    <h6><strong>Cliente: </strong> {{dataventa[0][0]}} {{dataventa[0][1]}}</h6>
-    <h6><strong>Nit: </strong> {{dataventa[0][2]}}</h6>
-    <h6><strong>Código: </strong> {{dataventa[0][23]}}</h6>
-    <h6><strong>Fecha: </strong> {{dataventa[0][6]}}</h6>
+	<center>
+		<h1>Orden de Trabajo</h1>
+		<h6><strong>Cliente: </strong> {{dataventa[0][0]}} {{dataventa[0][1]}}</h6>
+		<h6><strong>Nit: </strong> {{dataventa[0][2]}}</h6>
+		<h6><strong>Código: </strong> {{dataventa[0][23]}}</h6>
+		<h6><strong>Fecha: </strong> {{dataventa[0][6]}}</h6>
 
-    <table style="width: 50%;">
-        <tr>
-            <th colspan="2">Aro</th>
-        </tr>
-        <tr>
-            <td style="width: 70%;">{{dataaro[0]}} - {{dataaro[1]}} {{dataaro[2]}} {{dataaro[3]}}</td>
-            <td >Q {{dataventa[0][10]}}</td>
-        </tr>
-        </table>
-        <table style="width: 50%;">
-        <tr>
-            <th colspan="2">Lente</th>
-        </tr>
-        <tr>
-            <td style="width: 50%;"> Ojo Izquierdo:<br> {{datalente[0][0]}}</td>
-            <td style="width: 50%;"> Ojo Derecho:<br> {{datalente[1][0]}}</td>
-        </tr>
-        <tr>
-            <td colspan="2"><center>Q. {{dataventa[0][11]}}</center></td>
-        </tr>
-        </table>
-        <table style="width: 50%;">
-        {% if dataventa[0][24] == '1' or dataventa[0][24] == 1 %}
-        <tr>
-            <th colspan="2">Consulta</th>
-        </tr>
-        <tr>
-            <td>Si Aplica</td>
-            <td>Q 50.00</td>
-        </tr>
-        {% endif %}
-        <tr>
-            <th colspan="2">Extras</th>
-        </tr>
-        {% if dataventa[0][12] != '-' %}
-        <tr>
-            <td style="width: 70%;">Tratamiento Antireflejo Top Vision</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][13] != '-' %}
-        <tr>
-            <td style="width: 70%;">Montaje</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][14] != '-' %}
-        <tr>
-            <td style="width: 70%;">Tinte</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][15] != '0' and dataventa[0][15] != 0 %}
-        <tr>
-            <td style="width: 70%;">Perforado</td>
-            <td>{{dataventa[0][15]}}</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][16] != '-' %}
-        <tr>
-            <td style="width: 70%;">Ranurado</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][17] != '-' %}
-        <tr>
-            <td style="width: 70%;">Facetado</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][18] != '-' %}
-        <tr>
-            <td style="width: 70%;">Solo un ojo</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][19] != '-' %}
-        <tr>
-            <td style="width: 70%;">Prismas</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][20] != '-' %}
-        <tr>
-            <td style="width: 70%;">Dos Caras</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][21] != '-' %}
-        <tr>
-            <td style="width: 70%;">Moldes</td>
-            <td>Aplica</td>
-        </tr>
-        {% endif %}
-        {% if dataventa[0][22] > 0 %}
-        <tr>
-            <td style="width: 70%;">Filtro</td>
-            <td>Q.{{dataventa[0][22]}}</td>
-        </tr>
-        {% endif %}
-        <tr>
-            <th colspan="2">Totales</th>
-        </tr>
-        <tr>
-            <td style="width: 70%;">Total General</td>
-            <td>Q {{dataventa[0][3]}}</td>
-        </tr>
-        <tr>
-            <td style="width: 70%;">Descuento</td>
-            <td>Q {{dataventa[0][4]}}</td>
-        </tr>
-        <tr>
-            <td style="width: 70%;"><strong>Total a Cancelar</strong></td>
-            <td><strong>Q {{dataventa[0][5]}}</strong></td>
-        </tr>
-    </table>
-</center>
+		<table style="width: 50%;">
+			<tr>
+				<th colspan="2">Aro</th>
+			</tr>
+			<tr>
+				<td style="width: 70%;">{{dataaro[0]}} - {{dataaro[1]}} {{dataaro[2]}} {{dataaro[3]}}</td>
+				<td>Q {{dataventa[0][10]}}</td>
+			</tr>
+		</table>
+		<table style="width: 50%;">
+			<tr>
+				<th colspan="2">Lente</th>
+			</tr>
+			<tr>
+				<td style="width: 50%;"> Ojo Izquierdo:<br> {{datalente[0][0]}}</td>
+				<td style="width: 50%;"> Ojo Derecho:<br> {{datalente[1][0]}}</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<center>Q {{dataventa[0][11]}}</center>
+				</td>
+			</tr>
+		</table>
+		<table style="width: 50%;">
+			{% if dataventa[0][24] == '1' or dataventa[0][24] == 1 %}
+			<tr>
+				<th colspan="2">Consulta</th>
+			</tr>
+			<tr>
+				<td>Si Aplica</td>
+				<td>Q 50.00</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<th colspan="2">Extras</th>
+			</tr>
+			{% if dataventa[0][12] != '-' %}
+			<tr>
+				<td style="width: 70%;">Tratamiento Antireflejo Top Vision</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][25] != '-' %}
+			<tr>
+				<td style="width: 70%;">Antireflejo Nanoplasma</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][13] != '-' %}
+			<tr>
+				<td style="width: 70%;">Montaje</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][14] != '-' %}
+			<tr>
+				<td style="width: 70%;">Tinte</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][15] != '0' and dataventa[0][15] != 0 %}
+			<tr>
+				<td style="width: 70%;">Perforado</td>
+				<td>{{dataventa[0][15]}}</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][16] != '-' %}
+			<tr>
+				<td style="width: 70%;">Ranurado</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][17] != '-' %}
+			<tr>
+				<td style="width: 70%;">Facetado</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][18] != '-' %}
+			<tr>
+				<td style="width: 70%;">Solo un ojo</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][19] != '-' %}
+			<tr>
+				<td style="width: 70%;">Prismas</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][20] != '-' %}
+			<tr>
+				<td style="width: 70%;">Dos Caras</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][21] != '-' %}
+			<tr>
+				<td style="width: 70%;">Moldes</td>
+				<td>Aplica</td>
+			</tr>
+			{% endif %}
+			{% if dataventa[0][22] > 0 %}
+			<tr>
+				<td style="width: 70%;">Filtro</td>
+				<td>Q.{{dataventa[0][22]}}</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<th colspan="2">Totales</th>
+			</tr>
+			<tr>
+				<td style="width: 70%;">Total General</td>
+				<td>Q {{dataventa[0][3]}}</td>
+			</tr>
+			<tr>
+				<td style="width: 70%;">Descuento</td>
+				<td>Q {{dataventa[0][4]}}</td>
+			</tr>
+			<tr>
+				<td style="width: 70%;"><strong>Total a Cancelar</strong></td>
+				<td><strong>Q {{dataventa[0][5]}}</strong></td>
+			</tr>
+		</table>
+	</center>
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
 {% endblock %}

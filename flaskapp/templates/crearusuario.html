@@ -1,15 +1,55 @@
 {% extends "layout.html" %}
 {% block content %}
-    <center><h1>Nuevo usuario</h1>
+    <center><h1>Nuevo usuario</h1></center>
         <hr>
         <form action="" method="POST">
-    <input type="text" id="nombre" name="nombre" class="inputtext1" placeholder="  Nombre"><br>
-    <input type="text" id="apellido" name="apellido" class="inputtext1" placeholder="  Apellido"><br>
-    <input type="text" id="user" name="user" class="inputtext1" placeholder="  User"><br>
-    <input type="password" id="pwd" name="pwd" class="inputtext1" placeholder="  Contraseña"><br>
-    <center><button onclick="submit" class="button">Aceptar</button></center>
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="nombre">Nombre</label>
+					<input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" onblur="creariniciales()">
+				</div>
+				<div class="form-group col-md-6">
+					<label for="apellido">Apellido</label>
+					<input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" onblur="creariniciales()">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					<label for="user">Usuario</label>
+					<input type="text" id="user" name="user" class="form-control" placeholder="Usuario">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="pwd">Contraseña</label>
+					<input type="password" id="pwd" name="pwd" class="form-control" placeholder="Contraseña">
+				</div>
+				<div class="form-group col-md-6">
+					<label for="pwd1">Confirmar Contraseña</label>
+					<input type="password" id="pwd1" name="pwd1" class="form-control" placeholder="Confirme contraseña" onchange="verificarpwd()">
+					<p id="mensajecontra" style="color: red;">{{mensaje}}</p>
+				</div>
+			</div>
+    <center><button type="submit" class="btn btn-primary">Aceptar</button></center>
 </form>
-</center>
 
-    
+
+<script type="text/javascript">
+    function verificarpwd(){
+        var mensaje = document.getElementById('mensajecontra')
+        var pwd = document.getElementById('pwd').value
+        var pwd1 = document.getElementById('pwd1').value
+        console.log('1: ' + pwd)
+        console.log('2: ' + pwd1)
+        if(pwd != pwd1) {
+            mensaje.innerHTML = 'Las contraseñas no coinciden'
+        }else {
+            mensaje.innerHTML = ''
+        }
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
 {% endblock %}

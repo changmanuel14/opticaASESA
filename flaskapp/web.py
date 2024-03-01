@@ -1528,7 +1528,7 @@ def aprobados():
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y'), p.nombre2, p.apellido2 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1"
+				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y'), p.nombre2, p.apellido2 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1 order by c.fecha desc"
 				cursor.execute(consulta)
 				consultas = cursor.fetchall()
 		finally:
@@ -1581,7 +1581,7 @@ def recetas(idconsulta):
 					datagotero = [0,0,0,0]
 				else:
 					datagotero = aux[0]
-				consulta = "SELECT p.nombre1, p.nombre2, p.apellido1, p.apellido2, DATE_FORMAT(c.fecha,'%d/%m/%Y'), u.uso, DATE_FORMAT(c.proximacita,'%d/%m/%Y'), c.dnp, c.add11, c.add22, c.add33, o.nombre, o.apellido from paciente p inner join consulta c on p.idpaciente = c.idpaciente inner join usolen u on u.idusolen = c.idusolen inner join user o ON o.iduser = c.iduser where idconsulta = " + str(idconsulta) + ";"
+				consulta = "SELECT p.nombre1, p.nombre2, p.apellido1, p.apellido2, c.fecha, u.uso, c.proximacita, c.dnp, c.add11, c.add22, c.add33, o.nombre, o.apellido, DATE_FORMAT(c.fecha,'%d/%m/%Y'), DATE_FORMAT(c.proximacita,'%d/%m/%Y') from paciente p inner join consulta c on p.idpaciente = c.idpaciente inner join usolen u on u.idusolen = c.idusolen inner join user o ON o.iduser = c.iduser where idconsulta = " + str(idconsulta) + ";"
 				cursor.execute(consulta)
 				dataconsulta = cursor.fetchall()
 				consulta = "SELECT t.tipo, m.material, f.filtro, c.color, d.lentedetallado from lenterecomendado l inner join tipolen t on t.idtipolen=l.tipo inner join materiallen m on m.idmateriallen=l.material inner join filtrolen f on f.idfiltrolen=l.filtro inner join colorlen c on c.idcolorlen=l.color inner join lentedetallado d on d.idlentedetallado = l.lentedetallado where l.idconsulta = %s;"
@@ -1820,6 +1820,10 @@ def venta(idconsulta):
 					moldes = request.form['moldes']
 				except:
 					moldes = '-'
+				try:
+					nanoplasma = request.form['nanoplasma']
+				except:
+					nanoplasma = '-'
 				idlenteoi = request.form["ld"]
 				idlenteod = request.form["ld"]
 				filtro = '0'
@@ -1846,6 +1850,7 @@ def venta(idconsulta):
 				prismas = '-'
 				doscaras = '-'
 				moldes = '-'
+				nanoplasma = '-'
 		else:
 			idlenteoi = 0
 			idlenteod = 0
@@ -1861,6 +1866,7 @@ def venta(idconsulta):
 			perforado = '0'
 			ranurado = '-'
 			filtro = '0'
+			nanoplasma = '-'
 		try:
 			cons = request.form["precons"]
 			cons = 1
@@ -1900,8 +1906,8 @@ def venta(idconsulta):
 					cursor.execute(consulta)
 					idfh = cursor.fetchall()
 					idfh = idfh[0][0]
-					consulta = "insert into facturadesc(idaro, idlenteoi, idlenteod, consulta, idfacturaheader, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-					cursor.execute(consulta, (idaro, idlenteoi, idlenteod, cons, idfh, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro))
+					consulta = "insert into facturadesc(idaro, idlenteoi, idlenteod, consulta, idfacturaheader, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro, nanoplasma) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+					cursor.execute(consulta, (idaro, idlenteoi, idlenteod, cons, idfh, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro, nanoplasma))
 					if session['iduser1'] == '3' or session['iduser1'] == 3:
 						if nombreref == "":
 							cantcomision = round(float(restotcan * 0.03), 2)
@@ -2151,7 +2157,7 @@ def factura(idfacturaheader):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
+				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, d.nanoplasma from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
 				cursor.execute(consulta)
 				dataventa = cursor.fetchall()
 				try:
@@ -2193,7 +2199,7 @@ def segventas(idfacturaheader):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, h.paso from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
+				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, h.paso, d.nanoplasma from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
 				cursor.execute(consulta)
 				dataventa = cursor.fetchall()
 				if (idusuario == 2 or idusuario == 3 or idusuario == 7) and int(dataventa[0][25]) == 0:
@@ -2377,7 +2383,7 @@ def imprimir(idfacturaheader):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
+				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, d.nanoplasma from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
 				print(consulta)
 				cursor.execute(consulta)
 				dataventa = cursor.fetchall()
@@ -3483,7 +3489,7 @@ def recetalentespdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetalentespdf.html', title="Receta lente", dataconsulta=dataconsulta, rf = rf, lenterecomendado=lenterecomendado)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'letter', 'orientation': 'portrait', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
@@ -3528,7 +3534,7 @@ def recetacontactopdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetacontactopdf.html', title="Receta contacto", dataconsulta=dataconsulta, lencons=lencons)
-	options = {"enable-local-file-access": "", "page-size": "A5", "orientation": "landscape", "zoom": "0.6", "margin-top": "10mm"}
+	options = {'enable-local-file-access': None, 'page-size': 'letter', 'orientation': 'portrait', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
@@ -3564,7 +3570,7 @@ def recetagotaspdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetagotaspdf.html', title="Receta gotas", dataconsulta=dataconsulta, datagotero=datagotero)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'letter', 'orientation': 'portrait', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
@@ -3595,7 +3601,7 @@ def recetarefpdf(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	rendered = render_template('recetarefpdf.html', title="Receta Referencia", dataconsulta=dataconsulta, recetaref=recetaref)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'letter', 'orientation': 'portrait', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)
@@ -3613,7 +3619,7 @@ def recetalentesblancopdf():
 	x = datetime.datetime.now()
 	fecha = x.strftime("%d/%m/%Y")
 	rendered = render_template('recetalentesblancopdf.html', title="Receta lente", fecha = fecha)
-	options = {'enable-local-file-access': None, 'page-size': 'A5', 'orientation': 'landscape', 'zoom': '0.6', 'margin-top': '10mm'}
+	options = {'enable-local-file-access': None, 'page-size': 'letter', 'orientation': 'portrait', 'zoom': '0.6', 'margin-top': '10mm'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)
 	response = make_response(pdf)

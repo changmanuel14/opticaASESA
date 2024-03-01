@@ -1,441 +1,484 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Recetas</h1>
-    <div class="container">
-        <ul class="nav nav-tabs">
-          <li><a data-toggle="tab" href="#home" class="panelb">Receta</a></li>
-          <li><a data-toggle="tab" href="#menu1" class="panelb">Lente de Contacto</a></li>
-          <li><a data-toggle="tab" href="#menu2" class="panelb">Gotas</a></li>
-          <li><a data-toggle="tab" href="#menu3" class="panelb">Referencia Oftálmica</a></li>
-        </ul>
-        <form action="" method="POST">
+<h1>Recetas</h1>
+<div class="container">
+	<ul class="nav nav-tabs">
+		<li class="nav-item"><a data-toggle="tab" href="#home" class="nav-link">Receta</a></li>
+		<li class="nav-item"><a data-toggle="tab" href="#menu1" class="nav-link">Lente de Contacto</a></li>
+		<li class="nav-item"><a data-toggle="tab" href="#menu2" class="nav-link">Gotas</a></li>
+		<li class="nav-item"><a data-toggle="tab" href="#menu3" class="nav-link">Referencia Oftálmica</a></li>
+	</ul>
+	<form action="" method="POST">
 
-        <div class="tab-content">
-          <div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
-            <br>
-            <button type="button" class="button"><a href="/recetalentespdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
-            <br>
-            <br>
-            <br>
-            <div id="tblinfo1">
-            <div style="width: 40%; float: left; position: relative;">
-                <center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
-            </div>
-            <div class="derecha">
-                <table>
-                    <tr>
-                        <th class="letragrande"><center>Teléfonos:<br>7767-3023 7763-5643 </center></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">{{dataconsulta[0][4]}}</th>
-                    </tr>
-                </table> 
-            </div>
-            <div class="izquierda">
-            <table>
-                <tr>
-                    <th>Paciente:</th>
-                    <td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}} {{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
-                </tr>
-            </table><br>
-                <center>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th class="letragrande">C.A.</th>
-                                <th class="letragrande">Esfera</th>
-                                <th class="letragrande">Cilindro</th>
-                                <th class="letragrande">Eje</th>
-                                <th class="letragrande">Prisma</th>
-                                <th class="letragrande">Lente Recomendado</th>
-                            </tr>
-                        </thead>
-                            <tr>
-                                <th class="letragrande">OD</th>
-                                <td class="letragrande" id="esod"></td>
-                                <td class="letragrande"  id="ciod"></td>
-                                <td class="letragrande" id="ejod"></td>
-                                <td class="letragrande" id="prod"></td>
-                                <td rowspan="4" class="letragrande">Tipo: {{lenterecomendado[0][0]}}<br>Material: {{lenterecomendado[0][1]}}<br>Filtro: {{lenterecomendado[0][2]}}<br>Color: {{lenterecomendado[0][3]}}</td>
-                            </tr>
-                            <tr>
-                                <th class="letragrande">OI</th>
-                                <td class="letragrande" id="esoi"></td>
-                                <td class="letragrande" id="cioi"></td>
-                                <td class="letragrande" id="ejoi"></td>
-                                <td class="letragrande" id="proi"></td>
-                            </tr>
-                            <tr>
-                                <th class="letragrande">DNP</th>
-                                <td class="letragrande">{{dataconsulta[0][7]}}</td>
-                                <th class="letragrande">A.D.D.</th>
-                                <td class="letragrande" id="add">{{dataconsulta[0][8]}}</td>
-                                <td class="letragrande"></td>
-                            </tr>
-                            <tr>
-                                <th colspan="5" class="letragrande">Lente Oftalmico. Uso: {{dataconsulta[0][5]}}</th>
-                            </tr>
-                            <tr>
-                                <th class="letragrande">Próxima evaluación</th>
-                                <th colspan="4" rowspan="2" class="letragrande"><br><br><br></th>
-                                <th rowspan="2" class="letragrande"><br><br><br></th>
-                            </tr>
-                            <tr>
-                                <th class="letragrande">{{dataconsulta[0][6]}}</th>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <th colspan="4" class="letragrande">Realizado por: <br>{{dataconsulta[0][11]}} {{dataconsulta[0][12]}}</th>
-                                <th class="letragrande">Aprobado por:<br>Lic. Kevin Avendaño</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </center>
-            </div>  
-            </div>
-          </div>
-          <div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
-            <br>
-            <button type="button" class="button"><a href="/recetacontactopdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
-            <button onclick="submit" class="button">Aceptar</button>
-            <br>
-            <br>
-            <br>
-            <div id="tblinfo2" class="tblinfo2">
-                <div style="width: 40%; float: left; position: relative;">
-                    <center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
-                </div>
-                <div class="derecha">
-                    <table>
-                        <tr>
-                            <th class="letragrande"><center>Teléfonos:<br>7767-3023 7763-5643 </center></th>
-                        </tr>
-                        <tr>
-                            <th class="letragrande">{{dataconsulta[0][4]}}</th>
-                        </tr>
-                    </table> 
-                </div>
-                <center>
-                <table style="width: 80%;">
-                    <tr style="border: white;">
-                        <th class="letragrande">Nombre: </th>
-                        <td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}} {{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
-                    </tr>
-                    <tr style="border: white;">
-                        <th class="letragrande">Fecha Caducidad: </th>
-                        <td class="letragrande"><input type="text" class="inputtextrecetas" onblur="cambiarfechaob()" onfocus="cambiarfechaof()" id="lcfechacad" name="lcfechacad" value="{{lencons[0][0]}}"></td>
-                    </tr>
-                </table>
-                <br>
-                <br>
-                <table>
-                    <tr>
-                        <th></th>
-                        <th class="letragrande">OD</th>
-                        <th class="letragrande">OI</th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">PODER</th>
-                        <th><input type="text" class="inputtextrecetas" id="lcpoderod" name="lcpoderod" value="{{lencons[0][1]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lcpoderoi" name="lcpoderoi" value="{{lencons[1][1]}}"></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">CB</th>
-                        <th><input type="text" class="inputtextrecetas" id="lccbod" name="lccbod" value="{{lencons[0][2]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lccboi" name="lccboi" value="{{lencons[1][2]}}"></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">DIA</th>
-                        <th><input type="text" class="inputtextrecetas" id="lcdiaod" name="lcdiaod" value="{{lencons[0][3]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lcdiaoi" name="lcdiaoi" value="{{lencons[1][3]}}"></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">CIL</th>
-                        <th><input type="text" class="inputtextrecetas" id="lccilod" name="lccilod" value="{{lencons[0][4]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lcciloi" name="lcciloi" value="{{lencons[1][4]}}"></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">EJE</th>
-                        <th><input type="text" class="inputtextrecetas" id="lcejeod" name="lcejeod" value="{{lencons[0][5]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lcejeoi" name="lcejeoi" value="{{lencons[1][5]}}"></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">AGREGAR</th>
-                        <th><input type="text" class="inputtextrecetas" id="lcagregarod" name="lcagregarod" value="{{lencons[0][6]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lcagregaroi" name="lcagregaroi" value="{{lencons[1][6]}}"></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">COLOR</th>
-                        <th><input type="text" class="inputtextrecetas" id="lccolorod" name="lccolorod" value="{{lencons[0][7]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lccoloroi" name="lccoloroi" value="{{lencons[1][7]}}"></th>
-                    </tr>
-                    <tr>
-                        <th class="letragrande">TIPO</th>
-                        <th><input type="text" class="inputtextrecetas" id="lctipood" name="lctipood" value="{{lencons[0][8]}}"></th>
-                        <th><input type="text" class="inputtextrecetas" id="lctipooi" name="lctipooi" value="{{lencons[1][8]}}"></th>
-                    </tr>
-                </table>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <p>___________________________________________________</p>
-                <h4>Lic. Kevin Avendaño</h4>
-            </center>
-            </div>
-          </div>
-          <div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
-            <br>
-            <button type="button" class="button"><a href="/recetagotaspdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
-            <button onclick="submit" class="button">Aceptar</button>
-            <br>
-            <br>
-            <br>
-            <center>
-                <form action="" method="POST">
-            <div id="tblinfo3" style="width: 80%;">
-                <div style="width: 40%; float: left; position: relative;">
-                    <center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
-                </div>
-                <div class="derecha">
-                    <table>
-                        <tr>
-                            <th class="letragrande"><center>Teléfonos:<br>7767-3023 7763-5643 </center></th>
-                        </tr>
-                        <tr>
-                            <th class="letragrande">{{dataconsulta[0][4]}}</th>
-                        </tr>
-                    </table> 
-                </div>
-                <center>
-                <table>
-                    <tr style="border: white;">
-                        <th class="letragrande">Nombre: </th>
-                        <td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}} {{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
-                    </tr>
-                    <tr style="border: white;">
-                        <th class="letragrande">Fecha Proxima Cita: </th>
-                        <td class="letragrande1"><input type="text" class="inputtextrecetas" onblur="cambiarfechaob1(0)" onfocus="cambiarfechaof1(0)" id="gfechacad" name="gfechacad" value="{{dataconsulta[0][6]}}"></td>
-                    </tr>
-                </table>
-                <br>
-                <br>
-                <table>
-                    <tr>
-                        <th class="letragrande">Medicamento:</th>
-                        <td><input type="text" class="inputtextrecetas" style="text-align: right;" id="gmed1" name="gmed1" value="{{datagotero[0]}}"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="gdesc1" name="gdesc1" rows="2" cols="65" style="font-size: 25px; text-align: right;">{{datagotero[1]}}</textarea>
-                        </td>
-                    </tr>
-                </table>
-                <br>
-                    <table>
-                    <tr>
-                        <th class="letragrande">Medicamento:</th>
-                        <td><input type="text" class="inputtextrecetas"  style="text-align: right;" id="gmed2" name="gmed2" value="{{datagotero[2]}}"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="gdesc2" name="gdesc2" rows="2" cols="65" style="font-size: 25px; text-align: right;">{{datagotero[3]}}</textarea>
-                        </td>
-                    </tr>
-                </table>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <p>___________________________________________________</p>
-                <h4>Lic. Kevin Avendaño</h4>
-                </center>
-                
-                
-            </div>
-          </div>
-          <div id="menu3" class="tab-pane fade" style="padding-left: 5%;">
-            <br>
-            <button type="button" class="button"><a href="/recetarefpdf/{{idconsulta}}" target="_blank" style="color: white;">Imprimir Receta - PDF</a></button>
-            <button onclick="submit" class="button">Aceptar</button>
-            <br>
-            <br>
-            <br>
-            <center>
-                <form action="" method="POST">
-            <div id="tblinfo4" style="width: 80%;">
-                <div style="width: 40%; float: left; position: relative;">
-                    <center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
-                </div>
-                <div class="derecha">
-                    <table>
-                        <tr>
-                            <th class="letragrande"><center>Teléfonos:<br>7767-3023 7763-5643 </center></th>
-                        </tr>
-                        <tr>
-                            <th class="letragrande">{{dataconsulta[0][4]}}</th>
-                        </tr>
-                    </table> 
-                </div>
-                <center>
-                <table>
-                    <tr style="border: white;">
-                        <th class="letragrande">Nombre: </th>
-                        <td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}} {{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
-                    </tr>
-                </table>
-                <br>
-                <br>
-                <table>
-                    <tr>
-                        <th class="letragrande">Lugar a referir:</th>
-                        <td><input type="text" class="inputtextrecetas" id="lugar" name="lugar" value="{{recetaref[0][0]}}"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <textarea id="descripcion" name="descripcion" rows="2" cols="65" style="font-size: 25px;">{{recetaref[0][1]}}</textarea>
-                        </td>
-                    </tr>
-                </table>
-                <br>
-            </form>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <p>___________________________________________________</p>
-                <h4>Lic. Kevin Avendaño</h4>
-                </center>
-        </div>
-        </center>
-      </div>
-      <script type="text/javascript">
-      function cambiarfechaob1(num){
-          if(num == 0){
-            var fechatext = document.getElementById('gfechacad')
-            var fechatext1 = document.getElementById('rfechacad')
-          }else{
-            var fechatext = document.getElementById('rfechacad')
-            var fechatext1 = document.getElementById('gfechacad')
-          }
-        var data = fechatext.value
-        data = String(data)
-        var arreglo = data.split('-')
-        fechatext.type = 'text'
-        fechatext.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
-        fechatext1.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
-      }
-      function cambiarfechaof1(num){
-        if(num == 0){
-            var fechatext = document.getElementById('gfechacad')
-          }else{
-            var fechatext = document.getElementById('rfechacad')
-          }
-        var data = fechatext.value
-        data = String(data)
-        var arreglo = data.split('/')
-        fechatext.type = 'date'
-        var aux = arreglo[2] + "-" + arreglo[1] + "-" + arreglo[0]
-        fechatext.value = aux
-      }
-      function cambiarfechaob(){
-        var fechatext = document.getElementById('lcfechacad')
-        var data = fechatext.value
-        data = String(data)
-        var arreglo = data.split('-')
-        fechatext.type = 'text'
-        fechatext.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
-      }
-      function cambiarfechaof(){
-        var fechatext = document.getElementById('lcfechacad')
-        var data = fechatext.value
-        data = String(data)
-        var arreglo = data.split('/')
-        fechatext.type = 'date'
-        var aux = arreglo[2] + "-" + arreglo[1] + "-" + arreglo[0]
-        fechatext.value = aux
-      }
-        window.onload = function llenardata() {
-            var reffin = {{ rf|tojson }};
-            var esfera1 = document.getElementById('esod')
-            var esfera2 = document.getElementById('esoi')
-            var cilindro1 = document.getElementById('ciod')
-            var cilindro2 = document.getElementById('cioi')
-            var eje1 = document.getElementById('ejod')
-            var eje2 = document.getElementById('ejoi')
-            var prisma1 = document.getElementById('prod')
-            var prisma2 = document.getElementById('proi')
-            var aux = reffin[0][0]
-            aux = parseFloat(aux).toFixed(2)
-            if(aux > 0){
-                aux = '+' + String(aux)
-            }else aux = String(aux)
-            esfera1.innerHTML = aux
-
-            aux = reffin[1][0]
-            aux = parseFloat(aux).toFixed(2)
-            if(aux > 0){
-                aux = '+' + String(aux)
-            }else aux = String(aux)
-            esfera2.innerHTML = aux
-            aux = reffin[0][1]
-            aux = parseFloat(aux).toFixed(2)
-            if(aux > 0){
-                aux = '+' + String(aux)
-            }else aux = String(aux)
-            cilindro1.innerHTML = aux
-            aux = reffin[1][1]
-            aux = parseFloat(aux).toFixed(2)
-            if(aux > 0){
-                aux = '+' + String(aux)
-            }else aux = String(aux)
-            cilindro2.innerHTML = aux
-            aux = reffin[0][2]
-            aux = parseFloat(aux).toFixed()
-            aux = String(aux)
-            eje1.innerHTML = aux
-            aux = reffin[1][2]
-            aux = parseFloat(aux).toFixed()
-            aux = String(aux)
-            eje2.innerHTML = aux
-            aux = reffin[0][3]
-            aux = parseFloat(aux).toFixed(2)
-            if(aux > 0){
-                aux = '+' + String(aux)
-            }else aux = String(aux)
-            prisma1.innerHTML = aux
-            aux = reffin[1][3]
-            aux = parseFloat(aux).toFixed(2)
-            if(aux > 0){
-                aux = '+' + String(aux)
-            }else aux = String(aux)
-            prisma2.innerHTML = aux
+		<div class="tab-content">
+			<div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
+				<br>
+				<button type="button" class="button"><a href="/recetalentespdf/{{idconsulta}}" target="_blank"
+						style="color: white;">Imprimir Receta - PDF</a></button>
+				<br>
+				<br>
+				<br>
+				<div id="tblinfo1">
+					<div style="width: 40%; float: left; position: relative;">
+						<center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
+					</div>
+					<div class="derecha">
+						<table>
+							<tr>
+								<th class="letragrande">
+									<center>Teléfonos:<br>7767-3023 7763-5643 </center>
+								</th>
+							</tr>
+							<tr>
+								<th class="letragrande">{{dataconsulta[0][13]}}</th>
+							</tr>
+						</table>
+					</div>
+					<div class="izquierda">
+						<table>
+							<tr>
+								<th>Paciente:</th>
+								<td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}}
+									{{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
+							</tr>
+						</table><br>
+						<center>
+							<table>
+								<thead>
+									<tr>
+										<th class="letragrande">C.A.</th>
+										<th class="letragrande">Esfera</th>
+										<th class="letragrande">Cilindro</th>
+										<th class="letragrande">Eje</th>
+										<th class="letragrande">Prisma</th>
+										<th class="letragrande">Lente Recomendado</th>
+									</tr>
+								</thead>
+								<tr>
+									<th class="letragrande">OD</th>
+									<td class="letragrande" id="esod"></td>
+									<td class="letragrande" id="ciod"></td>
+									<td class="letragrande" id="ejod"></td>
+									<td class="letragrande" id="prod"></td>
+									<td rowspan="4" class="letragrande">Tipo: {{lenterecomendado[0][0]}}<br>Material:
+										{{lenterecomendado[0][1]}}<br>Filtro: {{lenterecomendado[0][2]}}<br>Color:
+										{{lenterecomendado[0][3]}}</td>
+								</tr>
+								<tr>
+									<th class="letragrande">OI</th>
+									<td class="letragrande" id="esoi"></td>
+									<td class="letragrande" id="cioi"></td>
+									<td class="letragrande" id="ejoi"></td>
+									<td class="letragrande" id="proi"></td>
+								</tr>
+								<tr>
+									<th class="letragrande">DNP</th>
+									<td class="letragrande">{{dataconsulta[0][7]}}</td>
+									<th class="letragrande">A.D.D.</th>
+									<td class="letragrande" id="add">{{dataconsulta[0][8]}}</td>
+									<td class="letragrande"></td>
+								</tr>
+								<tr>
+									<th colspan="5" class="letragrande">Lente Oftalmico. Uso: {{dataconsulta[0][5]}}
+									</th>
+								</tr>
+								<tr>
+									<th class="letragrande">Próxima evaluación</th>
+									<th colspan="4" rowspan="2" class="letragrande"><br><br><br></th>
+									<th rowspan="2" class="letragrande"><br><br><br></th>
+								</tr>
+								<tr>
+									<th class="letragrande">{{dataconsulta[0][14]}}</th>
+								</tr>
+								<tr>
+									<td></td>
+									<th colspan="4" class="letragrande">Realizado por: <br>{{dataconsulta[0][11]}}
+										{{dataconsulta[0][12]}}</th>
+									<th class="letragrande">Aprobado por:<br>Lic. Kevin Avendaño</th>
+								</tr>
+								</thead>
+							</table>
+						</center>
+					</div>
+				</div>
+			</div>
+			<div id="menu1" class="tab-pane fade" style="padding-left: 5%;">
+				<br>
+				<button type="button" class="button"><a href="/recetacontactopdf/{{idconsulta}}" target="_blank"
+						style="color: white;">Imprimir Receta - PDF</a></button>
+				<button onclick="submit" class="button">Aceptar</button>
+				<br>
+				<br>
+				<br>
+				<div id="tblinfo2" class="tblinfo2">
+					<div style="width: 40%; float: left; position: relative;">
+						<center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
+					</div>
+					<div class="derecha">
+						<table>
+							<tr>
+								<th class="letragrande">
+									<center>Teléfonos:<br>7767-3023 7763-5643 </center>
+								</th>
+							</tr>
+							<tr>
+								<th class="letragrande">{{dataconsulta[0][13]}}</th>
+							</tr>
+						</table>
+					</div>
+					<center>
+						<table style="width: 80%;">
+							<tr style="border: white;">
+								<th class="letragrande">Nombre: </th>
+								<td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}}
+									{{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
+							</tr>
+							<tr style="border: white;">
+								<th class="letragrande">Fecha Caducidad: </th>
+								<td class="letragrande"><input type="date" class="form-control" id="lcfechacad" name="lcfechacad" value="{{lencons[0][0]}}"></td>
+							</tr>
+						</table>
+						<br>
+						<br>
+						<table>
+							<tr>
+								<th></th>
+								<th class="letragrande">OD</th>
+								<th class="letragrande">OI</th>
+							</tr>
+							<tr>
+								<th class="letragrande">PODER</th>
+								<th><input type="text" class="form-control" id="lcpoderod" name="lcpoderod"
+										value="{{lencons[0][1]}}"></th>
+								<th><input type="text" class="form-control" id="lcpoderoi" name="lcpoderoi"
+										value="{{lencons[1][1]}}"></th>
+							</tr>
+							<tr>
+								<th class="letragrande">CB</th>
+								<th><input type="text" class="form-control" id="lccbod" name="lccbod"
+										value="{{lencons[0][2]}}"></th>
+								<th><input type="text" class="form-control" id="lccboi" name="lccboi"
+										value="{{lencons[1][2]}}"></th>
+							</tr>
+							<tr>
+								<th class="letragrande">DIA</th>
+								<th><input type="text" class="form-control" id="lcdiaod" name="lcdiaod"
+										value="{{lencons[0][3]}}"></th>
+								<th><input type="text" class="form-control" id="lcdiaoi" name="lcdiaoi"
+										value="{{lencons[1][3]}}"></th>
+							</tr>
+							<tr>
+								<th class="letragrande">CIL</th>
+								<th><input type="text" class="form-control" id="lccilod" name="lccilod"
+										value="{{lencons[0][4]}}"></th>
+								<th><input type="text" class="form-control" id="lcciloi" name="lcciloi"
+										value="{{lencons[1][4]}}"></th>
+							</tr>
+							<tr>
+								<th class="letragrande">EJE</th>
+								<th><input type="text" class="form-control" id="lcejeod" name="lcejeod"
+										value="{{lencons[0][5]}}"></th>
+								<th><input type="text" class="form-control" id="lcejeoi" name="lcejeoi"
+										value="{{lencons[1][5]}}"></th>
+							</tr>
+							<tr>
+								<th class="letragrande">AGREGAR</th>
+								<th><input type="text" class="form-control" id="lcagregarod" name="lcagregarod"
+										value="{{lencons[0][6]}}"></th>
+								<th><input type="text" class="form-control" id="lcagregaroi" name="lcagregaroi"
+										value="{{lencons[1][6]}}"></th>
+							</tr>
+							<tr>
+								<th class="letragrande">COLOR</th>
+								<th><input type="text" class="form-control" id="lccolorod" name="lccolorod"
+										value="{{lencons[0][7]}}"></th>
+								<th><input type="text" class="form-control" id="lccoloroi" name="lccoloroi"
+										value="{{lencons[1][7]}}"></th>
+							</tr>
+							<tr>
+								<th class="letragrande">TIPO</th>
+								<th><input type="text" class="form-control" id="lctipood" name="lctipood"
+										value="{{lencons[0][8]}}"></th>
+								<th><input type="text" class="form-control" id="lctipooi" name="lctipooi"
+										value="{{lencons[1][8]}}"></th>
+							</tr>
+						</table>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<p>___________________________________________________</p>
+						<h4>Lic. Kevin Avendaño</h4>
+					</center>
+				</div>
+			</div>
+			<div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
+				<br>
+				<button type="button" class="button"><a href="/recetagotaspdf/{{idconsulta}}" target="_blank"
+						style="color: white;">Imprimir Receta - PDF</a></button>
+				<button onclick="submit" class="button">Aceptar</button>
+				<br>
+				<br>
+				<br>
+				<center>
+					<form action="" method="POST">
+						<div id="tblinfo3" style="width: 80%;">
+							<div style="width: 40%; float: left; position: relative;">
+								<center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
+							</div>
+							<div class="derecha">
+								<table>
+									<tr>
+										<th class="letragrande">
+											<center>Teléfonos:<br>7767-3023 7763-5643 </center>
+										</th>
+									</tr>
+									<tr>
+										<th class="letragrande">{{dataconsulta[0][13]}}</th>
+									</tr>
+								</table>
+							</div>
+							<center>
+								<table>
+									<tr style="border: white;">
+										<th class="letragrande">Nombre: </th>
+										<td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}}
+											{{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
+									</tr>
+									<tr style="border: white;">
+										<th class="letragrande">Fecha Proxima Cita: </th>
+										<td class="letragrande1"><input type="date" class="form-control" id="gfechacad" name="gfechacad" value="{{dataconsulta[0][6]}}"></td>
+									</tr>
+								</table>
+								<br>
+								<br>
+								<table>
+									<tr>
+										<th class="letragrande">Medicamento:</th>
+										<td><input type="text" class="form-control"
+												id="gmed1" name="gmed1" value="{{datagotero[0]}}"></td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<textarea id="gdesc1" name="gdesc1" rows="2" cols="65"
+												style="font-size: 25px;">{{datagotero[1]}}</textarea>
+										</td>
+									</tr>
+								</table>
+								<br>
+								<table>
+									<tr>
+										<th class="letragrande">Medicamento:</th>
+										<td><input type="text" class="form-control" style="text-align: right;"
+												id="gmed2" name="gmed2" value="{{datagotero[2]}}"></td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<textarea id="gdesc2" name="gdesc2" rows="2" cols="65"
+												style="font-size: 25px; text-align: right;">{{datagotero[3]}}</textarea>
+										</td>
+									</tr>
+								</table>
+								<br>
+								<br>
+								<br>
+								<br>
+								<br>
+								<p>___________________________________________________</p>
+								<h4>Lic. Kevin Avendaño</h4>
+							</center>
+						</div>
+			</div>
+			<div id="menu3" class="tab-pane fade" style="padding-left: 5%;">
+				<br>
+				<button type="button" class="button"><a href="/recetarefpdf/{{idconsulta}}" target="_blank"
+						style="color: white;">Imprimir Receta - PDF</a></button>
+				<button onclick="submit" class="button">Aceptar</button>
+				<br>
+				<br>
+				<br>
+				<center>
+					<form action="" method="POST">
+						<div id="tblinfo4" style="width: 80%;">
+							<div style="width: 40%; float: left; position: relative;">
+								<center><img src="..\static\logo-optica.png" style="width: 80%;"> </center>
+							</div>
+							<div class="derecha">
+								<table>
+									<tr>
+										<th class="letragrande">
+											<center>Teléfonos:<br>7767-3023 7763-5643 </center>
+										</th>
+									</tr>
+									<tr>
+										<th class="letragrande">{{dataconsulta[0][13]}}</th>
+									</tr>
+								</table>
+							</div>
+							<center>
+								<table>
+									<tr style="border: white;">
+										<th class="letragrande">Nombre: </th>
+										<td class="letragrande">{{dataconsulta[0][0]}} {{dataconsulta[0][1]}}
+											{{dataconsulta[0][2]}} {{dataconsulta[0][3]}}</td>
+									</tr>
+								</table>
+								<br>
+								<br>
+								<table>
+									<tr>
+										<th class="letragrande">Lugar a referir:</th>
+										<td><input type="text" class="form-control" id="lugar" name="lugar"
+												value="{{recetaref[0][0]}}"></td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<textarea id="descripcion" name="descripcion" rows="2" cols="65"
+												style="font-size: 25px;">{{recetaref[0][1]}}</textarea>
+										</td>
+									</tr>
+								</table>
+								<br>
+					</form>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<p>___________________________________________________</p>
+					<h4>Lic. Kevin Avendaño</h4>
+				</center>
+			</div>
+			</center>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+			integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+			crossorigin="anonymous"></script>
+		<script type="text/javascript">
+			function cambiarfechaob1(num) {
+				if (num == 0) {
+					var fechatext = document.getElementById('gfechacad')
+					var fechatext1 = document.getElementById('rfechacad')
+				} else {
+					var fechatext = document.getElementById('rfechacad')
+					var fechatext1 = document.getElementById('gfechacad')
+				}
+				var data = fechatext.value
+				data = String(data)
+				var arreglo = data.split('-')
+				fechatext.type = 'text'
+				fechatext.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
+				fechatext1.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
+			}
+			function cambiarfechaof1(num) {
+				if (num == 0) {
+					var fechatext = document.getElementById('gfechacad')
+				} else {
+					var fechatext = document.getElementById('rfechacad')
+				}
+				var data = fechatext.value
+				data = String(data)
+				var arreglo = data.split('/')
+				fechatext.type = 'date'
+				var aux = arreglo[2] + "-" + arreglo[1] + "-" + arreglo[0]
+				fechatext.value = aux
+			}
+			function cambiarfechaob() {
+				var fechatext = document.getElementById('lcfechacad')
+				var data = fechatext.value
+				data = String(data)
+				var arreglo = data.split('-')
+				fechatext.type = 'text'
+				fechatext.value = arreglo[2] + "/" + arreglo[1] + "/" + arreglo[0]
+			}
+			function cambiarfechaof() {
+				var fechatext = document.getElementById('lcfechacad')
+				var data = fechatext.value
+				data = String(data)
+				var arreglo = data.split('/')
+				fechatext.type = 'date'
+				var aux = arreglo[2] + "-" + arreglo[1] + "-" + arreglo[0]
+				fechatext.value = aux
+			}
+			window.onload = function llenardata() {
+				var reffin = {{ rf| tojson }};
+			var esfera1 = document.getElementById('esod')
+			var esfera2 = document.getElementById('esoi')
+			var cilindro1 = document.getElementById('ciod')
+			var cilindro2 = document.getElementById('cioi')
+			var eje1 = document.getElementById('ejod')
+			var eje2 = document.getElementById('ejoi')
+			var prisma1 = document.getElementById('prod')
+			var prisma2 = document.getElementById('proi')
+			var aux = reffin[0][0]
+			aux = parseFloat(aux).toFixed(2)
+			if (aux > 0) {
+				aux = '+' + String(aux)
+			} else aux = String(aux)
+			esfera1.innerHTML = aux
+			aux = reffin[1][0]
+			aux = parseFloat(aux).toFixed(2)
+			if (aux > 0) {
+				aux = '+' + String(aux)
+			} else aux = String(aux)
+			esfera2.innerHTML = aux
+			aux = reffin[0][1]
+			aux = parseFloat(aux).toFixed(2)
+			if (aux > 0) {
+				aux = '+' + String(aux)
+			} else aux = String(aux)
+			cilindro1.innerHTML = aux
+			aux = reffin[1][1]
+			aux = parseFloat(aux).toFixed(2)
+			if (aux > 0) {
+				aux = '+' + String(aux)
+			} else aux = String(aux)
+			cilindro2.innerHTML = aux
+			aux = reffin[0][2]
+			aux = parseFloat(aux).toFixed()
+			aux = String(aux)
+			eje1.innerHTML = aux
+			aux = reffin[1][2]
+			aux = parseFloat(aux).toFixed()
+			aux = String(aux)
+			eje2.innerHTML = aux
+			aux = reffin[0][3]
+			aux = parseFloat(aux).toFixed(2)
+			if (aux > 0) {
+				aux = '+' + String(aux)
+			} else aux = String(aux)
+			prisma1.innerHTML = aux
+			aux = reffin[1][3]
+			aux = parseFloat(aux).toFixed(2)
+			if (aux > 0) {
+				aux = '+' + String(aux)
+			} else aux = String(aux)
+			prisma2.innerHTML = aux
         }
-        function PdfDownload(filename, num){
-            kendo.pdf.defineFont({
-                "FontAwesome":
-                "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf"
-            })
-            var nomdiv = "#tblinfo" + String(num)
-            kendo.drawing.drawDOM($(nomdiv))
-            .then(function(group){
-                return kendo.drawing.exportPDF(
-                    group,{
-                        paperSize: "auto",
-                        landscape: false,
-                        margin: "2cm",
-                        multiPage: true,
-                    });
-            })
-            .then(function(data){
-                kendo.saveAs({
-                    dataURI: data,
-                    fileName:filename
-                });
-            });
-        }
-    </script>
-{% endblock %}
+			function PdfDownload(filename, num) {
+				kendo.pdf.defineFont({
+					"FontAwesome":
+						"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/fonts/fontawesome-webfont.ttf"
+				})
+				var nomdiv = "#tblinfo" + String(num)
+				kendo.drawing.drawDOM($(nomdiv))
+					.then(function (group) {
+						return kendo.drawing.exportPDF(
+							group, {
+							paperSize: "auto",
+							landscape: false,
+							margin: "2cm",
+							multiPage: true,
+						});
+					})
+					.then(function (data) {
+						kendo.saveAs({
+							dataURI: data,
+							fileName: filename
+						});
+					});
+			}
+		</script>
+		{% endblock %}

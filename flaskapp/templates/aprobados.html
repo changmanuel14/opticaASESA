@@ -1,85 +1,38 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Consultas Aprobadas</h1>
-    <input type="text" id="estudiante" placeholder="   Filtro Estudiante" class="inputtext3" onkeyup="festudiante()">
-    <input type="text" id="paciente" placeholder="   Filtro Paciente" class="inputtext3" onkeyup="fpaciente()">
-    <input type="text" id="fecha" placeholder="   Filtro Fecha" class="inputtext3" onkeyup="ffecha()">
-    <table id="myTable">
-        <tr>
-            <th>Estudiante</th>
-            <th>Paciente</th>
-            <th>Fecha</th>
-            <th colspan="3">Opciones</th>
-        </tr>
-        {% for i in consultas %}
-        <tr>
-            <td>{{i[1]}} {{i[2]}}</td>
-            <td>{{i[3]}} {{i[6]}} {{i[4]}} {{i[7]}}</td>
-            <td>{{i[5]}}</td>
-            <td><a href="/ver/{{i[0]}}">Ver datos</a></td>
-            <td><a href="/venta/{{i[0]}}">Venta</a></td>
-            <td><a href="/recetas/{{i[0]}}">Recetas</a></td>
-        </tr>
-        {% endfor%}
-    </table>
-    <script type="text/javascript">
-    function festudiante(){
-            var input, filter, table, tr, td,i,txtValue;
-            input = document.getElementById("estudiante");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-
-            for(i = 0; i<tr.length;i++){
-                td = tr[i].getElementsByTagName("td")[0];
-                if (td) {
-                    txtValue = td.textContent || td.innerHTML;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    }else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    function fpaciente(){
-            var input, filter, table, tr, td,i,txtValue;
-            input = document.getElementById("paciente");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-
-            for(i = 0; i<tr.length;i++){
-                td = tr[i].getElementsByTagName("td")[1];
-                if (td) {
-                    txtValue = td.textContent || td.innerHTML;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    }else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-        function ffecha(){
-            var input, filter, table, tr, td,i,txtValue;
-            input = document.getElementById("fecha");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("myTable");
-            tr = table.getElementsByTagName("tr");
-
-            for(i = 0; i<tr.length;i++){
-                td = tr[i].getElementsByTagName("td")[2];
-                if (td) {
-                    txtValue = td.textContent || td.innerHTML;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    }else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    
-    </script>
+<h1>Consultas Aprobadas</h1>
+<table class="table table-striped sortable" id="sampleTable">
+	<tr>
+		<th>No.</th>
+		<th>Estudiante</th>
+		<th>Paciente</th>
+		<th>Fecha</th>
+		<th colspan="3">Opciones</th>
+	</tr>
+	{% for i in consultas %}
+	<tr>
+		<td>{{loop.index}}</td>
+		<td>{{i[1]}} {{i[2]}}</td>
+		<td>{{i[3]}} {{i[6]}} {{i[4]}} {{i[7]}}</td>
+		<td>{{i[5]}}</td>
+		<td><a href="/ver/{{i[0]}}"><button type="button" style="width: 100%;" class="btn btn-primary">Ver datos</button></a></td>
+		<td><a href="/venta/{{i[0]}}"><button type="button" style="width: 100%;" class="btn btn-success">Ingresar venta</button></a></td>
+		<td><a href="/recetas/{{i[0]}}"><button type="button" style="width: 100%;" class="btn btn-info">Ver recetas</button></a></td>
+	</tr>
+	{% endfor%}
+</table>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+<!-- fancyTable Js -->
+<script src="{{ url_for('static', filename='fancyTable.js') }}"></script>
+<script>
+	$(document).ready(function () {
+		$("#sampleTable").fancyTable({
+			inputPlaceholder: 'Buscar',
+			pagination: false
+		});
+	});
+</script>
 {% endblock %}

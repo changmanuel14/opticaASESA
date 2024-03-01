@@ -2,7 +2,7 @@
 {% block content %}
 <h1>Aros</h1>
 <a href="/ingresoaros"><button class="btn btn-success">Ingreso de Aro</button></a>
-<table class="sortable">
+<table class="table table-striped sortable" id="sampleTable">
 	<tr>
 		<th>ID</th>
 		<th>Marca</th>
@@ -48,4 +48,17 @@
 	</tr>
 	{% endfor%}
 </table>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='fancyTable.js') }}"></script>
+<script>
+	$(document).ready(function () {
+		$("#sampleTable").fancyTable({
+			inputPlaceholder: 'Buscar',
+			pagination: false
+		});
+	});
+</script>
 {% endblock %}

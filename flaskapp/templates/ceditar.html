@@ -1,39 +1,46 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Editar Cita</h1>
-    <form action="" method="POST">
-        <table>
-            <tr>
-                <th>Nombre</th>
-                <td><input type="text" id="nombre" name="nombre" class="inputtext1" value="{{datacita[0][0]}}" required> </td>
-            </tr>
-            <tr>
-                <th>Apellido</th>
-                <td><input type="text" id="apellido" name="apellido" class="inputtext1" value="{{datacita[0][1]}}" required> </td>
-            </tr>
-            <tr>
-                <th>Telefono</th>
-                <td><input type="number" id="telefono" name="telefono" class="inputtext1" value="{{datacita[0][2]}}" required> </td>
-            </tr>
-            <tr>
-                <th>Fecha</th>
-                <td><input type="date" id="fecha" name="fecha" class="inputtext1" value="{{datacita[0][3]}}" required> </td>
-            </tr>
-            <tr>
-                <th>Hora</th>
-                <td>
-                    <select id="hora" name="hora" class="inputtext1" required>
-                        {% for i in horas %}
-                        {% if i[0] == datacita[0][4] %}
-                            <option value="{{i[0]}}" selected>{{i[1]}}</option>
-                        {% else %}
-                            <option value="{{i[0]}}">{{i[1]}}</option>
-                        {% endif %}
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-        </table>
-        <center><button onclick="submit" class="button">Aceptar</button></center>
-    </form>
+<h1>Editar Cita</h1>
+<form action="" method="POST">
+	<table>
+		<tr>
+			<th>Nombre</th>
+			<td><input type="text" id="nombre" name="nombre" class="form-control" value="{{datacita[0][0]}}" required>
+			</td>
+		</tr>
+		<tr>
+			<th>Apellido</th>
+			<td><input type="text" id="apellido" name="apellido" class="form-control" value="{{datacita[0][1]}}" required>
+			</td>
+		</tr>
+		<tr>
+			<th>Telefono</th>
+			<td><input type="number" id="telefono" name="telefono" class="form-control" value="{{datacita[0][2]}}"
+					required> </td>
+		</tr>
+		<tr>
+			<th>Fecha</th>
+			<td><input type="date" id="fecha" name="fecha" class="form-control" value="{{datacita[0][3]}}" required> </td>
+		</tr>
+		<tr>
+			<th>Hora</th>
+			<td>
+				<select id="hora" name="hora" class="form-control" required>
+					{% for i in horas %}
+					{% if i[0] == datacita[0][4] %}
+					<option value="{{i[0]}}" selected>{{i[1]}}</option>
+					{% else %}
+					<option value="{{i[0]}}">{{i[1]}}</option>
+					{% endif %}
+					{% endfor %}
+				</select>
+			</td>
+		</tr>
+	</table>
+	<center><button type="submit" class="btn btn-primary">Aceptar</button></center>
+</form>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
 {% endblock %}

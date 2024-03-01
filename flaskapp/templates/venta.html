@@ -1,19 +1,28 @@
 {% extends "layout.html" %}
 {% block content %}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
 <h1>Venta</h1>
 <div class="container">
 	<ul class="nav nav-tabs">
-		<li><a data-toggle="tab" href="#home" class="panelb">Aro</a></li>
-		<li><a data-toggle="tab" href="#menu1" class="panelb">Lente</a></li>
-		<li><a data-toggle="tab" href="#menu2" class="panelb">Resumen</a></li>
+		<li class="nav-item"><a data-toggle="tab" href="#menu0" class="nav-link">Aro</a></li>
+		<li class="nav-item"><a data-toggle="tab" href="#menu1" class="nav-link">Lente</a></li>
+		<li class="nav-item"><a data-toggle="tab" href="#menu2" class="nav-link">Resumen</a></li>
 	</ul>
 	<form action="" method="POST">
 		<div class="tab-content">
-			<div id="home" class="tab-pane fade in active" style="padding-left: 5%;">
+			<div id="menu0" class="tab-pane fade in active" style="padding-left: 5%;">
 				<br>
 				<h1>Seleccion de aro</h1>
 				<center>
-					<select name="idaro" id="idaro" class="inputtext" onchange="cambioaro()">
+					<select name="idaro" id="idaro" class="form-control" onchange="cambioaro()">
 						<option value="">Seleccione el aro</option>
 						{% for i in aros %}
 						<option value="{{i[0]}}">{{i[0]}} - {{i[1]}} {{i[2]}} {{i[3]}}</option>
@@ -41,7 +50,7 @@
 					<tr>
 						<th style="width: 20%;">Laboratorio</th>
 						<th colspan="2">
-							<select name="lab" id="lab" class="inputtext" onchange="cambiolab()">
+							<select name="lab" id="lab" class="form-control" onchange="cambiolab()">
 								<option value="">Seleccione el laboratorio</option>
 								{% for i in laboratorios %}
 								<option value="{{i[0]}}">{{i[1]}}</option>
@@ -55,7 +64,7 @@
 						<tr>
 							<th style="width: 20%;">Tipo de Lente</th>
 							<th colspan="2">
-								<select name="lh" id="lh" class="inputtext" onchange="cambiolentes()">
+								<select name="lh" id="lh" class="form-control" onchange="cambiolentes()">
 									<option value="">Seleccione el tipo de lente</option>
 									{% for i in lenteheader %}
 									{% if i[2] == 1 or i[2] == '1' %}
@@ -68,7 +77,7 @@
 						<tr>
 							<th style="width: 20%;">Lente</th>
 							<th colspan="2">
-								<select name="ld" id="ld" class="inputtext" onchange="cambiolentes1()">
+								<select name="ld" id="ld" class="form-control" onchange="cambiolentes1()">
 									<option value="">Seleccione el lente</option>
 								</select>
 							</th>
@@ -81,6 +90,17 @@
 										onchange="cambiolentes1()">
 									<label for="antireflejo">Q </label>
 									<label for="antireflejo" id="antireflejol">{{servicios[0][2] * 2}}</label>
+								</center>
+							</td>
+						</tr>
+						<tr>
+							<th style="width: 20%;">Antireflejo Nanoplasma</th>
+							<td colspan="2">
+								<center>
+									<input type="checkbox" id="nanoplasma" name="nanoplasma" value="1"
+										onchange="cambiolentes1()">
+									<label for="nanoplasma">Q </label>
+									<label for="nanoplasma" id="nanoplasmal">{{servicios[10][2] * 2}}</label>
 								</center>
 							</td>
 						</tr>
@@ -113,7 +133,7 @@
 										onchange="cambiolentes1()">
 									<label for="perforado1">Q </label>
 									<label for="perforado1" id="perforado1l">{{servicios[3][2] * 2}}</label>
-									<input type="number" class="inputtext" id="cantperf" name="cantperf" value="0"
+									<input type="number" class="form-control" id="cantperf" name="cantperf" value="0"
 										onchange="cambiolentes1()">
 								</center>
 							</td>
@@ -224,7 +244,7 @@
 						<tr>
 							<th style="width: 20%;">Lente</th>
 							<td>
-								<select id="lenteoloi" name="lenteoloi" class="inputtext1" onchange="cambiolentes1()">
+								<select id="lenteoloi" name="lenteoloi" class="form-control" onchange="cambiolentes1()">
 									<option value="0">Lente OI</option>
 									{% for i in lentedesc %}
 									{% if i[1] == 17 or i[1] == '17' %}
@@ -234,7 +254,7 @@
 								</select>
 							</td>
 							<td>
-								<select id="lenteolod" name="lenteolod" class="inputtext1" onchange="cambiolentes1()">
+								<select id="lenteolod" name="lenteolod" class="form-control" onchange="cambiolentes1()">
 									<option value="0">Lente OD</option>
 									{% for i in lentedesc %}
 									{% if i[1] == 17 or i[1] == '17' %}
@@ -247,7 +267,7 @@
 						<tr>
 							<th>Filtro</th>
 							<td colspan="2">
-								<center><input type="number" id="filtrool" name="filtrool" step="0.01" class="inputtext"
+								<center><input type="number" id="filtrool" name="filtrool" step="0.01" class="form-control"
 										value="0" onchange="cambiolentes1()" required></center>
 							</td>
 						</tr>
@@ -358,29 +378,29 @@
 						</tr>
 						<tr>
 							<th>NIT</th>
-							<td><input type="text" class="inputtext1" id="nit" name="nit" value="CF"
+							<td><input type="text" class="form-control" id="nit" name="nit" value="CF"
 									onchange="datosfactura()"></td>
 						</tr>
 						<tr>
 							<th>Nombre</th>
-							<td><input type="text" class="inputtext1" id="nomcliente" name="nomcliente"
+							<td><input type="text" class="form-control" id="nomcliente" name="nomcliente"
 									value="{{datapaciente[0]}} {{datapaciente[1]}}"></td>
 						</tr>
 						<tr>
 							<th>Apellido</th>
-							<td><input type="text" class="inputtext1" id="apecliente" name="apecliente"
+							<td><input type="text" class="form-control" id="apecliente" name="apecliente"
 									value="{{datapaciente[2]}} {{datapaciente[3]}}"></td>
 						</tr>
 						<tr>
 							<th>Codigo (Carnet/CodPers)</th>
-							<td><input type="text" class="inputtext1" id="coddesc" name="coddesc"></td>
+							<td><input type="text" class="form-control" id="coddesc" name="coddesc"></td>
 						</tr>
 						<tr>
 							<th>Referido</th>
 							<td>
 								<input type="checkbox" id="referido" name="referido" value="1" onclick="refer()">
 								<label for="referido">Referido: </label>
-								<input type="text" class="inputtext4" id="referidonombre" name="referidonombre"
+								<input type="text" class="form-control" id="referidonombre" name="referidonombre"
 									disabled>
 							</td>
 						</tr>
@@ -392,12 +412,12 @@
 						</tr>
 						<tr>
 							<th>Nombre</th>
-							<td><input type="text" class="inputtext1" id="nompaciente" name="nompaciente"
+							<td><input type="text" class="form-control" id="nompaciente" name="nompaciente"
 									value="{{datapaciente[0]}} {{datapaciente[1]}}"></td>
 						</tr>
 						<tr>
 							<th>Apellido</th>
-							<td><input type="text" class="inputtext1" id="apepaciente" name="apepaciente"
+							<td><input type="text" class="form-control" id="apepaciente" name="apepaciente"
 									value="{{datapaciente[2]}} {{datapaciente[3]}}"></td>
 						</tr>
 						<tr>
@@ -408,17 +428,17 @@
 						</tr>
 						<tr>
 							<th>Total General</th>
-							<td>Q <input type="text" class="inputtext1" id="restotgen" name="restotgen"
+							<td>Q <input type="text" class="form-control" id="restotgen" name="restotgen"
 									onchange="cambcomb()" readonly></td>
 						</tr>
 						<tr>
 							<th>Descuento</th>
-							<td>Q <input type="text" class="inputtext1" id="resdesc" name="resdesc"
+							<td>Q <input type="text" class="form-control" id="resdesc" name="resdesc"
 									onchange="cambcomb()" readonly></td>
 						</tr>
 						<tr>
 							<th>Total a Cancelar</th>
-							<td>Q <input type="number" step="0.01" class="inputtext1" id="restotcan" name="restotcan">
+							<td>Q <input type="number" step="0.01" class="form-control" id="restotcan" name="restotcan">
 							</td>
 						</tr>
 					</table>
@@ -509,6 +529,12 @@
 		var lenninc = document.getElementById("lenprenin")
 		var consu = document.getElementById("precons")
 		var pagoefec = document.getElementById("pagoefectivo")
+		var codigopersonal = document.getElementById("coddesc")
+		if (arodocc.checked == true || lendocc.checked == true) {
+			codigopersonal.setAttribute("required", "");
+		} else {
+			codigopersonal.removeAttribute("required");
+		}
 		if (arogenc.checked == true) {
 			totalcan = parseFloat(totalcan) + parseFloat(arogenc.value)
 			totalgen = parseFloat(totalgen) + parseFloat(arogenc.value)
@@ -628,6 +654,8 @@
 	var doscarasl = document.getElementById('doscarasl')
 	var moldes = document.getElementById('moldes')
 	var moldesl = document.getElementById('moldesl')
+	var nanoplasma = document.getElementById('nanoplasma')
+	var nanoplasmal = document.getElementById('nanoplasmal')
 	if (antireflejo.checked == true) {
 		total = total + parseFloat(antireflejol.innerHTML)
 	}
@@ -657,6 +685,9 @@
 	}
 	if (moldes.checked == true) {
 		total = total + parseFloat(moldesl.innerHTML)
+	}
+	if (nanoplasma.checked == true) {
+		total = total + parseFloat(nanoplasmal.innerHTML)
 	}
             }else if (lab.value == 2 || lab.value == '2') {
 		var montaje = document.getElementById('montaje')
