@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Consultas Pendientes de Revisión</h1>
+<table class="table table-striped sortable" id="sampleTable">
+	<tr>
+		<th>No.</th>
+		<th>Estudiante</th>
+		<th>Paciente</th>
+		<th>Fecha</th>
+		<th colspan="2">Opciones</th>
+	</tr>
+	{% for i in consultas %}
+	<tr>
+		<td>{{loop.index}}</td>
+		<td>{{i[1]}} {{i[2]}}</td>
+		<td>{{i[3]}} {{i[6]}} {{i[4]}} {{i[7]}}</td>
+		<td>{{i[5]}}</td>
+		<td><a href="/ver/{{i[0]}}"><button type="button" style="width: 100%;" class="btn btn-primary">Ver datos</button></a></td>
+		<td><a href="/revisado/{{i[0]}}"><button type="button" style="width: 100%;" class="btn btn-success">Dar por Revisado</button></a></td>
+	</tr>
+	{% endfor%}
+</table>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+	crossorigin="anonymous"></script>
+<!-- fancyTable Js -->
+<script src="{{ url_for('static', filename='fancyTable.js') }}"></script>
+<script>
+	$(document).ready(function () {
+		$("#sampleTable").fancyTable({
+			inputPlaceholder: 'Buscar',
+			pagination: false
+		});
+	});
+</script>
+{% endblock %}

@@ -10,6 +10,7 @@
 		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 		crossorigin="anonymous"></script>
 <h1>Datos Ingresados</h1>
+<h2 style="text-align: right;">ID de Consulta: {{idconsulta}}</h2>
 <div class="container">
 	<ul class="nav nav-tabs">
 		<li class="nav-item"><a data-toggle="tab" id="t0" href="#menu0" class="nav-link">Estudiante</a></li>
@@ -1055,6 +1056,9 @@
 						</tr>
 					</table>
 				</div>
+				{% if logeadokevin == 1 %}
+				<a href="/revisado/{{idconsulta}}"><button type="button" style="width: 100%;" class="btn btn-success">Dar por Revisado</button></a>
+				{% endif %}
 			</div>
 		</div>
 	</form>

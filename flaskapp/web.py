@@ -352,7 +352,7 @@ def verventas():
 				'''
 				cursor.execute(consulta)
 				pagos = cursor.fetchall()
-				pasos = ["Ingreso de Solicitud", "Pago de Servicio", "Envío a laboratorio","Recepción de laboratorio", "Entrega a Paciente"]
+				pasos = ["Ingreso de Solicitud", "Pago de Servicio", "Envío a laboratorio","Lentes en Óptica, listo para entrega", "Entrega a Paciente"]
 		finally:
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
@@ -564,8 +564,6 @@ def penddatosclinicos():
 		logeado = session['logeado1']
 	except:
 		logeado = 0
-	if logeado == 0:
-		return redirect(url_for('home'))
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -585,8 +583,6 @@ def datosclinicos(idconsulta):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
-	if logeado == 0:
-		return redirect(url_for('home'))
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -1495,7 +1491,7 @@ def datosclinicos(idconsulta):
 		enfermedades=enfermedades,nervos=nervos, mms=mms, numeros=numeros, relva=relva, 
 		tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen, 
 		dataojo=dataojo, dataametropia=dataametropia, new_date=new_date, estudiante=estudiante,
-		lentedetalladolen=lentedetalladolen)
+		lentedetalladolen=lentedetalladolen, idconsulta = idconsulta)
 
 @app.route("/pendaprobar", methods=['GET', 'POST'])
 def pendaprobar():
@@ -1524,6 +1520,8 @@ def aprobados():
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -1537,12 +1535,39 @@ def aprobados():
 		print("Ocurrió un error al conectar: ", e)
 	return render_template('aprobados.html', title='Aprobados', logeado=logeado, consultas=consultas)
 
+@app.route("/revision", methods=['GET', 'POST'])
+def revision():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
+	if 'Kevin' in session['nombreuser1'] and "Avendaño" in session['apellidouser1']:
+		pass
+	else:
+		return redirect(url_for('home'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y'), p.nombre2, p.apellido2 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1 and revisadokevin = 0 order by c.fecha desc"
+				cursor.execute(consulta)
+				consultas = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('revision.html', title='revision', logeado=logeado, consultas=consultas)
+
 @app.route("/recetas/<idconsulta>", methods=['GET', 'POST'])
 def recetas(idconsulta):
 	try:
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	rf = []
 	lencons = []
 	existe = 0
@@ -1715,6 +1740,8 @@ def venta(idconsulta):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -2153,6 +2180,8 @@ def factura(idfacturaheader):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -2194,6 +2223,8 @@ def segventas(idfacturaheader):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	idusuario = int(session['iduser1'])
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
@@ -2305,6 +2336,8 @@ def subirdocumentos(idfacturaheader, mensaje):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	factura = 0
 	ordentrabajo = 0
 	nombrefactura = PATH_FILE + f"factura{idfacturaheader}.pdf"
@@ -3220,7 +3253,7 @@ def pendaprobarc(idconsulta):
 		dataconsulta=dataconsulta, anios=anios, cincos=cincos, meses=meses, antecedentes = antecedentes, av=av, ra=ra, vc=vc, roa=roa, ror=ror, 
 		rs=rs, rf=rf, mo=mo, obs=obs, usolen=usolen, numantmed=numantmed, numantqui=numantqui, antmed=antmed, antqui=antqui, enfermedades=enfermedades,
 		nervos=nervos, mms=mms, numeros=numeros, relva=relva, tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen,
-		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotero=gotero, lentedetalladolen=lentedetalladolen,referencia=referencia)
+		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotero=gotero, lentedetalladolen=lentedetalladolen,referencia=referencia, idconsulta = idconsulta)
 
 @app.route("/ver/<idconsulta>", methods=['GET', 'POST'])
 def ver(idconsulta):
@@ -3278,14 +3311,6 @@ def ver(idconsulta):
 				dataconsulta = cursor.fetchall()
 				idpaciente = dataconsulta[0][0]
 				idestudiante = dataconsulta[0][1]
-		finally:
-			conexion.close()
-	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
-		print("Ocurrió un error al conectar: ", e)
-	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
-		try:
-			with conexion.cursor() as cursor:
 				consulta = "SELECT nombre, apellido, carnet from estudiante where idestudiante = %s"
 				cursor.execute(consulta, (idestudiante))
 				estudiante = cursor.fetchall()
@@ -3427,11 +3452,36 @@ def ver(idconsulta):
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
+	if 'Kevin' in session['nombreuser1'] and "Avendaño" in session['apellidouser1']:
+		logeadokevin = 1
+	else:
+		logeadokevin = 0
 	return render_template('ver.html', title='Historico', logeado=logeado, estudiante=estudiante, paciente = paciente, 
 		dataconsulta=dataconsulta, anios=anios, cincos=cincos, meses=meses, antecedentes = antecedentes, av=av, ra=ra, vc=vc, roa=roa, ror=ror, 
 		rs=rs, rf=rf, mo=mo, obs=obs, usolen=usolen, numantmed=numantmed, numantqui=numantqui, antmed=antmed, antqui=antqui, enfermedades=enfermedades,
 		nervos=nervos, mms=mms, numeros=numeros, relva=relva, tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen,
-		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotas=gotas, referencia=referencia, lentedetalladolen=lentedetalladolen)
+		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotas=gotas, referencia=referencia, lentedetalladolen=lentedetalladolen, idconsulta = idconsulta, logeadokevin=logeadokevin)
+
+@app.route("/revisado/<idconsulta>", methods=['GET', 'POST'])
+def revisado(idconsulta):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
+	try:
+		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		try:
+			with conexion.cursor() as cursor:
+				consulta = f"update consulta set revisadokevin = 1 where idconsulta = {idconsulta};"
+				cursor.execute(consulta)
+				conexion.commit()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return redirect(url_for('revision'))
 
 @app.route("/crearusuario", methods=['GET', 'POST'])
 def crearusuario():
@@ -3439,6 +3489,8 @@ def crearusuario():
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	if request.method == 'POST':
 		nombre = request.form["nombre"]
 		apellido = request.form["apellido"]
@@ -3464,6 +3516,8 @@ def recetalentespdf(idconsulta):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	rf = []
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
@@ -3504,6 +3558,8 @@ def recetacontactopdf(idconsulta):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	lencons = []
 	existe = 0
 	try:
@@ -3549,6 +3605,8 @@ def recetagotaspdf(idconsulta):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	lencons = []
 	existe = 0
 	try:
@@ -3585,6 +3643,8 @@ def recetarefpdf(idconsulta):
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -3616,6 +3676,8 @@ def recetalentesblancopdf():
 		logeado = session['logeado1']
 	except:
 		logeado = 0
+	if logeado == 0:
+		return redirect(url_for('home'))
 	x = datetime.datetime.now()
 	fecha = x.strftime("%d/%m/%Y")
 	rendered = render_template('recetalentesblancopdf.html', title="Receta lente", fecha = fecha)

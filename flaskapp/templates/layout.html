@@ -124,8 +124,11 @@
 								<a class="dropdown-item" href="/penddatosclinicos">Ingreso de Datos Clínicos</a>
 								{% if logeado != 0 %}
 								<a class="dropdown-item" href="/pendaprobar">Pendientes de Aprobación</a>
-								{% endif %}
 								<a class="dropdown-item" href="/aprobados">Aprobados</a>
+								{% if 'Kevin' in session['nombreuser1'] and "Avendaño" in session['apellidouser1'] %}
+								<a class="dropdown-item" href="/revision">Revisión de Consultas</a>
+								{% endif %}
+								{% endif %}
 							</div>
 						</li>
 						{% if logeado != 0 %}
