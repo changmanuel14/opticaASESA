@@ -3470,6 +3470,10 @@ def revisado(idconsulta):
 		logeado = 0
 	if logeado == 0:
 		return redirect(url_for('home'))
+	if 'Kevin' in session['nombreuser1'] and "Avendaño" in session['apellidouser1']:
+		pass
+	else:
+		return redirect(url_for('home'))
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
