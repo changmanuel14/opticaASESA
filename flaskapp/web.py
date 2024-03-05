@@ -205,6 +205,9 @@ def nuevaconsulta():
 		cinco = cinco + 5
 	meses = [[1, "Enero"],[2, "Febrero"],[3, "Marzo"],[4, "Abril"],[5, "Mayo"],[6, "Junio"],[7, "Julio"],[8, "Agosto"],[9, "Septiembre"],[10, "Octubre"],[11, "Noviembre"],[12, "Diciembre"]]
 	enfermedades = [['Diabetes Mellitus'],['Hipertensión Arterial'],['Artritis Reumatoidea'],['Virus Inmunodeficiencia Humana'],['Hipertrigliceridemia'],['Colesterolemia']]
+	motivos = ["Ardor Ocular","Astigmatismo","Cambio de Lentes","Cansancio Visual","Chequeo General","Consulta de Prevención", "Dolor de Cabeza Frontal","Enrojecimiento",
+            "Inflamación Ocular", "Irritación al Sol","Lagrimeo", "Miopia","Picazón","Primera Consulta","Visión Cercana Borrosa", "Visión Lejana Borrosa","Vista Cansada"]
+	motivos.sort()
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -623,6 +626,9 @@ def datosclinicos(idconsulta):
 		cinco = cinco + 5
 	meses = [[1, "Enero"],[2, "Febrero"],[3, "Marzo"],[4, "Abril"],[5, "Mayo"],[6, "Junio"],[7, "Julio"],[8, "Agosto"],[9, "Septiembre"],[10, "Octubre"],[11, "Noviembre"],[12, "Diciembre"]]
 	enfermedades = [['Diabetes Mellitus'],['Hipertensión Arterial'],['Artritis Reumatoidea'],['Virus Inmunodeficiencia Humana'],['Hipertrigliceridemia'],['Colesterolemia']]
+	motivos = ["Ardor Ocular","Cambio de Lentes","Cansancio Visual","Chequeo General","Consulta de Prevención", "Dolor de Cabeza","Enrojecimiento Ocular","Inflamación Ocular","Irritación al Sol",
+            "Lagrimeo", "Molestia frente a Dispositivos Electrónicos","Picazón","Primera Consulta", "Sensación de Cuerpo Extraño","Visión Cercana Borrosa", "Visión Lejana Borrosa","Vista Cansada"]
+	motivos.sort()
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -679,7 +685,14 @@ def datosclinicos(idconsulta):
 		print("Ocurrió un error al conectar: ", e)
 	if request.method == 'POST':
 		#panel2
-		motivoconsulta = request.form["motivoconsulta"]
+		cantidadmotivos = request.form["cantmotivos"]
+		motivoconsulta = ""
+		for i in range(int(cantidadmotivos)):
+			aux = f"motivo{i}"
+			motivoaux = request.form[aux]
+			if i != 0:
+				motivoconsulta = motivoconsulta + ", "
+			motivoconsulta = motivoconsulta + motivoaux
 		if len(motivoconsulta) < 1:
 			motivoconsulta = 0
 		ultimaevmes = request.form["ultimaevmes"]
@@ -1491,7 +1504,7 @@ def datosclinicos(idconsulta):
 		enfermedades=enfermedades,nervos=nervos, mms=mms, numeros=numeros, relva=relva, 
 		tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen, 
 		dataojo=dataojo, dataametropia=dataametropia, new_date=new_date, estudiante=estudiante,
-		lentedetalladolen=lentedetalladolen, idconsulta = idconsulta)
+		lentedetalladolen=lentedetalladolen, idconsulta = idconsulta, motivos=motivos)
 
 @app.route("/pendaprobar", methods=['GET', 'POST'])
 def pendaprobar():

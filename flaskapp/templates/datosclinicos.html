@@ -102,11 +102,23 @@
 				</div>
 				<br>
 				<h3>Motivo de Consulta</h3>
+				<center>
+					<button type="button" class="btn btn-success" onclick="agmotivo()">Agregar Motivo de Consulta</button> 
+				</center>
+				<input type="hidden" value="1" id="cantmotivos" name="cantmotivos">
 				<table>
 					<tr>
 						<th style="width: 35%;">Motivo de la Consulta</th>
-						<th colspan="3"><textarea id="motivoconsulta" name="motivoconsulta" class="form-control" rows="2" cols="80"
-								placeholder="Motivo de la Consulta"></textarea></th>
+						<th id="thmotivos">
+							<div id="divmot0">
+								<select class="form-control" id="motivo0" name="motivo0">
+									<option value="">Seleccione motivo de consulta</option>
+									{% for i in motivos %}
+									<option value="{{i}}">{{i}}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</th>
 					</tr>
 				</table>
 				<br>
@@ -1220,6 +1232,33 @@
 		td3.append(input2)
 		tr.append(td3)
 		divgen.append(tr)
+	}
+	function agmotivo() {
+		var th = document.getElementById("thmotivos");
+		var cantidad = document.getElementById("cantmotivos");
+		var aux = "divmot" + String(cantidad.value);
+		var div = document.createElement("div");
+		div.id = aux;
+		var select = document.createElement("select");
+		select.className = "form-control";
+		aux = "motivo" + String(cantidad.value);
+		select.id = aux;
+		select.name = aux;
+		var opcion = document.createElement("option");
+		opcion.value = "";
+		opcion.innerHTML = "Seleccione motivo de consulta";
+		select.append(opcion);
+		var arreglo = {{ motivos | tojson }};
+		var conteo = Object.keys(arreglo).length;
+		for (var i = 0; i <= conteo - 1; i++) {
+			var nuevaOpcion = document.createElement("option");
+			nuevaOpcion.value = arreglo[i];
+			nuevaOpcion.innerHTML = arreglo[i];
+			select.appendChild(nuevaOpcion);
+		}
+		div.append(select);
+		th.append(div)
+		cantidad.value = parseInt(cantidad.value) + 1
 	}
 	function agantmed() {
 		var divgen = document.getElementById("antecedentesmedicos");
