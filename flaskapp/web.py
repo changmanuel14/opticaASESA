@@ -279,23 +279,16 @@ def nuevaconsulta():
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:
 				with conexion.cursor() as cursor:
-					consulta = "select idpaciente from paciente where cui = %s and cui!= '0';"
-					cursor.execute(consulta, cui)
-					paciente = cursor.fetchall()
-					if len(paciente) > 0:
-						idpaciente = paciente[0][0]
-						exicui = 1
-					else:
-						consulta = "insert into paciente(nombre1, nombre2, apellido1, apellido2, fechanac, idsexo, profesion, direccion, cui, telefono, telefono2, ultimaev) values(%s, %s, %s, %s, %s, %s,%s, %s, %s,%s, %s, %s);"
-						cursor.execute(consulta,(nombre1, nombre2,apellido1, apellido2, fechanac, se, profesion, direccion, cui, telefono, telefono1, date.today()))
+					consulta = "insert into paciente(nombre1, nombre2, apellido1, apellido2, fechanac, idsexo, profesion, direccion, cui, telefono, telefono2, ultimaev) values(%s, %s, %s, %s, %s, %s,%s, %s, %s,%s, %s, %s);"
+					cursor.execute(consulta,(nombre1, nombre2,apellido1, apellido2, fechanac, se, profesion, direccion, cui, telefono, telefono1, date.today()))
 					consulta = "select idestudiante, pacientes from estudiante where carnet = %s;"
 					cursor.execute(consulta, carnet)
 					estudiante = cursor.fetchall()
 					if len(estudiante) > 0:
 						idestudiante = estudiante[0][0]
 						exicarnet = 1
-						consulta = "update estudiante set pacientes = %s where idestudiante = %s"
-						cursor.execute(consulta, (int(estudiante[0][1]) + 1, idestudiante))
+						consulta = "update estudiante set pacientes = %s, nombre = %s, apellido = %s where idestudiante = %s"
+						cursor.execute(consulta, (int(estudiante[0][1]) + 1, nombre, apellido, idestudiante))
 					else:
 						consulta = "insert into estudiante(nombre, apellido, carnet,pacientes) values(%s, %s, %s,1);"
 						cursor.execute(consulta,(nombre, apellido,carnet))
