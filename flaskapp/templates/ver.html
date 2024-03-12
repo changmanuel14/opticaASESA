@@ -11,6 +11,7 @@
 		crossorigin="anonymous"></script>
 <h1>Datos Ingresados</h1>
 <h2 style="text-align: right;">ID de Consulta: {{idconsulta}}</h2>
+<h4 style="text-align: right;">Tiempo de Consulta: {{tiempoconsulta}} minutos.<br>Tiempo de Aprobación: {{tiempoaprobacion}} minutos.</h4>
 <div class="container">
 	<ul class="nav nav-tabs">
 		<li class="nav-item"><a data-toggle="tab" id="t0" href="#menu0" class="nav-link">Estudiante</a></li>
@@ -121,7 +122,7 @@
 					<tr>
 						<th style="width: 35%;">Motivo de la Consulta</th>
 						<th colspan="3"><textarea id="motivoconsulta" name="motivoconsulta" rows="2" cols="80" class="form-control"
-								placeholder="Motivo de la Consulta" disabled>{{dataconsulta[0][27]}}</textarea></th>
+								placeholder="Motivo de la Consulta" disabled>{{dataconsulta[0][31]}}</textarea></th>
 					</tr>
 				</table>
 				<br>
@@ -1057,28 +1058,18 @@
 					</table>
 				</div>
 				{% if logeadokevin == 1 %}
-				<a href="/revisado/{{idconsulta}}"><button type="button" style="width: 100%;" class="btn btn-success">Dar por Revisado</button></a>
+				<h3>Comentario de Supervisión</h3>
+				{% if dataconsulta[0][32] == 1 or dataconsulta[0][32] == '1' %}
+				<textarea id="comentariokevin" name="comentariokevin" rows="2" cols="80" class="form-control" placeholder="Comentario de Supervisión" disabled>{{dataconsulta[0][33]}}</textarea>
+				{% else %}
+				<form action="" method="POST">
+					<textarea id="comentariokevin" name="comentariokevin" rows="2" cols="80" class="form-control" placeholder="Comentario de Supervisión"></textarea>
+					<center><button type="submit" class="btn btn-primary">Aceptar</button></center>
+				</form>
+				{% endif %}
 				{% endif %}
 			</div>
 		</div>
 	</form>
 </div>
-<script type="text/javascript">
-	function colorespanel(codpanel) {
-		codpanel = parseInt(codpanel)
-		for (var i = 0; i <= 2; i++) {
-			if (i == codpanel) {
-				var aux = 't' + String(i);
-				var t = document.getElementById(aux)
-				t.style.backgroundColor = '#5BC0DE'
-				t.style.color = 'white'
-			} else {
-				var aux = 't' + String(i);
-				var t = document.getElementById(aux)
-				t.style.backgroundColor = 'white'
-				t.style.color = 'black'
-			}
-		}
-	}
-</script>
 {% endblock %}

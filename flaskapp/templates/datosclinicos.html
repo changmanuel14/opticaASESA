@@ -111,12 +111,15 @@
 						<th style="width: 35%;">Motivo de la Consulta</th>
 						<th id="thmotivos">
 							<div id="divmot0">
-								<select class="form-control" id="motivo0" name="motivo0">
-									<option value="">Seleccione motivo de consulta</option>
-									{% for i in motivos %}
-									<option value="{{i}}">{{i}}</option>
-									{% endfor %}
-								</select>
+								<div class="form-row">
+									<select class="form-control col-md-6" id="motivo0" name="motivo0" onchange="motivoOtros(0)">
+										<option value="">Seleccione motivo de consulta</option>
+										{% for i in motivos %}
+										<option value="{{i[0]}}">{{i[0]}}</option>
+										{% endfor %}
+									</select>
+									<input class="form-control col-md-6" id="mototros0" style="display: none;" name="mototros0" placeholder="Escriba Motivo">
+								</div>
 							</div>
 						</th>
 					</tr>
@@ -1233,17 +1236,35 @@
 		tr.append(td3)
 		divgen.append(tr)
 	}
+	function motivoOtros(num) {
+		var aux = "motivo" + String(num);
+		var select = document.getElementById(aux);
+		aux = "mototros" + String(num);
+		var input = document.getElementById(aux);
+		console.log(num)
+		console.log(select.value)
+		if (select.value == "Otros"){
+			input.style = "display: block;"
+		}else {
+			input.style = "display: none;"
+		}
+	}
 	function agmotivo() {
 		var th = document.getElementById("thmotivos");
 		var cantidad = document.getElementById("cantmotivos");
 		var aux = "divmot" + String(cantidad.value);
 		var div = document.createElement("div");
 		div.id = aux;
+		var div1 = document.createElement("div")
+		div1.className = "form-row"
 		var select = document.createElement("select");
-		select.className = "form-control";
+		select.className = "form-control col-md-6";
 		aux = "motivo" + String(cantidad.value);
 		select.id = aux;
 		select.name = aux;
+		select.addEventListener("change", function() {
+			motivoOtros(parseInt(cantidad.value)-1);
+		});
 		var opcion = document.createElement("option");
 		opcion.value = "";
 		opcion.innerHTML = "Seleccione motivo de consulta";
@@ -1256,10 +1277,22 @@
 			nuevaOpcion.innerHTML = arreglo[i];
 			select.appendChild(nuevaOpcion);
 		}
-		div.append(select);
+		var input = document.createElement("input");
+		input.type = "text";
+		input.className = "form-control col-md-6";
+		input.style = "display: none;";
+		aux = "mototros" + String(cantidad.value);
+		input.id = aux;
+		input.name = aux;
+		input.placeholder = "Escriba Motivo"
+		div1.append(select);
+		div1.append(input);
+		div.append(div1);
 		th.append(div)
 		cantidad.value = parseInt(cantidad.value) + 1
 	}
+
+
 	function agantmed() {
 		var divgen = document.getElementById("antecedentesmedicos");
 		var inputnum = document.getElementById("numantmed");

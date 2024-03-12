@@ -619,9 +619,7 @@ def datosclinicos(idconsulta):
 		cinco = cinco + 5
 	meses = [[1, "Enero"],[2, "Febrero"],[3, "Marzo"],[4, "Abril"],[5, "Mayo"],[6, "Junio"],[7, "Julio"],[8, "Agosto"],[9, "Septiembre"],[10, "Octubre"],[11, "Noviembre"],[12, "Diciembre"]]
 	enfermedades = [['Diabetes Mellitus'],['Hipertensión Arterial'],['Artritis Reumatoidea'],['Virus Inmunodeficiencia Humana'],['Hipertrigliceridemia'],['Colesterolemia']]
-	motivos = ["Ardor Ocular","Cambio de Lentes","Cansancio Visual","Chequeo General","Consulta de Prevención", "Dolor de Cabeza","Enrojecimiento Ocular","Inflamación Ocular","Irritación al Sol",
-            "Lagrimeo", "Molestia frente a Dispositivos Electrónicos","Picazón","Primera Consulta", "Sensación de Cuerpo Extraño","Visión Cercana Borrosa", "Visión Lejana Borrosa","Vista Cansada"]
-	motivos.sort()
+	#Insert into motivos(motivo) values ("Ardor Ocular"),("Cambio de Lentes"),("Cansancio Visual"),("Chequeo General"),("Consulta de Prevención"),("Dolor de Cabeza"),("Enrojecimiento Ocular"),("Inflamación Ocular"),("Irritación al Sol"),("Lagrimeo"),("Molestia frente a Dispositivos Electrónicos"),("Picazón"),("Primera Consulta"),("Sensación de Cuerpo Extraño"),("Visión Cercana Borrosa"),("Visión Lejana Borrosa"),("Vista Cansada"),("Rectificacion de Graduación"),("Otros");
 	try:
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
@@ -658,6 +656,9 @@ def datosclinicos(idconsulta):
 				consulta = "select idcolorlen, color from colorlen;"
 				cursor.execute(consulta)
 				colorlen = cursor.fetchall()
+				consulta = "select motivo from motivos order by motivo asc;"
+				cursor.execute(consulta)
+				motivos = cursor.fetchall()
 				consulta = "select idojo, ojo from ojo;"
 				cursor.execute(consulta)
 				dataojo = cursor.fetchall()
@@ -683,6 +684,10 @@ def datosclinicos(idconsulta):
 		for i in range(int(cantidadmotivos)):
 			aux = f"motivo{i}"
 			motivoaux = request.form[aux]
+			if motivoaux == "Otros":
+				aux1 = f"mototros{i}"
+				motivootros = request.form[aux1]
+				motivoaux = motivoaux + f": {motivootros}"
 			if i != 0:
 				motivoconsulta = motivoconsulta + ", "
 			motivoconsulta = motivoconsulta + motivoaux
@@ -1446,36 +1451,11 @@ def datosclinicos(idconsulta):
 					#referencia
 					consulta = "insert into recetareferencia(idconsulta, lugar, descripcion) values(%s,%s,%s)"
 					cursor.execute(consulta, (idconsulta, lugarref, descref))
-				conexion.commit()
-			finally:
-				conexion.close()
-		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
-			print("Ocurrió un error al conectar: ", e)
-		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
-			try:
-				with conexion.cursor() as cursor:
-					consulta = "select idantecedentes from antecedentes where idpaciente = %s;"
-					cursor.execute(consulta, idpaciente)
-					antecedentes = cursor.fetchall()
-					exicui = len(antecedentes)
-					print(exicui)
+
 					#antecedentes
-					if exicui == 0:
-						consulta = "insert into antecedentes(idpaciente, oftalmologicos, familiares, glaucoma, alergicas) values (%s,%s,%s,%s,%s);"
-						cursor.execute(consulta, (idpaciente, antoftal, antfam, antgla, antaler))
-					else:
-						consulta = "update antecedentes set oftalmologicos = %s, familiares = %s, glaucoma = %s, alergicas = %s where idpaciente = %s;"
-						cursor.execute(consulta, (antoftal, antfam, antgla, antaler, idpaciente))
-				conexion.commit()
-			finally:
-				conexion.close()
-		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
-			print("Ocurrió un error al conectar: ", e)
-		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
-			try:
-				with conexion.cursor() as cursor:
+					consulta = "insert into antecedentes(idpaciente, oftalmologicos, familiares, glaucoma, alergicas) values (%s,%s,%s,%s,%s);"
+					cursor.execute(consulta, (idpaciente, antoftal, antfam, antgla, antaler))
+					conexion.commit()
 					consulta = "select idantecedentes from antecedentes where idpaciente = %s;"
 					cursor.execute(consulta, idpaciente)
 					dataantecedentes = cursor.fetchall()
@@ -1486,6 +1466,9 @@ def datosclinicos(idconsulta):
 					for i in range(numantqui):
 						consulta = "insert into antquir(idantecedentes, cirugia, tiempoevolucion, control) values (%s,%s,%s,%s);"
 						cursor.execute(consulta, (idantecedentes, antqui[i][0], antqui[i][1],antqui[i][2]))
+					hora = datetime.datetime.now().strftime("%H:%M:%S")
+					consulta = "update consulta set horaingresodatos = %s where idconsulta = %s;"
+					cursor.execute(consulta, (hora, idconsulta))
 				conexion.commit()
 			finally:
 				conexion.close()
@@ -3177,6 +3160,7 @@ def pendaprobarc(idconsulta):
 			lugarref = 0
 		if len(descref) < 1:
 			descref = 0
+		tiempoevaluacionmin = request.form["tiempoevaluacionmin"]
 		try:
 			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 			try:
@@ -3249,6 +3233,9 @@ def pendaprobarc(idconsulta):
 					#referencia
 					consulta = "update recetareferencia set lugar = %s, descripcion = %s where idconsulta = %s;"
 					cursor.execute(consulta, (lugarref, descref, idconsulta))
+					hora = datetime.datetime.now().strftime("%H:%M:%S")
+					consulta = "update consulta set horaaprobacion = %s, tiempoconsulta = %s where idconsulta = %s;"
+					cursor.execute(consulta, (hora, tiempoevaluacionmin, idconsulta))
 				conexion.commit()
 			finally:
 				conexion.close()
@@ -3312,7 +3299,7 @@ def ver(idconsulta):
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, nota, ambliopiaoi, ambliopiaod, ametropiaoi, motivoconsulta from consulta where idconsulta = "+ str(idconsulta) + ";"
+				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, nota, ambliopiaoi, ambliopiaod, ametropiaoi, motivoconsulta, revisadokevin, comentariokevin from consulta where idconsulta = "+ str(idconsulta) + ";"
 				cursor.execute(consulta)
 				dataconsulta = cursor.fetchall()
 				idpaciente = dataconsulta[0][0]
@@ -3454,6 +3441,14 @@ def ver(idconsulta):
 				consulta = "select lugar, descripcion from recetareferencia where idconsulta = %s"
 				cursor.execute(consulta,idconsulta)
 				referencia = cursor.fetchone()
+				consulta = "select tiempoconsulta from consulta where idconsulta = %s"
+				cursor.execute(consulta,idconsulta)
+				tiempoconsulta = cursor.fetchone()
+				tiempoconsulta = tiempoconsulta[0]
+				consulta = f"SELECT CONCAT(TIMESTAMPDIFF(MINUTE, CAST(horaingresodatos as TIME), CAST(horaaprobacion as TIME)), ':', TIMESTAMPDIFF(SECOND, CAST(horaingresodatos as TIME), CAST(horaaprobacion as TIME)) % 60) from consulta where idconsulta = {idconsulta}"
+				cursor.execute(consulta)
+				tiempoaprobacion = cursor.fetchone()
+				tiempoaprobacion = tiempoaprobacion[0]
 		finally:
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
@@ -3462,11 +3457,26 @@ def ver(idconsulta):
 		logeadokevin = 1
 	else:
 		logeadokevin = 0
+	if request.method == 'POST':
+		comentario = request.form["comentariokevin"]
+		try:
+			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "update consulta set comentariokevin = %s, revisadokevin = 1 where idconsulta = %s;"
+					cursor.execute(consulta, (comentario, idconsulta))
+				conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('aprobados'))
 	return render_template('ver.html', title='Historico', logeado=logeado, estudiante=estudiante, paciente = paciente, 
 		dataconsulta=dataconsulta, anios=anios, cincos=cincos, meses=meses, antecedentes = antecedentes, av=av, ra=ra, vc=vc, roa=roa, ror=ror, 
 		rs=rs, rf=rf, mo=mo, obs=obs, usolen=usolen, numantmed=numantmed, numantqui=numantqui, antmed=antmed, antqui=antqui, enfermedades=enfermedades,
 		nervos=nervos, mms=mms, numeros=numeros, relva=relva, tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen,
-		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotas=gotas, referencia=referencia, lentedetalladolen=lentedetalladolen, idconsulta = idconsulta, logeadokevin=logeadokevin)
+		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotas=gotas, referencia=referencia, lentedetalladolen=lentedetalladolen,
+		idconsulta = idconsulta, logeadokevin=logeadokevin, tiempoconsulta = tiempoconsulta, tiempoaprobacion = tiempoaprobacion)
 
 @app.route("/revisado/<idconsulta>", methods=['GET', 'POST'])
 def revisado(idconsulta):
