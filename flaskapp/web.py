@@ -564,7 +564,7 @@ def penddatosclinicos():
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 0 and ingdata = 0"
+				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y') from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 0 and ingdata = 0 order by c.fecha desc;"
 				cursor.execute(consulta)
 				consultas = cursor.fetchall()
 		finally:
@@ -1494,7 +1494,7 @@ def pendaprobar():
 		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 0 and ingdata = 1"
+				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y') from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 0 and ingdata = 1 order by c.fecha desc;"
 				cursor.execute(consulta)
 				consultas = cursor.fetchall()
 		finally:
@@ -2406,7 +2406,6 @@ def imprimir(idfacturaheader):
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, d.nanoplasma from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
-				print(consulta)
 				cursor.execute(consulta)
 				dataventa = cursor.fetchall()
 				try:
@@ -2429,7 +2428,7 @@ def imprimir(idfacturaheader):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	
-	rendered = render_template('descventa.html', title='Factura', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente)
+	rendered = render_template('descventa.html', title='Factura', logeado=logeado, dataventa=dataventa, dataaro=dataaro, datalente=datalente, idfacturaheader = idfacturaheader)
 	options = {'enable-local-file-access': None, 'page-size': 'A8', 'orientation': 'Portrait', 'margin-left': '0', 'margin-right': '0', 'margin-top': '0', 'margin-bottom': '5', 'encoding': 'utf-8', 'zoom': '0.8'}
 	config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
 	pdf = pdfkit.from_string(rendered, False, configuration=config, options=options)

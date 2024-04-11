@@ -3,14 +3,18 @@
     <h1>Pendientes de Ingreso de Datos Clínicos</h1>
     <table>
         <tr>
-            <th style="width: 40%;">Estudiante</th>
-            <th style="width: 40%;">Paciente</th>
+            <th style="width: 5%;">No.</th>
+            <th style="width: 33%;">Estudiante</th>
+            <th style="width: 33%;">Paciente</th>
+            <th style="width: 9%;">Fecha</th>
 			<th>Opción</th>
         </tr>
         {% for i in consultas %}
         <tr>
+            <td>{{ loop.index }}</td>
             <td>{{i[1]}} {{i[2]}}</td>
             <td>{{i[3]}} {{i[4]}}</td>
+            <td>{{i[5]}}</td>
 			<td><a href="/datosclinicos/{{i[0]}}" style="color: black;"><button type="button" style="width: 100%;" class="btn btn-primary">Ingresar datos</button></a></td>
         </tr>
         {% endfor%}
