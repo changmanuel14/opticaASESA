@@ -9,6 +9,7 @@ from os import getcwd, path
 import os
 from PIL import Image
 from fpdf import FPDF
+from conexion import Conhost, Conuser, Conpassword, Condb
 
 from werkzeug.utils import send_file
 
@@ -38,7 +39,7 @@ def citas():
 	fecha = datetime.datetime.now()
 	d4 = fecha.strftime("%Y-%m-%d")
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT c.nombre, c.apellido, DATE_FORMAT(c.fecha,'%d/%m/%Y'), h.hora, c.telefono, c.idcitas from citas c inner join hora h on c.idhora = h.idhora where fecha >= '" + str(d4) + "' order by c.fecha asc, c.idhora asc;"
@@ -54,7 +55,7 @@ def citas():
 	if request.method == 'POST':
 		fecha = request.form["fecha"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "SELECT c.nombre, c.apellido, DATE_FORMAT(c.fecha,'%d/%m/%Y'), h.hora, c.telefono, c.idcitas from citas c inner join hora h on c.idhora = h.idhora where fecha = '" + str(fecha) + "' order by c.idhora asc;"
@@ -77,7 +78,7 @@ def nuevacita():
 	except:
 		logeado = 0
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idhora, hora from hora;"
@@ -94,7 +95,7 @@ def nuevacita():
 		fecha = request.form["fecha"]
 		hora = request.form["hora"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "insert into citas(nombre, apellido, telefono, fecha, idhora) values(%s,%s,%s,%s,%s)"
@@ -114,7 +115,7 @@ def ceditar(idcita):
 	except:
 		logeado = 0
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idhora, hora from hora;"
@@ -135,7 +136,7 @@ def ceditar(idcita):
 		fecha = request.form["fecha"]
 		hora = request.form["hora"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "update citas set nombre = %s, apellido = %s, telefono = %s, fecha = %s, idhora = %s where idcitas = %s"
@@ -151,7 +152,7 @@ def ceditar(idcita):
 @app.route('/celiminar/<idcita>', methods=['GET', 'POST'])
 def celiminar(idcita):
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "delete from citas where idcitas = "+idcita+";"
@@ -209,7 +210,7 @@ def nuevaconsulta():
             "Inflamación Ocular", "Irritación al Sol","Lagrimeo", "Miopia","Picazón","Primera Consulta","Visión Cercana Borrosa", "Visión Lejana Borrosa","Vista Cansada"]
 	motivos.sort()
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "select idsexo, sexo from sexo;"
@@ -276,7 +277,7 @@ def nuevaconsulta():
 		direccion = request.form["direccion"]
 		#ingreso paciente y estudiante
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "insert into paciente(nombre1, nombre2, apellido1, apellido2, fechanac, idsexo, profesion, direccion, cui, telefono, telefono2, ultimaev) values(%s, %s, %s, %s, %s, %s,%s, %s, %s,%s, %s, %s);"
@@ -311,7 +312,7 @@ def nuevaconsulta():
 			print("Ocurrió un error al conectar: ", e)
 		#inserción de consulta a bd
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "insert into consulta(fecha, idpaciente, idestudiante, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, ojoambliopia, emetropia, antimetropia, tipoametropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, aprobado,motivoconsulta) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,0, %s);"
@@ -336,7 +337,7 @@ def verventas():
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = '''
@@ -364,7 +365,7 @@ def aros():
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT a.codigo, a.color, m.marca, a.cantidad, a.precio, a.precio * 3, a.consignacion, a.idaro, TIMESTAMPDIFF(MONTH, a.fechaingreso, CURDATE()), a.idaro, a.proveedor, a.factura from aro a inner join marca m on a.idmarca = m.idmarca where a.cantidad > 0 order by m.marca asc, a.codigo asc"
@@ -385,7 +386,7 @@ def marcas():
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idmarca, marca from marca order by marca asc"
@@ -408,7 +409,7 @@ def nuevamarca():
 	if request.method == 'POST':
 		marca = request.form["marca"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "INSERT INTO marca(marca) values (%s)"
@@ -430,7 +431,7 @@ def editarmarca(id):
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT marca from marca where idmarca = %s"
@@ -444,7 +445,7 @@ def editarmarca(id):
 	if request.method == 'POST':
 		marcaedit = request.form["marca"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "UPDATE marca set marca = %s where idmarca = %s"
@@ -466,7 +467,7 @@ def ingresoaros():
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idmarca, marca from marca order by marca asc"
@@ -499,7 +500,7 @@ def ingresoaros():
 		if descmarca != 0:
 			precio = precio * 2 / 3
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "INSERT INTO aro(codigo, color, idmarca, cantidad, precio, consignacion, fechaingreso, factura, proveedor) values(%s,%s,%s,%s,%s,%s, CURDATE(),%s,%s)"
@@ -524,7 +525,7 @@ def login():
 		user = request.form["user"]
 		pwd = request.form["pwd"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "SELECT iduser, nombre, apellido FROM user WHERE user = %s and pwd = md5(%s)"
@@ -561,7 +562,7 @@ def penddatosclinicos():
 	except:
 		logeado = 0
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y') from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 0 and ingdata = 0 order by c.fecha desc;"
@@ -580,7 +581,7 @@ def datosclinicos(idconsulta):
 	except:
 		logeado = 0
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "select idusolen, uso from usolen;"
@@ -621,7 +622,7 @@ def datosclinicos(idconsulta):
 	enfermedades = [['Diabetes Mellitus'],['Hipertensión Arterial'],['Artritis Reumatoidea'],['Virus Inmunodeficiencia Humana'],['Hipertrigliceridemia'],['Colesterolemia']]
 	#Insert into motivos(motivo) values ("Ardor Ocular"),("Cambio de Lentes"),("Cansancio Visual"),("Chequeo General"),("Consulta de Prevención"),("Dolor de Cabeza"),("Enrojecimiento Ocular"),("Inflamación Ocular"),("Irritación al Sol"),("Lagrimeo"),("Molestia frente a Dispositivos Electrónicos"),("Picazón"),("Primera Consulta"),("Sensación de Cuerpo Extraño"),("Visión Cercana Borrosa"),("Visión Lejana Borrosa"),("Vista Cansada"),("Rectificacion de Graduación"),("Otros");
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idpaciente, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, DATE_FORMAT(fecha,'%d%m%Y'), motivoconsulta, idestudiante from consulta where idconsulta = "+ str(idconsulta) + ";"
@@ -635,7 +636,7 @@ def datosclinicos(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "select idrelacionvenaarteria, relacion from relacionvenaarteria;"
@@ -1379,7 +1380,7 @@ def datosclinicos(idconsulta):
 		if len(notas) < 1:
 			notas = 0
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					#agudeza visual
@@ -1491,7 +1492,7 @@ def pendaprobar():
 	if logeado == 0:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y') from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 0 and ingdata = 1 order by c.fecha desc;"
@@ -1512,7 +1513,7 @@ def aprobados():
 	if logeado == 0:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y'), p.nombre2, p.apellido2 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1 order by c.fecha desc"
@@ -1537,7 +1538,7 @@ def revision():
 	else:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT c.idconsulta, e.nombre, e.apellido, p.nombre1, p.apellido1, DATE_FORMAT(c.fecha,'%d/%m/%Y'), p.nombre2, p.apellido2 from consulta c inner join estudiante e on c.idestudiante = e.idestudiante inner join paciente p on p.idpaciente = c.idpaciente where aprobado = 1 and revisadokevin = 0 order by c.fecha desc"
@@ -1561,7 +1562,7 @@ def recetas(idconsulta):
 	lencons = []
 	existe = 0
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT esfera1, cilindro1, eje1, prisma1, avcc1 from reffin where idconsulta = %s and idojo = 2;"
@@ -1693,7 +1694,7 @@ def recetas(idconsulta):
 		if len(descripcion) < 1:
 			descripcion = 0
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					if existe == 0:
@@ -1732,7 +1733,7 @@ def venta(idconsulta):
 	if logeado == 0:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idservicios, servicio, precio from servicios;"
@@ -1902,7 +1903,7 @@ def venta(idconsulta):
 		today = date.today()
 		d1 = today.strftime("%d/%m/%Y")
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "SELECT nombre, cantidad FROM accesorios ORDER BY idaccesorios"
@@ -1975,7 +1976,7 @@ def comisionliquidar():
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = 'select f.nombrecliente, f.apellidocliente, f.nit, DATE_FORMAT(f.fecha, "%d/%m/%Y"), c.totalventa, c.comision, c.nombreliquidacion, c.idcomisiones from facturaheader f inner join comisiones c on c.idfacturaheader = f.idfacturaheader where c.liquidado = 0 and c.activo = 1 ORDER BY f.fecha desc, f.nombrecliente asc;'
@@ -1996,7 +1997,7 @@ def exportarliquidacion():
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = 'select f.nombrecliente, f.apellidocliente, f.nit, DATE_FORMAT(f.fecha, "%d/%m/%Y"), c.totalventa, c.comision, c.nombreliquidacion, c.idcomisiones from facturaheader f inner join comisiones c on c.idfacturaheader = f.idfacturaheader where c.liquidado = 0 and c.activo = 1 ORDER BY f.fecha desc, f.nombrecliente asc;'
@@ -2107,7 +2108,7 @@ def comision():
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = 'select f.nombrecliente, f.apellidocliente, f.nit, DATE_FORMAT(f.fecha, "%d/%m/%Y"), c.totalventa, c.comision, c.nombreliquidacion, DATE_FORMAT(c.fechaliquidado, "%d/%m/%Y") from facturaheader f inner join comisiones c on c.idfacturaheader = f.idfacturaheader where c.liquidado = 1 ORDER BY f.fecha desc, f.nombrecliente asc;'
@@ -2129,7 +2130,7 @@ def liquidarcomisiones():
 		return redirect(url_for('login'))
 	
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = 'update comisiones set liquidado = 1, fechaliquidado = %s where liquidado = 0;'
@@ -2151,7 +2152,7 @@ def liquidarcomision(idcomision):
 		return redirect(url_for('login'))
 	
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = 'update comisiones set liquidado = 1, fechaliquidado = %s where idcomisiones = %s;'
@@ -2172,7 +2173,7 @@ def factura(idfacturaheader):
 	if logeado == 0:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, d.nanoplasma from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
@@ -2216,7 +2217,7 @@ def segventas(idfacturaheader):
 		return redirect(url_for('home'))
 	idusuario = int(session['iduser1'])
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, h.paso, d.nanoplasma from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
@@ -2269,7 +2270,7 @@ def segventas(idfacturaheader):
 		comentario = request.form['comentario']
 		fechaact = datetime.datetime.now()
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = 'INSERT INTO segventas(comentario, fecha, iduser, idfacturaheader) values (%s, %s, %s, %s);'
@@ -2402,7 +2403,7 @@ def imprimir(idfacturaheader):
 	if logeado == 0:
 		return redirect(url_for('login'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "Select h.nombrecliente, h.apellidocliente, h.nit, h.preciogen, h.descuento, h.total, DATE_FORMAT(h.fecha, '%d/%m/%Y'), d.idaro, d.idlenteoi, d.idlenteod, d.precioaro, d.preciolente, d.antireflejo, d.montaje, d.tinte, d.perforado, d.ranurado, d.facetado, d.solo1ojo, d.prismas, d.doscaras, d.moldes, d.filtro, h.coddesc, d.consulta, d.nanoplasma from facturaheader h inner join facturadesc d on h.idfacturaheader = d.idfacturaheader where h.idfacturaheader = " + str(idfacturaheader) + ";"
@@ -2447,7 +2448,7 @@ def pendaprobarc(idconsulta):
 	if logeado == 0:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "select idusolen, uso from usolen;"
@@ -2486,7 +2487,7 @@ def pendaprobarc(idconsulta):
 	meses = [[1, "Enero"],[2, "Febrero"],[3, "Marzo"],[4, "Abril"],[5, "Mayo"],[6, "Junio"],[7, "Julio"],[8, "Agosto"],[9, "Septiembre"],[10, "Octubre"],[11, "Noviembre"],[12, "Diciembre"]]
 	enfermedades = [['Diabetes Mellitus'],['Hipertensión Arterial'],['Artritis Reumatoidea'],['Virus Inmunodeficiencia Humana']]
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, motivoconsulta, nota, ambliopiaoi, ambliopiaod, ametropiaoi from consulta where idconsulta = "+ str(idconsulta) + ";"
@@ -2499,7 +2500,7 @@ def pendaprobarc(idconsulta):
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 		print("Ocurrió un error al conectar: ", e)
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT nombre, apellido, carnet from estudiante where idestudiante = %s"
@@ -3161,7 +3162,7 @@ def pendaprobarc(idconsulta):
 			descref = 0
 		tiempoevaluacionmin = request.form["tiempoevaluacionmin"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					"""
@@ -3256,7 +3257,7 @@ def ver(idconsulta):
 	if logeado == 0:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "select idusolen, uso from usolen;"
@@ -3295,7 +3296,7 @@ def ver(idconsulta):
 	meses = [[1, "Enero"],[2, "Febrero"],[3, "Marzo"],[4, "Abril"],[5, "Mayo"],[6, "Junio"],[7, "Julio"],[8, "Agosto"],[9, "Septiembre"],[10, "Octubre"],[11, "Noviembre"],[12, "Diciembre"]]
 	enfermedades = [['Diabetes Mellitus'],['Hipertensión Arterial'],['Artritis Reumatoidea'],['Virus Inmunodeficiencia Humana']]
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, nota, ambliopiaoi, ambliopiaod, ametropiaoi, motivoconsulta, revisadokevin, comentariokevin from consulta where idconsulta = "+ str(idconsulta) + ";"
@@ -3459,7 +3460,7 @@ def ver(idconsulta):
 	if request.method == 'POST':
 		comentario = request.form["comentariokevin"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "update consulta set comentariokevin = %s, revisadokevin = 1 where idconsulta = %s;"
@@ -3490,7 +3491,7 @@ def revisado(idconsulta):
 	else:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = f"update consulta set revisadokevin = 1 where idconsulta = {idconsulta};"
@@ -3516,7 +3517,7 @@ def crearusuario():
 		user = request.form["user"]
 		pwd = request.form["pwd"]
 		try:
-			conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
 				with conexion.cursor() as cursor:
 					consulta = "INSERT INTO user(nombre, apellido, user, pwd) values (%s, %s, %s, MD5(%s));"
@@ -3539,7 +3540,7 @@ def recetalentespdf(idconsulta):
 		return redirect(url_for('home'))
 	rf = []
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT esfera1, cilindro1, eje1, prisma1, avcc1 from reffin where idconsulta = %s and idojo = 2;"
@@ -3582,7 +3583,7 @@ def recetacontactopdf(idconsulta):
 	lencons = []
 	existe = 0
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT DATE_FORMAT(fechacaducidad,'%d/%m/%Y'), poder, cb, dia, cil, eje, agregar, color, tipo from recetacontacto where idconsulta = " + str(idconsulta) + " and idojo = 2;"
@@ -3629,7 +3630,7 @@ def recetagotaspdf(idconsulta):
 	lencons = []
 	existe = 0
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT medicamento1, descripcion1, medicamento2, descripcion2 from recetagotero where idconsulta = %s;"
@@ -3665,7 +3666,7 @@ def recetarefpdf(idconsulta):
 	if logeado == 0:
 		return redirect(url_for('home'))
 	try:
-		conexion = pymysql.connect(host='localhost', user='root', password='database', db='opticadb')
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
 				consulta = "SELECT lugar, descripcion from recetareferencia  where idconsulta = %s;"
@@ -3708,6 +3709,243 @@ def recetalentesblancopdf():
 	response.headers['Content-Disposition'] = 'inline; filename=reportediario.pdf'
 	print(response)
 	return response
+
+@app.route("/equipo")
+def equipo():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	try:
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+		try:
+			with conexion.cursor() as cursor:
+				cursor.execute("SELECT idequipo, nombre, codigo, marca, activo, razonbaja, DATE_FORMAT(fechabaja,'%d/%m/%Y') from equipo order by codigo asc;")
+			# Con fetchall traemos todas las filas
+				equipos = cursor.fetchall()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('equipo.html', title='Equipos',equipos = equipos, logeado=logeado)
+
+@app.route("/nuevoequipo", methods=['GET', 'POST'])
+def nuevoequipo():
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+		return redirect(url_for('login'))
+	if request.method == 'POST':
+		nombre = request.form["nombre"]
+		marca = request.form["marca"]
+		try:
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "SELECT MAX(codigo) from equipo;"
+					cursor.execute(consulta)
+					maxid = cursor.fetchall()
+					maxid = maxid[0][0]
+					if maxid != None:
+						straux = ""
+						for i in range(len(maxid)):
+							if maxid[i].isnumeric():
+								straux = straux + maxid[i]
+						maxid = str(int(straux) + 1)
+						while len(maxid) < 3:
+							maxid = '0' + maxid
+						codigo = "E" + str(maxid)
+					else:
+						codigo = "E001"
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		
+
+		try:
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "INSERT INTO equipo(nombre, codigo, marca, activo) values (%s,%s,%s,1);"
+					cursor.execute(consulta, (nombre, codigo, marca))
+				conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('equipo'))
+	return render_template('nuevoequipo.html', title='Agregar Equipo', logeado=logeado)
+
+@app.route("/editarequipo/<id>", methods=['GET', 'POST'])
+def editarequipo(id):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+		return redirect(url_for('login'))
+	try:
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+		try:
+			with conexion.cursor() as cursor:
+				consulta = "select nombre, marca from equipo where idequipo = %s;"
+				cursor.execute(consulta, (id))
+				equipo = cursor.fetchone()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	if request.method == 'POST':
+		nombre = request.form["nombre"]
+		marca = request.form["marca"]
+		try:
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "update equipo set nombre = %s, marca = %s where idequipo = %s;"
+					cursor.execute(consulta, (nombre, marca, id))
+				conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('equipo'))
+	return render_template('editarequipo.html', title='Editar Equipo', logeado=logeado, equipo = equipo)
+
+@app.route("/mantenimientos/<id>")
+def mantenimientos(id):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	try:
+		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+		try:
+			with conexion.cursor() as cursor:
+				consulta = f"SELECT idmantenimiento, proveedor, DATE_FORMAT(fecha,'%d/%m/%Y'), documento from mantenimiento where idequipo = {id} order by fecha desc;"
+				cursor.execute(consulta)
+			# Con fetchall traemos todas las filas
+				mantenimientos = cursor.fetchall()
+				consulta = "SELECT nombre, codigo, marca from equipo where idequipo = %s;"
+				cursor.execute(consulta, id)
+			# Con fetchall traemos todas las filas
+				equipo = cursor.fetchone()
+		finally:
+			conexion.close()
+	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+		print("Ocurrió un error al conectar: ", e)
+	return render_template('mantenimientos.html', title='Mantenimientos', mantenimientos = mantenimientos, logeado=logeado, equipo=equipo, id=id)
+
+@app.route("/nuevomantenimiento/<id>", methods=['GET', 'POST'])
+def nuevomantenimiento(id):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if request.method == 'POST':
+		proveedor = request.form["proveedor"]
+		fecha = request.form["fecha"]
+		try:
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "insert into mantenimiento(idequipo, fecha, documento, proveedor) values (%s, %s, 0, %s);"
+					cursor.execute(consulta, (id,fecha,proveedor))
+				# Con fetchall traemos todas las filas
+					conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('mantenimientos', id = id))
+	return render_template('nuevomantenimiento.html', title='Nuevo Mantenimiento', logeado=logeado)
+
+@app.route("/subirdocumentomantenimiento/<idmantenimiento>&<mensaje>", methods=['GET', 'POST'])
+def subirdocumentomantenimiento(idmantenimiento, mensaje):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+		return redirect(url_for('login'))
+	existe = 0
+	nombrearchivo = PATH_FILE + f"mantenimiento_{idmantenimiento}.pdf"
+	if path.exists(nombrearchivo):
+		existe = 1
+	if request.method == 'POST':
+		if existe == 0:
+			try:
+				archivomantenimiento = request.files['documento']
+				if archivomantenimiento.filename != '':
+					if ".pdf" not in archivomantenimiento.filename:
+						if archivomantenimiento.filename.split('.')[-1].lower() not in ['jpg', 'jpeg', 'png', 'gif']:
+							mensaje = 1
+							return redirect(url_for('subirdocumentomantenimiento', idmantenimiento = idmantenimiento, mensaje = mensaje))
+						else:
+							archivomantenimiento.save('temp.png')
+							if archivomantenimiento.filename.split('.')[-1].lower() == 'png':
+								img = Image.open('temp.png')
+								rgb_img = img.convert('RGB')
+								rgb_img.save('temp.jpg')
+								imagen_path = 'temp.jpg'
+							else:
+								imagen_path = 'temp.png'
+							pdf = FPDF('P', 'mm', 'Letter')  # Ajustar a tamaño Carta
+							pdf.add_page()
+							pdf.image(imagen_path, 0, 0, 215.9, 279.4)
+							pdf.output(path.join(PATH_FILE, f"mantenimiento_{idmantenimiento}.pdf"), 'F')
+							os.remove(imagen_path)
+					else:
+						archivomantenimiento.save(path.join(PATH_FILE, f"mantenimiento_{idmantenimiento}.pdf"))
+					try:
+						conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+						try:
+							with conexion.cursor() as cursor:
+								consulta = "update mantenimiento set documento = 1 where idmantenimiento = %s;"
+								cursor.execute(consulta, (idmantenimiento))
+							# Con fetchall traemos todas las filas
+								conexion.commit()
+						finally:
+							conexion.close()
+					except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+						print("Ocurrió un error al conectar: ", e)
+			except:
+				print("No subió documento del mantenimiento")
+		return redirect(url_for('equipo'))
+	return render_template('subirdocumentomantenimiento.html', title='Adjuntar documentos', logeado=logeado, mensaje = mensaje)
+
+@app.route("/darbajaequipo/<id>", methods=['GET', 'POST'])
+def darbajaequipo(id):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+	if request.method == 'POST':
+		razon = request.form["razon"]
+		fecha = request.form["fecha"]
+		try:
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
+			try:
+				with conexion.cursor() as cursor:
+					consulta = "update equipo set activo = 0, razonbaja = %s, fechabaja = %s where idequipo = %s;"
+					cursor.execute(consulta, (razon, fecha, id))
+				# Con fetchall traemos todas las filas
+					conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		return redirect(url_for('equipo'))
+	return render_template('darbajaequipo.html', title='Dar Baja a Equipo', logeado=logeado)
+
+@app.route("/verdocumento/<nombredocumento>", methods=['GET', 'POST'])
+def verdocumento(nombredocumento):
+	try:
+		logeado = session['logeado1']
+	except:
+		logeado = 0
+		return redirect(url_for('login'))
+	return render_template('verdocumento.html', title='Visualización de Documento', logeado=logeado, nombredocumento = nombredocumento)
 
 if __name__ == '__main__':
     app.debug = True

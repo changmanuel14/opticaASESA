@@ -1,2 +1,3 @@
 myvenv/
 flaskapp/static/documentos/
+conexion.py
