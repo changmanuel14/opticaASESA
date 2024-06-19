@@ -9,7 +9,7 @@ from os import getcwd, path
 import os
 from PIL import Image
 from fpdf import FPDF
-from conexion import Conhost, Conuser, Conpassword, Condb
+from conexion import Conhost, Conuser, Conpassword, Condb, Condb2
 
 from werkzeug.utils import send_file
 
@@ -1768,6 +1768,10 @@ def venta(idconsulta):
 		except:
 			referido = ""
 			nombreref = ""
+		try:
+			pagodeposito = request.form["pagodeposito"]
+		except:
+			pagodeposito = ""
 		nomcliente = request.form["nomcliente"]
 		apecliente = request.form["apecliente"]
 		nompaciente = request.form["nompaciente"]
@@ -1958,6 +1962,24 @@ def venta(idconsulta):
 						cantidadaro = int(cantidadaro[0][0]) - 1
 						consulta = "Update aro set cantidad = %s where idaro = %s;"
 						cursor.execute(consulta, (cantidadaro, idaro))
+					conexion.commit()
+			finally:
+				conexion.close()
+		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
+			print("Ocurrió un error al conectar: ", e)
+		try:
+			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb2)
+			try:
+				with conexion.cursor() as cursor:
+					"""consulta = f"SELECT idcodigos from codigos where concepto like '%Aro%Optica%';"
+					cursor.execute(consulta)
+					idpagoaro = cursor.fetchone()
+					consulta = f"SELECT idcodigos from codigos where concepto like '%Lente%Optica%';"
+					cursor.execute(consulta)
+					idpagolente = cursor.fetchone()"""
+					nombrecompletopaciente =  (nomcliente + " " + apecliente).upper()
+					consulta = "insert into pagooptica(nombre, nit, precioaro, preciolente, total) values (%s, %s, %s, %s, %s);"
+					cursor.execute(consulta, (nombrecompletopaciente, nit, precioaro, preciolente, restotcan))
 					conexion.commit()
 			finally:
 				conexion.close()
