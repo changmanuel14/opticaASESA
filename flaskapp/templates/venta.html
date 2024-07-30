@@ -105,6 +105,17 @@
 							</td>
 						</tr>
 						<tr>
+							<th style="width: 20%;">Filtro Absoblue</th>
+							<td colspan="2">
+								<center>
+									<input type="checkbox" id="absoblue" name="absoblue" value="1"
+										onchange="cambiolentes1()">
+									<label for="absoblue">Q </label>
+									<label for="absoblue" id="absobluel">{{servicios[11][2] * 2}}</label>
+								</center>
+							</td>
+						</tr>
+						<tr>
 							<th style="width: 20%;">Montaje</th>
 							<td colspan="2">
 								<center>
@@ -656,6 +667,8 @@
 	var moldesl = document.getElementById('moldesl')
 	var nanoplasma = document.getElementById('nanoplasma')
 	var nanoplasmal = document.getElementById('nanoplasmal')
+	var absoblue = document.getElementById('absoblue')
+	var absobluel = document.getElementById('absobluel')
 	if (antireflejo.checked == true) {
 		total = total + parseFloat(antireflejol.innerHTML)
 	}
@@ -688,6 +701,9 @@
 	}
 	if (nanoplasma.checked == true) {
 		total = total + parseFloat(nanoplasmal.innerHTML)
+	}
+	if (absoblue.checked == true) {
+		total = total + parseFloat(absobluel.innerHTML)
 	}
             }else if (lab.value == 2 || lab.value == '2') {
 		var montaje = document.getElementById('montaje')
