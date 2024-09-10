@@ -1748,7 +1748,7 @@ def venta(idconsulta):
 				consulta = "SELECT idlentedesc, idlenteheader, nombre, precio, preciosug from lentedesc;"
 				cursor.execute(consulta)
 				lentedesc = cursor.fetchall()
-				consulta = "select a.idaro, m.marca, a.codigo, a.color, a.precio from aro a inner join marca m on a.idmarca = m.idmarca where a.cantidad > 0 order by m.marca asc;"
+				consulta = "select a.idaro, m.marca, a.codigo, a.color, a.precio from aro a inner join marca m on a.idmarca = m.idmarca where a.cantidad > 0 order by m.marca asc, a.codigo asc, a.color asc;"
 				cursor.execute(consulta)
 				aros = cursor.fetchall()
 				consulta = "select nombrecliente, apellidocliente, nit, coddesc from facturaheader group by nit order by fecha desc;"

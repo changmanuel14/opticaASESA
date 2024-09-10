@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-		crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-		crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-		crossorigin="anonymous"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+	integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+	crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+	integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+	crossorigin="anonymous"></script>
 <h1>Venta</h1>
 <div class="container">
 	<ul class="nav nav-tabs">
@@ -25,7 +25,7 @@
 					<select name="idaro" id="idaro" class="form-control" onchange="cambioaro()">
 						<option value="">Seleccione el aro</option>
 						{% for i in aros %}
-						<option value="{{i[0]}}">{{i[0]}} - {{i[1]}} {{i[2]}} {{i[3]}}</option>
+						<option value="{{i[0]}}" style="color: black;">{{i[0]}} - {{i[1]}} {{i[2]}} {{i[3]}}</option>
 						{% endfor %}
 					</select>
 					<br>
@@ -278,8 +278,8 @@
 						<tr>
 							<th>Filtro</th>
 							<td colspan="2">
-								<center><input type="number" id="filtrool" name="filtrool" step="0.01" class="form-control"
-										value="0" onchange="cambiolentes1()" required></center>
+								<center><input type="number" id="filtrool" name="filtrool" step="0.01"
+										class="form-control" value="0" onchange="cambiolentes1()" required></center>
 							</td>
 						</tr>
 					</table>
@@ -459,6 +459,13 @@
 	</form>
 </div>
 <script type="text/javascript">
+	$(document).ready(function () {
+		$('#idaro').select2({
+			placeholder: "Seleccione el aro",
+			allowClear: true
+		});
+	});
+
 	function cambcomb() {
 		var general = document.getElementById("restotgen");
 		var descuento = document.getElementById("resdesc");
@@ -637,7 +644,7 @@
 		if (lab.value == 1 || lab.value == '1') {
 			var select = document.getElementById("ld");
 			var idlh = select.value;
-			var arreglo = {{ lentedesc | tojson }};
+			var arreglo = {{ lentedesc | tojson }}
 	var conteo = Object.keys(arreglo).length;
 	for (var i = 0; i < conteo; i++) {
 		if (parseInt(arreglo[i][0]) == parseInt(idlh)) {
@@ -769,31 +776,31 @@
 		var rpree1 = document.getElementById("aropregen");
 		var rpred1 = document.getElementById("aropredoc");
 		var arreglo = {{ aros | tojson }};
-		var total = 0
-		var conteo = Object.keys(arreglo).length;
-		for (var i = 0; i < conteo; i++) {
-			if (parseInt(arreglo[i][0]) == parseInt(idlh)) {
-				total = total + 1
-				var total1 = parseFloat(arreglo[i][4])
-				preg.innerHTML = "Precio Venta: Q " + String(((total1 * 3) + accesorios).toFixed(2))
-				rpreg.innerHTML = "Q " + String(((total1 * 3) + accesorios).toFixed(2))
-				rpree.innerHTML = "Q " + String(((total1 * 3) + accesorios).toFixed(2))
-				rpred.innerHTML = "Q " + String(((total1 * 2.85) + accesorios).toFixed(2))
-				rpreg1.value = String(((total1 * 3) + accesorios).toFixed(2))
-				rpree1.value = String(((total1 * 3) + accesorios).toFixed(2))
-				rpred1.value = String(((total1 * 2.85) + accesorios).toFixed(2))
-			}
+	var total = 0
+	var conteo = Object.keys(arreglo).length;
+	for (var i = 0; i < conteo; i++) {
+		if (parseInt(arreglo[i][0]) == parseInt(idlh)) {
+			total = total + 1
+			var total1 = parseFloat(arreglo[i][4])
+			preg.innerHTML = "Precio Venta: Q " + String(((total1 * 3) + accesorios).toFixed(2))
+			rpreg.innerHTML = "Q " + String(((total1 * 3) + accesorios).toFixed(2))
+			rpree.innerHTML = "Q " + String(((total1 * 3) + accesorios).toFixed(2))
+			rpred.innerHTML = "Q " + String(((total1 * 2.85) + accesorios).toFixed(2))
+			rpreg1.value = String(((total1 * 3) + accesorios).toFixed(2))
+			rpree1.value = String(((total1 * 3) + accesorios).toFixed(2))
+			rpred1.value = String(((total1 * 2.85) + accesorios).toFixed(2))
 		}
-		if (total == 0) {
-			preg.innerHTML = "Precio Venta: Q " + String(accesorios)
-			rpreg.innerHTML = "Q " + String(accesorios)
-			rpree.innerHTML = "Q " + String(accesorios)
-			rpred.innerHTML = "Q " + String(accesorios)
-			rpreg1.value = String(accesorios)
-			rpree1.value = String(accesorios)
-			rpred1.value = String(accesorios)
+	}
+	if (total == 0) {
+		preg.innerHTML = "Precio Venta: Q " + String(accesorios)
+		rpreg.innerHTML = "Q " + String(accesorios)
+		rpree.innerHTML = "Q " + String(accesorios)
+		rpred.innerHTML = "Q " + String(accesorios)
+		rpreg1.value = String(accesorios)
+		rpree1.value = String(accesorios)
+		rpred1.value = String(accesorios)
 
-		}
+	}
         }
 </script>
 {% endblock %}
