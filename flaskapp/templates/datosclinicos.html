@@ -101,6 +101,9 @@
 					</div>
 				</div>
 				<br>
+			</div>
+			<div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
+				<br>
 				<h3>Motivo de Consulta</h3>
 				<center>
 					<button type="button" class="btn btn-success" onclick="agmotivo()">Agregar Motivo de Consulta</button> 
@@ -232,8 +235,6 @@
 						</th>
 					</tr>
 				</table>
-			</div>
-			<div id="menu2" class="tab-pane fade" style="padding-left: 5%;">
 				<br>
 				<center>
 					<h3>Agudeza Visual</h3>
@@ -249,18 +250,18 @@
 					</thead>
 					<tr>
 						<th>Ojo Derecho</th>
-						<td><input type="text" class="form-control" id="avlod" name="avlod" list="av"
+						<td><input type="text" class="form-control" id="avlod" name="avlod" 
 								autocomplete="false"></td>
 						<td><input type="text" class="form-control" id="aeod" name="aeod"></td>
-						<td><input type="text" class="form-control" id="avclod" name="avcod" list="av"
+						<td><input type="text" class="form-control" id="avclod" name="avcod" 
 								autocomplete="false"></td>
 					</tr>
 					<tr>
 						<th>Ojo Izquierdo</th>
-						<td><input type="text" class="form-control" id="avloi" name="avloi" list="av"
+						<td><input type="text" class="form-control" id="avloi" name="avloi" 
 								autocomplete="false"></td>
 						<td><input type="text" class="form-control" id="aeoi" name="aeoi"></td>
-						<td><input type="text" class="form-control" id="avcloi" name="avcoi" list="av"
+						<td><input type="text" class="form-control" id="avcloi" name="avcoi" 
 								autocomplete="false"></td>
 					</tr>
 				</table>
@@ -285,7 +286,7 @@
 						<td><input type="text" class="form-control" id="racod" name="racod"></td>
 						<td><input type="text" class="form-control" id="raejod" name="raejod"></td>
 						<td><input type="text" class="form-control" id="rapod" name="rapod"></td>
-						<td><input type="text" class="form-control" id="raavcc1od" name="raavcc1od" list="av"
+						<td><input type="text" class="form-control" id="raavcc1od" name="raavcc1od" 
 								autocomplete="false"></td>
 					</tr>
 					<tr>
@@ -294,7 +295,7 @@
 						<td><input type="text" class="form-control" id="racoi" name="racoi"></td>
 						<td><input type="text" class="form-control" id="raejoi" name="raejoi"></td>
 						<td><input type="text" class="form-control" id="rapoi" name="rapoi"></td>
-						<td><input type="text" class="form-control" id="raavcc1oi" name="raavcc1oi" list="av"
+						<td><input type="text" class="form-control" id="raavcc1oi" name="raavcc1oi" 
 								autocomplete="false"></td>
 					</tr>
 					<tr>
@@ -303,7 +304,7 @@
 						<th>A.D.D.</th>
 						<td><input type="text" class="form-control" id="add1" name="add1"></td>
 						<td><input type="text" class="form-control" id="add2" name="add2"></td>
-						<td><input type="text" class="form-control" id="add3" name="add3" list="av" autocomplete="false">
+						<td><input type="text" class="form-control" id="add3" name="add3"  autocomplete="false">
 						</td>
 					</tr>
 					</thead>
@@ -326,7 +327,7 @@
 						<td><input type="text" class="form-control" id="vccod" name="vccod"></td>
 						<td><input type="text" class="form-control" id="vcejod" name="vcejod"></td>
 						<td><input type="text" class="form-control" id="vcpod" name="vcpod"></td>
-						<td><input type="text" class="form-control" id="vcavccod" name="vcavccod" list="av"
+						<td><input type="text" class="form-control" id="vcavccod" name="vcavccod" 
 								autocomplete="false"></td>
 					</tr>
 					<tr>
@@ -335,7 +336,7 @@
 						<td><input type="text" class="form-control" id="vccoi" name="vccoi"></td>
 						<td><input type="text" class="form-control" id="vcejoi" name="vcejoi"></td>
 						<td><input type="text" class="form-control" id="vcpoi" name="vcpoi"></td>
-						<td><input type="text" class="form-control" id="vcavccoi" name="vcavccoi" list="av"
+						<td><input type="text" class="form-control" id="vcavccoi" name="vcavccoi" 
 								autocomplete="false"></td>
 
 					</tr>
@@ -364,7 +365,7 @@
 						</td>
 						<td><input type="text" class="form-control" id="roapod" name="roapod" onchange="changepod()"></td>
 						<td><input type="text" class="form-control" id="roavod" name="roavod"></td>
-						<td><input type="text" class="form-control" id="roaavccod" name="roaavccod" list="av"
+						<td><input type="text" class="form-control" id="roaavccod" name="roaavccod" 
 								autocomplete="false" onchange="changeavccod()"></td>
 					</tr>
 					<tr>
@@ -375,7 +376,7 @@
 						</td>
 						<td><input type="text" class="form-control" id="roapoi" name="roapoi" onchange="changepoi()"></td>
 						<td><input type="text" class="form-control" id="roavoi" name="roavoi"></td>
-						<td><input type="text" class="form-control" id="roaavccoi" name="roaavccoi" list="av"
+						<td><input type="text" class="form-control" id="roaavccoi" name="roaavccoi" 
 								autocomplete="false" onchange="changeavccoi()"></td>
 					</tr>
 				</table><br>
@@ -434,7 +435,7 @@
 						<td><input type="text" class="form-control" id="rscod" name="rscod"></td>
 						<td><input type="text" class="form-control" id="rsejod" name="rsejod"></td>
 						<td><input type="text" class="form-control" id="rspod" name="rspod"></td>
-						<td><input type="text" class="form-control" id="rsavccod" name="rsavccod" list="av"
+						<td><input type="text" class="form-control" id="rsavccod" name="rsavccod" 
 								autocomplete="false"></td>
 					</tr>
 					<tr>
@@ -443,7 +444,7 @@
 						<td><input type="text" class="form-control" id="rscoi" name="rscoi"></td>
 						<td><input type="text" class="form-control" id="rsejoi" name="rsejoi"></td>
 						<td><input type="text" class="form-control" id="rspoi" name="rspoi"></td>
-						<td><input type="text" class="form-control" id="rsavccoi" name="rsavccoi" list="av"
+						<td><input type="text" class="form-control" id="rsavccoi" name="rsavccoi" 
 								autocomplete="false"></td>
 					</tr>
 				</table>
@@ -492,7 +493,7 @@
 						<td><input type="text" class="form-control" id="rfc1od" name="rfc1od"></td>
 						<td><input type="text" class="form-control" id="rfej1od" name="rfej1od"></td>
 						<td><input type="text" class="form-control" id="rfp1od" name="rfp1od"></td>
-						<td><input type="text" class="form-control" id="rfavcc1od" name="rfavcc1od" list="av"
+						<td><input type="text" class="form-control" id="rfavcc1od" name="rfavcc1od" 
 								autocomplete="false"></td>
 					</tr>
 					<tr>
@@ -501,7 +502,7 @@
 						<td><input type="text" class="form-control" id="rfc1oi" name="rfc1oi"></td>
 						<td><input type="text" class="form-control" id="rfej1oi" name="rfej1oi"></td>
 						<td><input type="text" class="form-control" id="rfp1oi" name="rfp1oi"></td>
-						<td><input type="text" class="form-control" id="rfavcc1oi" name="rfavcc1oi" list="av"
+						<td><input type="text" class="form-control" id="rfavcc1oi" name="rfavcc1oi" 
 								autocomplete="false"></td>
 					</tr>
 					<tr>
@@ -510,7 +511,7 @@
 						<th>A.D.D.</th>
 						<td><input type="text" class="form-control" id="add11" name="add11"></td>
 						<td><input type="text" class="form-control" id="add22" name="add22"></td>
-						<td><input type="text" class="form-control" id="add33" name="add33" list="av"
+						<td><input type="text" class="form-control" id="add33" name="add33" 
 								autocomplete="false"></td>
 					</tr>
 					</thead>
@@ -535,7 +536,7 @@
 							<td><input type="text" class="form-control" id="rfej2od" name="rfej2od" value="0"></td>
 							<td><input type="text" class="form-control" id="rfp2od" name="rfp2od" value="0"></td>
 							<td><input type="text" class="form-control" id="rfavcc2od" name="rfavcc2od" value="0"
-									list="av" autocomplete="false"></td>
+									 autocomplete="false"></td>
 						</tr>
 						<tr>
 							<th>Ojo Izquierdo</th>
@@ -544,7 +545,7 @@
 							<td><input type="text" class="form-control" id="rfej2oi" name="rfej2oi" value="0"></td>
 							<td><input type="text" class="form-control" id="rfp2oi" name="rfp2oi" value="0"></td>
 							<td><input type="text" class="form-control" id="rfavcc2oi" name="rfavcc2oi" value="0"
-									list="av" autocomplete="false"></td>
+									 autocomplete="false"></td>
 						</tr>
 						<tr>
 							<th>DNP</th>
@@ -573,7 +574,7 @@
 							<td><input type="text" class="form-control" id="rfej3od" name="rfej3od" value="0"></td>
 							<td><input type="text" class="form-control" id="rfp3od" name="rfp3od" value="0"></td>
 							<td><input type="text" class="form-control" id="rfavcc3od" name="rfavcc3od" value="0"
-									list="av" autocomplete="false"></td>
+									 autocomplete="false"></td>
 						</tr>
 						<tr>
 							<th>Ojo Izquierdo</th>
@@ -582,7 +583,7 @@
 							<td><input type="text" class="form-control" id="rfej3oi" name="rfej3oi" value="0"></td>
 							<td><input type="text" class="form-control" id="rfp3oi" name="rfp3oi" value="0"></td>
 							<td><input type="text" class="form-control" id="rfavcc3oi" name="rfavcc3oi" value="0"
-									list="av" autocomplete="false"></td>
+									 autocomplete="false"></td>
 						</tr>
 						<tr>
 							<th>DNP</th>
