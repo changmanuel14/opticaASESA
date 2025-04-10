@@ -1006,39 +1006,29 @@
 					</tr>
 				</table>
 				<br>
-				<table>
-					<tr>
-						<th>Anotaciones</th>
-						<td style="width: 80%;">
-							<textarea id="notas" name="notas" rows="2" cols="65" style="font-size: 25px;"
-								disabled>{{dataconsulta[0][27]}}</textarea>
-						</td>
-					</tr>
-				</table>
-				<br>
 				<h6>Datos Gotero</h6>
 				<table id="tablegotas" style="display: block;">
 					<tr>
 						<td><input type="text" class="form-control" id="gmed1" name="gmed1" value="{{gotas[0]}}"
-								disabled></td>
-					</tr>
-					<tr>
+							disabled></td>
+						</tr>
+						<tr>
 						<td colspan="2">
 							<textarea id="gdesc1" name="gdesc1" rows="2" cols="65" style="font-size: 25px;" class="form-control"
 								disabled>{{gotas[1]}}</textarea>
-						</td>
-					</tr>
-				</table>
-				<br>
-				<table id="tablegotas1" style="display: block;">
-					<tr>
-						<td><input type="text" class="form-control" id="gmed2" name="gmed2" value="{{gotas[2]}}"
+							</td>
+						</tr>
+					</table>
+					<br>
+					<table id="tablegotas1" style="display: block;">
+						<tr>
+							<td><input type="text" class="form-control" id="gmed2" name="gmed2" value="{{gotas[2]}}"
 								disabled></td>
-					</tr>
-					<tr>
+							</tr>
+							<tr>
 						<td colspan="2">
 							<textarea id="gdesc2" name="gdesc2" rows="2" cols="65" style="font-size: 25px;" class="form-control"
-								disabled>{{gotas[3]}}</textarea>
+							disabled>{{gotas[3]}}</textarea>
 						</td>
 					</tr>
 				</table>
@@ -1047,18 +1037,43 @@
 					<table>
 						<tr>
 							<td>Lugar a referir: <input type="text" class="form-control" id="lugarref"
-									name="lugarref" value="{{referencia[0]}}" disabled></td>
+								name="lugarref" value="{{referencia[0]}}" disabled></td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<textarea id="descref" name="descref" rows="2" cols="65" style="font-size: 25px;" class="form-control"
+									disabled>{{referencia[1]}}</textarea>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<br>
+					<table>
+						<tr>
+							<th>Medicamento Dado</th>
+							<td style="width: 80%;">
+								<select name="idmedicamento" id="idmedicamento" class="form-control" disabled>
+									<option value="0" selected>Sin Medicamento</option>
+									{% for i in medicamentos %}
+									{% if (dataconsulta[0][34] | int == i[0] | int) and dataconsulta[0][34] | int > 0 %}
+									<option value="{{i[0]}}" selected>{{i[1]}} - {{i[2]}}</option>
+									{% else %}
+									<option value="{{i[0]}}">{{i[1]}} - {{i[2]}}</option>
+									{% endif %}
+									{% endfor %}
+								</select>
+							</td>
 						</tr>
 						<tr>
-							<td colspan="2">
-								<textarea id="descref" name="descref" rows="2" cols="65" style="font-size: 25px;" class="form-control"
-									disabled>{{referencia[1]}}</textarea>
+							<th>Anotaciones</th>
+							<td style="width: 80%;">
+								<textarea id="notas" name="notas" rows="2" cols="65" style="font-size: 25px;"
+									disabled>{{dataconsulta[0][27]}}</textarea>
 							</td>
 						</tr>
 					</table>
-				</div>
-				{% if logeadokevin == 1 %}
-				<h3>Comentario de Supervisión</h3>
+					{% if logeadokevin == 1 %}
+					<h3>Comentario de Supervisión</h3>
 				{% if dataconsulta[0][32] == 1 or dataconsulta[0][32] == '1' %}
 				<textarea id="comentariokevin" name="comentariokevin" rows="2" cols="80" class="form-control" placeholder="Comentario de Supervisión" disabled>{{dataconsulta[0][33]}}</textarea>
 				{% else %}

@@ -3332,7 +3332,7 @@ def ver(idconsulta):
 		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, nota, ambliopiaoi, ambliopiaod, ametropiaoi, motivoconsulta, revisadokevin, comentariokevin from consulta where idconsulta = "+ str(idconsulta) + ";"
+				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, nota, ambliopiaoi, ambliopiaod, ametropiaoi, motivoconsulta, revisadokevin, comentariokevin, idmedicamento from consulta where idconsulta = "+ str(idconsulta) + ";"
 				cursor.execute(consulta)
 				dataconsulta = cursor.fetchall()
 				idpaciente = dataconsulta[0][0]
@@ -3341,6 +3341,9 @@ def ver(idconsulta):
 				cursor.execute(consulta, (idestudiante))
 				estudiante = cursor.fetchall()
 				estudiante = estudiante[0]
+				consulta = "select idmedicamento, nombre, componente from medicamento;"
+				cursor.execute(consulta)
+				medicamentos = cursor.fetchall()
 				consulta = "select idrelacionvenaarteria, relacion from relacionvenaarteria;"
 				cursor.execute(consulta)
 				relva = cursor.fetchall()
@@ -3509,7 +3512,7 @@ def ver(idconsulta):
 		rs=rs, rf=rf, mo=mo, obs=obs, usolen=usolen, numantmed=numantmed, numantqui=numantqui, antmed=antmed, antqui=antqui, enfermedades=enfermedades,
 		nervos=nervos, mms=mms, numeros=numeros, relva=relva, tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen,
 		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotas=gotas, referencia=referencia, lentedetalladolen=lentedetalladolen,
-		idconsulta = idconsulta, logeadokevin=logeadokevin, tiempoconsulta = tiempoconsulta, tiempoaprobacion = tiempoaprobacion)
+		idconsulta = idconsulta, logeadokevin=logeadokevin, tiempoconsulta = tiempoconsulta, tiempoaprobacion = tiempoaprobacion, medicamentos=medicamentos)
 
 @app.route("/revisado/<idconsulta>", methods=['GET', 'POST'])
 def revisado(idconsulta):

@@ -1194,10 +1194,10 @@
 							<select name="idmedicamento" id="idmedicamento" class="form-control" disabled>
 								<option value="0">Sin Medicamento</option>
 								{% for i in medicamentos %}
-								{% if dataconsulta[0][32] | int == i[0] | int %}
+								{% if (dataconsulta[0][32] | int == i[0] | int) and dataconsulta[0][32] | int > 0 %}
 								<option value="{{i[0]}}" selected>{{i[1]}} - {{i[2]}}</option>
 								{% else %}
-								<option value="{{i[0]}}" selected>{{i[1]}} - {{i[2]}}</option>
+								<option value="{{i[0]}}">{{i[1]}} - {{i[2]}}</option>
 								{% endif %}
 								{% endfor %}
 							</select>
