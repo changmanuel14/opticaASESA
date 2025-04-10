@@ -1146,15 +1146,7 @@
 						</td>
 					</tr>
 				</table>
-				<table>
-					<tr>
-						<th>Anotaciones</th>
-						<td style="width: 80%;">
-							<textarea id="notas" name="notas" rows="2" cols="65"
-								style="font-size: 25px;">{{dataconsulta[0][28]}}</textarea>
-						</td>
-					</tr>
-				</table>
+				<br>
 				<h5>Datos Gotero</h5>
 				<table id="tablegotas" style="display: block;">
 					<tr>
@@ -1194,6 +1186,31 @@
 						</tr>
 					</table>
 				</div>
+				<table>
+					<tr>
+						<th>Medicamento Dado</th>
+						<td style="width: 80%;">
+							<select name="idmedicamento" id="idmedicamento" class="form-control" disabled>
+								<option value="0">Sin Medicamento</option>
+								{% for i in medicamentos %}
+								{% if dataconsulta[0][32] | int == i[0] | int %}
+								<option value="{{i[0]}}" selected>{{i[1]}} - {{i[2]}}</option>
+								{% else %}
+								<option value="{{i[0]}}" selected>{{i[1]}} - {{i[2]}}</option>
+								{% endif %}
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Anotaciones</th>
+						<td style="width: 80%;">
+							<textarea id="notas" name="notas" rows="2" cols="65"
+								style="font-size: 25px;">{{dataconsulta[0][28]}}</textarea>
+						</td>
+					</tr>
+				</table>
+				
 				<center>
 					<input class="btn btn-primary" type="submit" value="Aceptar">
 				</center>

@@ -36,13 +36,14 @@ def citas():
 		logeado = session['logeado1']
 	except:
 		logeado = 0
-	fecha = datetime.datetime.now()
-	d4 = fecha.strftime("%Y-%m-%d")
 	try:
 		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT c.nombre, c.apellido, DATE_FORMAT(c.fecha,'%d/%m/%Y'), h.hora, c.telefono, c.idcitas from citas c inner join hora h on c.idhora = h.idhora where fecha >= '" + str(d4) + "' order by c.fecha asc, c.idhora asc;"
+				consulta = 'delete from citas where fecha < CURDATE();'
+				cursor.execute(consulta)
+				conexion.commit()
+				consulta = "SELECT c.nombre, c.apellido, DATE_FORMAT(c.fecha,'%d/%m/%Y'), h.hora, c.telefono, c.idcitas from citas c inner join hora h on c.idhora = h.idhora where fecha >= CURDATE() order by c.fecha asc, c.idhora asc;"
 				cursor.execute(consulta)
 				data = cursor.fetchall()
 				consulta = "SELECT idhora, hora from hora;"
@@ -666,6 +667,9 @@ def datosclinicos(idconsulta):
 				consulta = "select idtipoametropia, tipo from tipoametropia;"
 				cursor.execute(consulta)
 				dataametropia = cursor.fetchall()
+				consulta = "select idmedicamento, nombre, componente, cantidad from medicamento where cantidad > 0;"
+				cursor.execute(consulta)
+				medicamentos = cursor.fetchall()
 				consulta = "SELECT p.nombre1, p.nombre2, p.apellido1, p.apellido2, p.fechanac, s.sexo, p.profesion, p.direccion, p.cui, p.telefono, p.telefono2 from paciente p inner join sexo s on p.idsexo = s.idsexo where idpaciente = %s"
 				cursor.execute(consulta, (idpaciente))
 				paciente = cursor.fetchall()
@@ -1379,6 +1383,7 @@ def datosclinicos(idconsulta):
 		notas = request.form["notas"]
 		if len(notas) < 1:
 			notas = 0
+		idmedicamento = request.form["idmedicamento"]
 		try:
 			conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 			try:
@@ -1468,8 +1473,11 @@ def datosclinicos(idconsulta):
 						consulta = "insert into antquir(idantecedentes, cirugia, tiempoevolucion, control) values (%s,%s,%s,%s);"
 						cursor.execute(consulta, (idantecedentes, antqui[i][0], antqui[i][1],antqui[i][2]))
 					hora = datetime.datetime.now().strftime("%H:%M:%S")
-					consulta = "update consulta set horaingresodatos = %s where idconsulta = %s;"
-					cursor.execute(consulta, (hora, idconsulta))
+					consulta = "update consulta set horaingresodatos = %s, idmedicamento = %s where idconsulta = %s;"
+					cursor.execute(consulta, (hora, idmedicamento, idconsulta))
+					if int(idmedicamento) > 0:
+						consulta = "UPDATE medicamento SET cantidad = cantidad - 1 WHERE idmedicamento = %s AND cantidad > 0;;"
+						cursor.execute(consulta, (idmedicamento))
 				conexion.commit()
 			finally:
 				conexion.close()
@@ -1481,7 +1489,7 @@ def datosclinicos(idconsulta):
 		enfermedades=enfermedades,nervos=nervos, mms=mms, numeros=numeros, relva=relva, 
 		tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen, 
 		dataojo=dataojo, dataametropia=dataametropia, new_date=new_date, estudiante=estudiante,
-		lentedetalladolen=lentedetalladolen, idconsulta = idconsulta, motivos=motivos)
+		lentedetalladolen=lentedetalladolen, idconsulta = idconsulta, motivos=motivos, medicamentos=medicamentos)
 
 @app.route("/pendaprobar", methods=['GET', 'POST'])
 def pendaprobar():
@@ -2512,7 +2520,7 @@ def pendaprobarc(idconsulta):
 		conexion = pymysql.connect(host=Conhost, user=Conuser, password=Conpassword, db=Condb)
 		try:
 			with conexion.cursor() as cursor:
-				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, motivoconsulta, nota, ambliopiaoi, ambliopiaod, ametropiaoi from consulta where idconsulta = "+ str(idconsulta) + ";"
+				consulta = "SELECT idpaciente, idestudiante, ojoambliopia, tipoametropia, idusolen, proximacita, dnp, dnp1, dnp2, dnp3, ultimaevmes, ultimaevanio, tiempolen, add1, add2, add3, add11, add22, add33, emetropia, antimetropia, anisometropia, patologiaocular, lentesoftalmicos, lentescontacto, refoftalmologica, farmaco, motivoconsulta, nota, ambliopiaoi, ambliopiaod, ametropiaoi, idmedicamento from consulta where idconsulta = "+ str(idconsulta) + ";"
 				cursor.execute(consulta)
 				dataconsulta = cursor.fetchall()
 				idpaciente = dataconsulta[0][0]
@@ -2550,6 +2558,9 @@ def pendaprobarc(idconsulta):
 				consulta = "select idojo, ojo from ojo;"
 				cursor.execute(consulta)
 				dataojo = cursor.fetchall()
+				consulta = "select idmedicamento, nombre, componente from medicamento;"
+				cursor.execute(consulta)
+				medicamentos = cursor.fetchall()
 				consulta = "select idtipoametropia, tipo from tipoametropia;"
 				cursor.execute(consulta)
 				dataametropia = cursor.fetchall()
@@ -3268,7 +3279,7 @@ def pendaprobarc(idconsulta):
 		dataconsulta=dataconsulta, anios=anios, cincos=cincos, meses=meses, antecedentes = antecedentes, av=av, ra=ra, vc=vc, roa=roa, ror=ror, 
 		rs=rs, rf=rf, mo=mo, obs=obs, usolen=usolen, numantmed=numantmed, numantqui=numantqui, antmed=antmed, antqui=antqui, enfermedades=enfermedades,
 		nervos=nervos, mms=mms, numeros=numeros, relva=relva, tipolen=tipolen, materiallen=materiallen, filtrolen=filtrolen, colorlen=colorlen,
-		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotero=gotero, lentedetalladolen=lentedetalladolen,referencia=referencia, idconsulta = idconsulta)
+		lenterecomendado=lenterecomendado, dataojo=dataojo, dataametropia=dataametropia, gotero=gotero, lentedetalladolen=lentedetalladolen,referencia=referencia, idconsulta = idconsulta, medicamentos=medicamentos)
 
 @app.route("/ver/<idconsulta>", methods=['GET', 'POST'])
 def ver(idconsulta):

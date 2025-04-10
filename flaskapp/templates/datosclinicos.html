@@ -938,14 +938,6 @@
 					</tr>
 				</table>
 				<br>
-				<table>
-					<tr>
-						<th>Anotaciones</th>
-						<td style="width: 80%;">
-							<textarea id="notas" name="notas" rows="2" cols="65" style="font-size: 25px;" class="form-control"></textarea>
-						</td>
-					</tr>
-				</table>
 				<div id="tablegotas" style="display: none;">
 					<h6>Datos Gotero</h6>
 					<table>
@@ -988,6 +980,26 @@
 						</tr>
 					</table>
 				</div>
+				<br>
+				<table>
+					<tr>
+						<th>Medicamento Dado</th>
+						<td style="width: 80%;">
+							<select name="idmedicamento" id="idmedicamento" class="form-control">
+								<option value="0">Sin Medicamento</option>
+								{% for i in medicamentos %}
+								<option value="{{i[0]}}">{{i[1]}} - {{i[2]}}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>Anotaciones</th>
+						<td style="width: 80%;">
+							<textarea id="notas" name="notas" rows="2" cols="65" style="font-size: 25px;" class="form-control"></textarea>
+						</td>
+					</tr>
+				</table>
 				<center>
 					<input class="btn btn-primary" type="submit" value="Aceptar">
 				</center>

@@ -40,6 +40,17 @@
 						<input type="number" class="form-control" id="colgadores" name="colgadores"
 							placeholder="Colgadores" value="0" onchange="cambioaro()">
 					</div>
+					<div class="form-group col-md-3">
+						<h6>Estuches</h6>
+						<select name="estuche" id="estuche" class="form-control" onchange="cambioaro()">
+							<option value="">Seleccione el estuche</option>
+							{% for i in estuches %}
+							<option value="{{i[0]}}">{{i[1]}}</option>
+							{% endfor %}
+						</select>
+						<input type="number" class="form-control" id="colgadores" name="colgadores"
+							placeholder="Colgadores" value="0" onchange="cambioaro()">
+					</div>
 				</center>
 				<h5 id="precioarov">Precio de Venta: Q0.00</h5>
 			</div>
