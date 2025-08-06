@@ -75,7 +75,7 @@
 						<tr>
 							<th style="width: 20%;">Tipo de Lente</th>
 							<th colspan="2">
-								<select name="lh" id="lh" class="form-control" onchange="cambiolentes()">
+								<select name="lh" id="lh" class="form-control" onchange="cambiolentes(0)">
 									<option value="">Seleccione el tipo de lente</option>
 									{% for i in lenteheader %}
 									{% if i[2] == 1 or i[2] == '1' %}
@@ -295,6 +295,89 @@
 						</tr>
 					</table>
 				</div>
+				<div id="coopervision" style="display: none">
+					<table>
+						<tr>
+							<th style="width: 20%;">Envío</th>
+							<td colspan="2">
+								<center>
+									<input type="checkbox" id="envio" name="envio" value="1"
+										onchange="cambiolentes1()">
+									<label for="envio">Q </label>
+									<label for="envio" id="enviol">33.00</label>
+								</center>
+							</td>
+						</tr>
+						<tr>
+							<th style="width: 20%;">Líquido</th>
+							<td colspan="2">
+								<center>
+									<input type="checkbox" id="liquido" name="liquido" value="1"
+										onchange="cambiolentes1()">
+									<label for="liquido">Q </label>
+									<label for="liquido" id="liquidol">5.00</label>
+								</center>
+							</td>
+						</tr>
+						<tr>
+							<th style="width: 20%;">Estuche</th>
+							<td colspan="2">
+								<center>
+									<input type="checkbox" id="cajaguardar" name="cajaguardar" value="1"
+										onchange="cambiolentes1()">
+									<label for="cajaguardar">Q </label>
+									<label for="cajaguardar" id="cajaguardarl">5.00</label>
+								</center>
+							</td>
+						</tr>
+						<tr>
+							<th style="width: 20%;">Tipo de Lente</th>
+							<td>
+								<select id="tlentecvoi" name="tlentecvoi" class="form-control" onchange="cambiolentes(1)">
+									<option value="">Seleccione el tipo de lente OI</option>
+									{% for i in lenteheader %}
+									{% if i[2] == 3 or i[2] == '3' %}
+									<option value="{{i[0]}}">{{i[1]}}</option>
+									{% endif %}
+									{% endfor %}
+								</select>
+							</td>
+							<td>
+								<select id="tlentecvod" name="tlentecvod" class="form-control" onchange="cambiolentes(2)">
+									<option value="">Seleccione el tipo de lente OD</option>
+									{% for i in lenteheader %}
+									{% if i[2] == 3 or i[2] == '3' %}
+									<option value="{{i[0]}}">{{i[1]}}</option>
+									{% endif %}
+									{% endfor %}
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th style="width: 20%;">Lente</th>
+							<td>
+								<select id="lentecvoi" name="lentecvoi" class="form-control" onchange="cambiolentes1()">
+									<option value="0">Lente OI</option>
+									{% for i in lentedesc %}
+									{% if i[1] == 17 or i[1] == '17' %}
+									<option value="{{i[0]}}">{{i[2]}}</option>
+									{% endif %}
+									{% endfor %}
+								</select>
+							</td>
+							<td>
+								<select id="lentecvod" name="lentecvod" class="form-control" onchange="cambiolentes1()">
+									<option value="0">Lente OD</option>
+									{% for i in lentedesc %}
+									{% if i[1] == 17 or i[1] == '17' %}
+									<option value="{{i[0]}}">{{i[2]}}</option>
+									{% endif %}
+									{% endfor %}
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>
 				</table>
 				<h5 id="preciolenv">Precio de Venta: Q0.00</h5>
 
@@ -497,15 +580,23 @@
 	function cambiolab() {
 		var so = document.getElementById('solopt')
 		var ol = document.getElementById('opticalasers')
+		var cv = document.getElementById('coopervision')
 		var select = document.getElementById('lab')
 		if (select.value == 1 || select.value == '1') {
 			so.style.display = 'block'
 			ol.style.display = 'none'
+			cv.style.display = 'none'
 		} else if (select.value == 2 || select.value == '2') {
 			so.style.display = 'none'
+			cv.style.display = 'none'
 			ol.style.display = 'block'
+		} else if (select.value == 3 || select.value == '3') {
+			so.style.display = 'none'
+			cv.style.display = 'block'
+			ol.style.display = 'none'
 		} else {
 			so.style.display = 'none'
+			cv.style.display = 'none'
 			ol.style.display = 'none'
 		}
 	}
@@ -623,22 +714,72 @@
 
 	}
 
-	function cambiolentes() {
-		var select = document.getElementById("lh");
-		var select1 = document.getElementById("ld");
-		var idlh = select.value;
-		var length = select.options.length;
-		for (i = length - 1; i >= 1; i--) {
-			select1.options[i] = null;
-		}
-		var arreglo = {{ lentedesc| tojson }};
-	var conteo = Object.keys(arreglo).length;
-	for (var i = 0; i < conteo; i++) {
-		if (parseInt(arreglo[i][1]) == parseInt(idlh)) {
-			var opt = document.createElement('option');
-			opt.value = arreglo[i][0];
-			opt.innerHTML = arreglo[i][2];
-			select1.appendChild(opt);
+	function cambiolentes(tipo) {
+		var lab = document.getElementById('lab')
+		if (lab.value == 1 || lab.value == '1') {
+			var select = document.getElementById("lh");
+			var select1 = document.getElementById("ld");
+			var idlh = select.value;
+			while (select1.options.length > 0) {
+				select1.remove(0);
+			}
+			var optini = document.createElement('option');
+			optini.value = "";
+			optini.innerHTML = "Seleccione el lente";
+			select1.appendChild(optini);
+			var arreglo = {{ lentedesc| tojson }};
+			var conteo = Object.keys(arreglo).length;
+			for (var i = 0; i < conteo; i++) {
+				if (parseInt(arreglo[i][1]) == parseInt(idlh)) {
+					var opt = document.createElement('option');
+					opt.value = arreglo[i][0];
+					opt.innerHTML = arreglo[i][2];
+					select1.appendChild(opt);
+					}
+				}
+	} else if (lab.value == 3 || lab.value == '3') {
+		if (parseInt(tipo) == 1) {
+			var tipolenteoi = document.getElementById("tlentecvoi");
+			var lenteoi = document.getElementById("lentecvoi");
+			var idlhoi = tipolenteoi.value;
+			while (lenteoi.options.length > 0) {
+				lenteoi.remove(0);
+			}
+			var optini1 = document.createElement('option');
+			optini1.value = "";
+			optini1.innerHTML = "Seleccione el lente";
+			lenteoi.appendChild(optini1);
+			var arreglo = {{ lentedesc| tojson }};
+			var conteo = Object.keys(arreglo).length;
+			for (var i = 0; i < conteo; i++) {
+				if (parseInt(arreglo[i][1]) == parseInt(idlhoi)) {
+					var opt = document.createElement('option');
+					opt.value = arreglo[i][0];
+					opt.innerHTML = arreglo[i][2];
+					lenteoi.appendChild(opt);
+				}
+			}
+		} else if (parseInt(tipo) == 2) {
+			var tipolenteod = document.getElementById("tlentecvod");
+			var lenteod = document.getElementById("lentecvod");
+			var idlhod = tipolenteod.value;
+			while (lenteod.options.length > 0) {
+				lenteod.remove(0);
+			}
+			var optini1 = document.createElement('option');
+			optini1.value = "";
+			optini1.innerHTML = "Seleccione el lente";
+			lenteod.appendChild(optini1);
+			var arreglo = {{ lentedesc| tojson }};
+			var conteo = Object.keys(arreglo).length;
+			for (var i = 0; i < conteo; i++) {
+				if (parseInt(arreglo[i][1]) == parseInt(idlhod)) {
+					var opt = document.createElement('option');
+					opt.value = arreglo[i][0];
+					opt.innerHTML = arreglo[i][2];
+					lenteod.appendChild(opt);
+				}
+			}
 		}
 	}
         }
@@ -723,7 +864,7 @@
 	if (absoblue.checked == true) {
 		total = total + parseFloat(absobluel.innerHTML)
 	}
-            }else if (lab.value == 2 || lab.value == '2') {
+            } else if (lab.value == 2 || lab.value == '2') {
 		var montaje = document.getElementById('montaje')
 		var montajel = document.getElementById('montajel')
 		var ranurado = document.getElementById('ranurado')
@@ -756,7 +897,35 @@
 		total = total + parseFloat(filtrool.value)
 	}
                 
-            }
+            } else if (lab.value == 3 || lab.value == '3') {
+				var envio = document.getElementById('envio')
+				var enviol = document.getElementById('enviol')
+				var liquido = document.getElementById('liquido')
+				var liquidol = document.getElementById('liquidol')
+				var cajaguardar = document.getElementById('cajaguardar')
+				var cajaguardarl = document.getElementById('cajaguardarl')
+				if (envio.checked == true) {
+					total = total + parseFloat(enviol.innerText)
+				}
+				if (liquido.checked == true) {
+					total = total + parseFloat(liquidol.innerText)
+				}
+				if (cajaguardar.checked == true) {
+					total = total + parseFloat(cajaguardarl.innerText)
+				}
+				var lenteoloi = document.getElementById('lentecvoi')
+				var lenteolod = document.getElementById('lentecvod')
+				var arreglo = {{ lentedesc| tojson }};
+			var conteo = Object.keys(arreglo).length;
+			for (var i = 0; i < conteo; i++) {
+				if (parseInt(arreglo[i][0]) == parseInt(lenteoloi.value)) {
+					total = total + (parseFloat(arreglo[i][3]) * 2.5)
+				}
+				if (parseInt(arreglo[i][0]) == parseInt(lenteolod.value)) {
+					total = total + (parseFloat(arreglo[i][3]) * 2.5)
+				}
+			}
+					}
 	preg.innerHTML = "Precio Venta: Q " + String(parseFloat(total).toFixed(2))
 	rpreg.innerHTML = "Q " + String(parseFloat(total).toFixed(2))
 	rpree.innerHTML = "Q " + String(parseFloat(total).toFixed(2))
@@ -766,6 +935,9 @@
 	} else if (lab.value == 2 || lab.value == '2') {
 		rpred.innerHTML = "Q " + String(parseFloat((total / 2.5) * 2.375).toFixed(2))
 		rpred1.value = String(parseFloat((total / 2.5) * 2.375).toFixed(2))
+	} else if (lab.value == 3 || lab.value == '3') {
+		rpred.innerHTML = "Q " + String(parseFloat((total / 1.8) * 1.67).toFixed(2))
+		rpred1.value = String(parseFloat((total / 1.8) * 1.67).toFixed(2))
 	}
 	rpreg1.value = String(parseFloat(total).toFixed(2))
 	rpree1.value = String(parseFloat(total).toFixed(2))
