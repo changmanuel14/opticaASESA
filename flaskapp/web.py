@@ -2525,6 +2525,7 @@ def pendaprobarc(idconsulta):
 				dataconsulta = cursor.fetchall()
 				idpaciente = dataconsulta[0][0]
 				idestudiante = dataconsulta[0][1]
+				print(idestudiante)
 		finally:
 			conexion.close()
 	except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
