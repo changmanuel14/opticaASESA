@@ -1856,6 +1856,9 @@ def venta(idconsulta):
 				idlenteoi = request.form["ld"]
 				idlenteod = request.form["ld"]
 				filtro = '0'
+				envio = "-"
+				liquido = "-"
+				cajaguardar = "-"
 			elif lab == 2 or lab == '2':
 				antireflejo = '-'
 				try:
@@ -1880,6 +1883,39 @@ def venta(idconsulta):
 				doscaras = '-'
 				moldes = '-'
 				nanoplasma = '-'
+				envio = "-"
+				liquido = "-"
+				cajaguardar = "-"
+			elif lab == 3 or lab == '3':
+				print("Lab 3")
+				antireflejo = '-'
+				try:
+					envio = request.form['envio']
+				except:
+					envio = '-'
+				try:
+					liquido = request.form['liquido']
+				except:
+					liquido = '0'
+				try:
+					cajaguardar = request.form['cajaguardar']
+				except:
+					cajaguardar = '-'
+				idlenteoi = request.form["lentecvoi"]
+				idlenteod = request.form["lentecvod"]
+				print(idlenteoi, idlenteod)
+				tinte = '-'
+				facetado = '-'
+				solo1ojo = '-'
+				prismas = '-'
+				doscaras = '-'
+				moldes = '-'
+				montaje = '-'
+				antireflejo = '-'
+				perforado = '0'
+				ranurado = '-'
+				filtro = '0'
+				nanoplasma = '-'
 		else:
 			idlenteoi = 0
 			idlenteod = 0
@@ -1896,6 +1932,9 @@ def venta(idconsulta):
 			ranurado = '-'
 			filtro = '0'
 			nanoplasma = '-'
+			envio = "-"
+			liquido = "-"
+			cajaguardar = "-"
 		try:
 			cons = request.form["precons"]
 			cons = 1
@@ -1935,8 +1974,8 @@ def venta(idconsulta):
 					cursor.execute(consulta)
 					idfh = cursor.fetchall()
 					idfh = idfh[0][0]
-					consulta = "insert into facturadesc(idaro, idlenteoi, idlenteod, consulta, idfacturaheader, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro, nanoplasma) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
-					cursor.execute(consulta, (idaro, idlenteoi, idlenteod, cons, idfh, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro, nanoplasma))
+					consulta = "insert into facturadesc(idaro, idlenteoi, idlenteod, consulta, idfacturaheader, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro, nanoplasma, envio, liquido, cajaguardar) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+					cursor.execute(consulta, (idaro, idlenteoi, idlenteod, cons, idfh, precioaro, preciolente, antireflejo, montaje, tinte, perforado, ranurado, facetado, solo1ojo, prismas, doscaras, moldes, filtro, nanoplasma, envio, liquido, cajaguardar))
 					if session['iduser1'] == '3' or session['iduser1'] == 3:
 						if nombreref == "":
 							cantcomision = round(float(restotcan * 0.03), 2)
