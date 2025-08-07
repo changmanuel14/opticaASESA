@@ -2032,7 +2032,7 @@ def venta(idconsulta):
 				conexion.close()
 		except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
 			print("Ocurrió un error al conectar: ", e)
-		return redirect(url_for('aprobados'))
+		return redirect(url_for('verventas'))
 	return render_template('venta.html', title='Venta', logeado=logeado, lenteheader=lenteheader, lentedesc=lentedesc, aros=aros, 
 	datafacturas=datafacturas, laboratorios=laboratorios, servicios=servicios, datapaciente = datapaciente)
 
